@@ -25,14 +25,13 @@ class _HomeViewState extends State<HomeView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
+                  FilledButton.tonal(
                     onPressed: () {},
-                    style: ElevatedButton.styleFrom(
+                    style: FilledButton.styleFrom(
                       backgroundColor: Colors.grey[200],
-                      shape: const CircleBorder(),
+                      // shape: const CircleBorder(),
                       padding: const EdgeInsets.all(12),
                       minimumSize: const Size(46, 46),
-                      elevation: 0,
                     ),
                     child: Icon(Icons.menu, color: Colors.grey[600]),
                   ),
