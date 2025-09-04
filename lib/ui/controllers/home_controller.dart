@@ -27,5 +27,5 @@ enum ColorLabel {
 }
 
 abstract class HomeController extends State<HomeView> {
-  void fetchData();
+  // todo
 }
