@@ -20,7 +20,31 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 100, child: Image.asset('assets/images/head.png')),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[200],
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(12),
+                      minimumSize: const Size(46, 46),
+                      elevation: 0,
+                    ),
+                    child: Icon(Icons.menu, color: Colors.grey[600]),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 46,
+                      child: Image.asset('assets/images/head.png'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             DropdownMenu(
               label: const Text('Buscar por'),
               dropdownMenuEntries: ColorLabel.entries,
@@ -46,7 +70,10 @@ class _HomeViewState extends State<HomeView> {
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text("Nuevas adquisiciones", style: Theme.of(context).textTheme.headlineSmall),
+              child: Text(
+                "Nuevas adquisiciones",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
           ],
         ),
