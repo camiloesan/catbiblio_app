@@ -20,6 +20,7 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(height: 100, child: Image.asset('assets/images/head.png')),
             DropdownMenu(
               label: const Text('Buscar por'),
               dropdownMenuEntries: ColorLabel.entries,
