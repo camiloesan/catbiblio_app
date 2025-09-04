@@ -75,6 +75,14 @@ class _HomeViewState extends State<HomeView> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Avisos",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
           ],
         ),
       ),
