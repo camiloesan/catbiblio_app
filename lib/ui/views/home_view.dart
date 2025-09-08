@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 
 part '../controllers/home_controller.dart';
@@ -13,7 +13,7 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends HomeController{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,15 +90,17 @@ class _HomeViewState extends State<HomeView> {
               dropdownMenuEntries: ColorLabel.entries,
               width: double.infinity,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             DropdownMenu(
               label: const Text('Biblioteca'),
               leadingIcon: const Icon(Icons.location_city, color: primaryColor),
               dropdownMenuEntries: ColorLabel.entries,
               width: double.infinity,
             ),
-            const SizedBox(height: 16),
-            const TextField(
+            const SizedBox(height: 8),
+            TextField(
+              controller: _controllerBusqueda,
+              onSubmitted: (value) => onSubmitAction(value),
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: primaryColor),
                 suffixIcon: Icon(Icons.clear),
@@ -106,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 6),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(

@@ -1,4 +1,4 @@
-part of '../views/home_view.dart';
+part of '../views/search_view.dart';
 
 typedef ColorEntry = DropdownMenuEntry<ColorLabel>;
 
@@ -26,11 +26,12 @@ enum ColorLabel {
   );
 }
 
-abstract class HomeController extends State<HomeView> {
+abstract class SearchController extends State<SearchView> {
   late TextEditingController _controllerBusqueda;
+  late String searchQuery;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     _controllerBusqueda = TextEditingController();
   }
@@ -43,6 +44,18 @@ abstract class HomeController extends State<HomeView> {
 
   void clearText() {
     _controllerBusqueda.clear();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is String) {
+      searchQuery = args;
+    } else {
+      searchQuery = '';
+    }
+    _controllerBusqueda.text = searchQuery;
   }
 
   void onSubmitAction(String cadenaDeBusqueda) {
