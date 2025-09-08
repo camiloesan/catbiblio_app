@@ -91,82 +91,89 @@ class _HomeViewController extends HomeController {
         ],
       ),
       drawerEnableOpenDragGesture: true,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Expanded(
-                child: SizedBox(
-                  height: 56,
-                  child: Image.asset('assets/images/head.png'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Expanded(
+                  child: SizedBox(
+                    height: 56,
+                    child: Image.asset('assets/images/head.png'),
+                  ),
                 ),
               ),
-            ),
-            DropdownMenu(
-              label: const Text('Buscar por'),
-              leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-              dropdownMenuEntries: ColorLabel.entries,
-              width: double.infinity,
-            ),
-            const SizedBox(height: 8),
-            DropdownMenu(
-              label: const Text('Biblioteca'),
-              leadingIcon: const Icon(Icons.location_city, color: primaryColor),
-              dropdownMenuEntries: ColorLabel.entries,
-              width: double.infinity,
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _controllerBusqueda,
-              onSubmitted: (value) => onSubmitAction(value),
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: primaryColor),
-                suffixIcon: Icon(Icons.clear),
-                labelText: 'Buscar',
-                border: OutlineInputBorder(),
+              DropdownMenu(
+                label: const Text('Buscar por'),
+                leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
+                dropdownMenuEntries: ColorLabel.entries,
+                width: double.infinity,
               ),
-            ),
-            const SizedBox(height: 6),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Nuevas adquisiciones",
-                style: Theme.of(context).textTheme.headlineSmall,
+              const SizedBox(height: 8),
+              DropdownMenu(
+                label: const Text('Biblioteca'),
+                leadingIcon: const Icon(
+                  Icons.location_city,
+                  color: primaryColor,
+                ),
+                dropdownMenuEntries: ColorLabel.entries,
+                width: double.infinity,
               ),
-            ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Avisos",
-                style: Theme.of(context).textTheme.headlineSmall,
+              const SizedBox(height: 8),
+              TextField(
+                controller: _controllerBusqueda,
+                onSubmitted: (value) => onSubmitAction(value),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, color: primaryColor),
+                  suffixIcon: Icon(Icons.clear),
+                  labelText: 'Buscar',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            FutureBuilder<List<Aviso>>(
-              future: futureAvisos,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
-                    height: 202, // Altura del carrusel + indicadores
-                    child: Center(child: CircularProgressIndicator()),
+              const SizedBox(height: 6),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Nuevas adquisiciones",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Avisos",
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ),
+              const SizedBox(height: 12),
+              FutureBuilder<List<Aviso>>(
+                future: futureAvisos,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox(
+                      height: 202, // Altura del carrusel + indicadores
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error al cargar avisos: ${snapshot.error}'),
+                    );
+                  }
+                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    return construirCarousel(snapshot.data!);
+                  }
+                  return const Center(
+                    child: Text('No hay avisos disponibles.'),
                   );
-                }
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error al cargar avisos: ${snapshot.error}'),
-                  );
-                }
-                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  return construirCarousel(snapshot.data!);
-                }
-                return const Center(child: Text('No hay avisos disponibles.'));
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

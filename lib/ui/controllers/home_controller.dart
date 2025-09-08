@@ -100,7 +100,6 @@ abstract class HomeController extends State<HomeView> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
                       image: DecorationImage(
                         image: NetworkImage(aviso.imagen),
                         fit: BoxFit.contain,
@@ -112,7 +111,7 @@ abstract class HomeController extends State<HomeView> {
             );
           },
           options: CarouselOptions(
-            height: 200,
+            //height: 130,
             autoPlay: true,
             enlargeCenterPage: true,
             viewportFraction: 1,
