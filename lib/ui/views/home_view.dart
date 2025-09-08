@@ -103,8 +103,6 @@ class _HomeViewState extends State<HomeView> {
                 prefixIcon: Icon(Icons.search, color: primaryColor),
                 suffixIcon: Icon(Icons.clear),
                 labelText: 'Buscar',
-                // hintText: 'Buscando por título en la USBI Xalapa',
-                helperText: 'Buscando por título en la USBI Xalapa',
                 border: OutlineInputBorder(),
               ),
             ),
