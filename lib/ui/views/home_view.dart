@@ -2,6 +2,12 @@ import 'dart:collection';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import '../../classes/aviso.dart';
+
 part '../controllers/home_controller.dart';
 
 const Color primaryColor = Color(0xFF003466);
@@ -10,10 +16,10 @@ class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<HomeView> createState() => _HomeViewController();
 }
 
-class _HomeViewState extends HomeController{
+class _HomeViewController extends HomeController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,25 +52,37 @@ class _HomeViewState extends HomeController{
           ListTile(
             leading: const Icon(Icons.map, color: primaryColor),
             title: const Text('Directorio de bibliotecas'),
-            trailing: Transform.scale(scale: 0.8, child: const Icon(Icons.open_in_new)),
+            trailing: Transform.scale(
+              scale: 0.8,
+              child: const Icon(Icons.open_in_new),
+            ),
             onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.computer, color: primaryColor),
             title: const Text('Recursos electrónicos'),
-            trailing: Transform.scale(scale: 0.8, child: const Icon(Icons.open_in_new)),
+            trailing: Transform.scale(
+              scale: 0.8,
+              child: const Icon(Icons.open_in_new),
+            ),
             onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.help, color: primaryColor),
             title: const Text('Preguntas frecuentes'),
-            trailing: Transform.scale(scale: 0.8, child: const Icon(Icons.open_in_new)),
+            trailing: Transform.scale(
+              scale: 0.8,
+              child: const Icon(Icons.open_in_new),
+            ),
             onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip, color: primaryColor),
             title: const Text('Aviso de privacidad'),
-            trailing: Transform.scale(scale: 0.8, child: const Icon(Icons.open_in_new)),
+            trailing: Transform.scale(
+              scale: 0.8,
+              child: const Icon(Icons.open_in_new),
+            ),
             onTap: () {},
           ),
         ],
@@ -123,6 +141,32 @@ class _HomeViewState extends HomeController{
                 "Avisos",
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
+            ),
+            const SizedBox(height: 10),
+            FutureBuilder<List<Aviso>>(
+              future: futureAvisos, // Este 'Future' viene del HomeController
+              builder: (context, snapshot) {
+                // Mientras carga...
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(
+                    height: 202, // Altura del carrusel + indicadores
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                // Si hay un error...
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error al cargar avisos: ${snapshot.error}'),
+                  );
+                }
+                // Si hay datos...
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  // Llama al método del controlador para construir el carrusel
+                  return construirCarousel(snapshot.data!);
+                }
+                // Si no hay datos...
+                return const Center(child: Text('No hay avisos disponibles.'));
+              },
             ),
           ],
         ),
