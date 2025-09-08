@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../../classes/aviso.dart';
+import 'package:catbiblio_app/classes/aviso.dart';
 
 part '../controllers/home_controller.dart';
 
@@ -56,7 +56,7 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () {},
+            onTap: () => abrirEnlace('https://www.uv.mx/dgbuv/#mapa'),
           ),
           ListTile(
             leading: const Icon(Icons.computer, color: primaryColor),
@@ -65,7 +65,7 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () {},
+            onTap: () => abrirEnlace('https://www.uv.mx/dgbuv/#descubridor'),
           ),
           ListTile(
             leading: const Icon(Icons.help, color: primaryColor),
@@ -74,7 +74,8 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () {},
+            onTap: () =>
+                abrirEnlace('https://www.uv.mx/dgbuv/preguntas-frecuentes/'),
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip, color: primaryColor),
@@ -83,7 +84,9 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () {},
+            onTap: () => abrirEnlace(
+              'https://catbiblio.uv.mx/avisos/aviso-privacidad-integral-sib.pdf',
+            ),
           ),
         ],
       ),
@@ -144,27 +147,22 @@ class _HomeViewController extends HomeController {
             ),
             const SizedBox(height: 10),
             FutureBuilder<List<Aviso>>(
-              future: futureAvisos, // Este 'Future' viene del HomeController
+              future: futureAvisos,
               builder: (context, snapshot) {
-                // Mientras carga...
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox(
                     height: 202, // Altura del carrusel + indicadores
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
-                // Si hay un error...
                 if (snapshot.hasError) {
                   return Center(
                     child: Text('Error al cargar avisos: ${snapshot.error}'),
                   );
                 }
-                // Si hay datos...
                 if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  // Llama al método del controlador para construir el carrusel
                   return construirCarousel(snapshot.data!);
                 }
-                // Si no hay datos...
                 return const Center(child: Text('No hay avisos disponibles.'));
               },
             ),
