@@ -33,13 +33,6 @@ class _HomeViewState extends State<HomeView> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.book, color: primaryColor),
-            title: const Text('Biblioteca'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.history, color: primaryColor),
             title: const Text('Historial de búsqueda'),
             onTap: () {},
@@ -86,26 +79,28 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Expanded(
                 child: SizedBox(
-                  height: 46,
+                  height: 56,
                   child: Image.asset('assets/images/head.png'),
                 ),
               ),
             ),
             DropdownMenu(
               label: const Text('Buscar por'),
+              leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
               dropdownMenuEntries: ColorLabel.entries,
               width: double.infinity,
             ),
             const SizedBox(height: 16),
             DropdownMenu(
               label: const Text('Biblioteca'),
+              leadingIcon: const Icon(Icons.location_city, color: primaryColor),
               dropdownMenuEntries: ColorLabel.entries,
               width: double.infinity,
             ),
             const SizedBox(height: 16),
             const TextField(
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: Icon(Icons.search, color: primaryColor),
                 suffixIcon: Icon(Icons.clear),
                 labelText: 'Buscar',
                 // hintText: 'Buscando por título en la USBI Xalapa',
