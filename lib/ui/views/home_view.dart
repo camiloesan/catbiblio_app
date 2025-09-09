@@ -108,7 +108,10 @@ class _HomeViewController extends HomeController {
                 controller: _controllerTipoBusqueda,
                 label: const Text('Buscar por'),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: ColorLabel.entries,
+                dropdownMenuEntries: const [
+                  DropdownMenuEntry(value: 'title', label: 'Título'),
+                  DropdownMenuEntry(value: 'author', label: 'Autor'),
+                ],
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
@@ -119,7 +122,13 @@ class _HomeViewController extends HomeController {
                   Icons.location_city,
                   color: primaryColor,
                 ),
-                dropdownMenuEntries: ColorLabel.entries,
+                dropdownMenuEntries: const [
+                  DropdownMenuEntry(
+                    value: 'homebranch',
+                    label: 'Todas las bibliotecas',
+                  ),
+                  DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
+                ],
                 width: double.infinity,
               ),
               const SizedBox(height: 8),

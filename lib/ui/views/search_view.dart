@@ -15,12 +15,11 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
-    final (String, String, String) searchQuery = ModalRoute.of(context)!.settings.arguments as (String, String, String);
+    final (String, String, String) searchQuery =
+        ModalRoute.of(context)!.settings.arguments as (String, String, String);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Búsqueda'),
-      ),
+      appBar: AppBar(title: Text('Búsqueda')),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
         child: Column(
@@ -29,7 +28,10 @@ class _SearchViewState extends SearchController {
               controller: _controllerTipoBusqueda,
               label: const Text('Buscar por'),
               leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-              dropdownMenuEntries: ColorLabel.entries,
+              dropdownMenuEntries: const [
+                DropdownMenuEntry(value: 'title', label: 'Título'),
+                DropdownMenuEntry(value: 'author', label: 'Autor'),
+              ],
               width: double.infinity,
             ),
             const SizedBox(height: 8),
@@ -37,7 +39,13 @@ class _SearchViewState extends SearchController {
               controller: _controllerBiblioteca,
               label: const Text('Biblioteca'),
               leadingIcon: const Icon(Icons.location_city, color: primaryColor),
-              dropdownMenuEntries: ColorLabel.entries,
+              dropdownMenuEntries: const [
+                DropdownMenuEntry(
+                  value: 'homebranch',
+                  label: 'Todas las bibliotecas',
+                ),
+                DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
+              ],
               width: double.infinity,
             ),
             const SizedBox(height: 8),
