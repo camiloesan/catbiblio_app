@@ -32,7 +32,13 @@ abstract class HomeController extends State<HomeView> {
         context,
         MaterialPageRoute(
           builder: (context) => const SearchView(),
-          settings: RouteSettings(arguments: (_controllerTipoBusqueda.text, _controllerBiblioteca.text, cadenaDeBusqueda)),
+          settings: RouteSettings(
+            arguments: (
+              _controllerTipoBusqueda.text,
+              _controllerBiblioteca.text,
+              cadenaDeBusqueda,
+            ),
+          ),
         ),
       );
     }
@@ -72,16 +78,28 @@ abstract class HomeController extends State<HomeView> {
             return GestureDetector(
               onTap: () => abrirEnlace(aviso.enlace),
               child: Stack(
-                alignment: Alignment.bottomLeft,
+                alignment: Alignment.topCenter,
                 children: [
                   // Contenedor de la Imagen
-                  Container(
+                  SizedBox(
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(aviso.imagen),
-                        fit: BoxFit.contain,
-                      ),
+                    child: Image.network(
+                      aviso.imagen,
+                      fit: BoxFit.contain,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset('assets/images/aviso.png');
+                      },
                     ),
                   ),
                 ],
@@ -89,11 +107,10 @@ abstract class HomeController extends State<HomeView> {
             );
           },
           options: CarouselOptions(
-            //height: 130,
             autoPlay: true,
             enlargeCenterPage: true,
             viewportFraction: 1,
-            aspectRatio: 16 / 9,
+            aspectRatio: 16 / 6,
             onPageChanged: (index, reason) => avisoCambiado(index, reason),
           ),
         ),
@@ -106,7 +123,7 @@ abstract class HomeController extends State<HomeView> {
             (index) => Container(
               width: 9,
               height: 9,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _avisosIndex == index
