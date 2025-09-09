@@ -93,20 +93,19 @@ class _HomeViewController extends HomeController {
       drawerEnableOpenDragGesture: true,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: Expanded(
-                  child: SizedBox(
-                    height: 56,
-                    child: Image.asset('assets/images/head.png'),
-                  ),
+                child: SizedBox(
+                  height: 56,
+                  child: Image.asset('assets/images/head.png'),
                 ),
               ),
               DropdownMenu(
+                controller: _controllerTipoBusqueda,
                 label: const Text('Buscar por'),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
                 dropdownMenuEntries: ColorLabel.entries,
@@ -114,6 +113,7 @@ class _HomeViewController extends HomeController {
               ),
               const SizedBox(height: 8),
               DropdownMenu(
+                controller: _controllerBiblioteca,
                 label: const Text('Biblioteca'),
                 leadingIcon: const Icon(
                   Icons.location_city,

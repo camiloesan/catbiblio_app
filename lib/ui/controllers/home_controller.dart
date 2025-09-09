@@ -27,6 +27,8 @@ enum ColorLabel {
 }
 
 abstract class HomeController extends State<HomeView> {
+  late TextEditingController _controllerTipoBusqueda;
+  late TextEditingController _controllerBiblioteca;
   late TextEditingController _controllerBusqueda;
   late Future<List<Aviso>> futureAvisos;
   int _avisosIndex = 0;
@@ -34,6 +36,8 @@ abstract class HomeController extends State<HomeView> {
   @override
   initState() {
     super.initState();
+    _controllerTipoBusqueda = TextEditingController();
+    _controllerBiblioteca = TextEditingController();
     _controllerBusqueda = TextEditingController();
     futureAvisos = _obtenerAvisos();
   }
@@ -54,7 +58,7 @@ abstract class HomeController extends State<HomeView> {
         context,
         MaterialPageRoute(
           builder: (context) => const SearchView(),
-          settings: RouteSettings(arguments: cadenaDeBusqueda),
+          settings: RouteSettings(arguments: (_controllerTipoBusqueda.text, _controllerBiblioteca.text, cadenaDeBusqueda)),
         ),
       );
     }
