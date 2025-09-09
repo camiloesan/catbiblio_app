@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 
