@@ -1,3 +1,5 @@
+import 'package:catbiblio_app/l10n/app_localizations.dart';
+import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +25,7 @@ class _HomeViewController extends HomeController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio'),
+        title: Text(AppLocalizations.of(context)!.home),
         backgroundColor: Colors.transparent,
         actionsPadding: EdgeInsets.only(right: 16.0),
       ),
@@ -32,25 +34,25 @@ class _HomeViewController extends HomeController {
           DrawerHeader(child: Image.asset('assets/images/head.png')),
           ListTile(
             leading: const Icon(Icons.home, color: primaryColor),
-            title: const Text('Inicio'),
+            title: Text(AppLocalizations.of(context)!.home),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
             leading: const Icon(Icons.history, color: primaryColor),
-            title: const Text('Historial de búsqueda'),
+            title: Text(AppLocalizations.of(context)!.searchHistory),
             onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.language, color: primaryColor),
-            title: const Text('Idioma'),
+            title: Text(AppLocalizations.of(context)!.language),
             onTap: () {},
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.map, color: primaryColor),
-            title: const Text('Directorio de bibliotecas'),
+            title: Text(AppLocalizations.of(context)!.libraryDirectory),
             trailing: Transform.scale(
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
@@ -59,7 +61,7 @@ class _HomeViewController extends HomeController {
           ),
           ListTile(
             leading: const Icon(Icons.computer, color: primaryColor),
-            title: const Text('Recursos electrónicos'),
+            title: Text(AppLocalizations.of(context)!.electronicResources),
             trailing: Transform.scale(
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
@@ -68,7 +70,7 @@ class _HomeViewController extends HomeController {
           ),
           ListTile(
             leading: const Icon(Icons.help, color: primaryColor),
-            title: const Text('Preguntas frecuentes'),
+            title: Text(AppLocalizations.of(context)!.faq),
             trailing: Transform.scale(
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
@@ -78,7 +80,7 @@ class _HomeViewController extends HomeController {
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip, color: primaryColor),
-            title: const Text('Aviso de privacidad'),
+            title: Text(AppLocalizations.of(context)!.privacyNotice),
             trailing: Transform.scale(
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
@@ -105,18 +107,15 @@ class _HomeViewController extends HomeController {
               ),
               DropdownMenu(
                 controller: _controllerTipoBusqueda,
-                label: const Text('Buscar por'),
+                label: Text(AppLocalizations.of(context)!.searchBy),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(value: 'title', label: 'Título'),
-                  DropdownMenuEntry(value: 'author', label: 'Autor'),
-                ],
+                dropdownMenuEntries: entradasTipoBusqueda,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
               DropdownMenu(
                 controller: _controllerBiblioteca,
-                label: const Text('Biblioteca'),
+                label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
                   color: primaryColor,
@@ -137,7 +136,7 @@ class _HomeViewController extends HomeController {
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
                   suffixIcon: Icon(Icons.clear),
-                  labelText: 'Buscar',
+                  labelText: AppLocalizations.of(context)!.search,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -145,7 +144,7 @@ class _HomeViewController extends HomeController {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Nuevas adquisiciones",
+                  AppLocalizations.of(context)!.ourSelections,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
@@ -153,8 +152,8 @@ class _HomeViewController extends HomeController {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Avisos",
-                  style: Theme.of(context).textTheme.displaySmall,
+                  AppLocalizations.of(context)!.news,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
               const SizedBox(height: 12),

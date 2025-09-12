@@ -4,8 +4,18 @@ abstract class SearchController extends State<SearchView> {
   late TextEditingController _controllerBiblioteca;
   late TextEditingController _controllerTipoBusqueda;
   late TextEditingController _controllerBusqueda;
-  late (String, String, String) searchQuery;
+  late QueryParams searchQuery;
   late List<String> _titulos = [];
+
+  List<DropdownMenuEntry<String>> get entradasTipoBusqueda {
+    return [
+      DropdownMenuEntry(value: 'title', label: AppLocalizations.of(context)!.titleEntry),
+      DropdownMenuEntry(value: 'author', label: AppLocalizations.of(context)!.authorEntry),
+      DropdownMenuEntry(value: 'subject', label: AppLocalizations.of(context)!.subjectEntry),
+      DropdownMenuEntry(value: 'isbn', label: AppLocalizations.of(context)!.isbnEntry),
+      DropdownMenuEntry(value: 'issn', label: AppLocalizations.of(context)!.issnEntry),
+    ];
+  }
 
   @override
   void initState() {
@@ -30,19 +40,22 @@ abstract class SearchController extends State<SearchView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is (String, String, String)) {
+    args.runtimeType;
+    if (args is QueryParams) {
       searchQuery = args;
     } else {
-      searchQuery = ('', '', '');
+      // searchQuery = QueryParams(bibliotecaController: TextEditingController(), tipoBusquedaController: TextEditingController(), cadenaDeBusqueda: '');
     }
+    // no sirve
+    // _controllerTipoBusqueda = searchQuery.tipoBusqueda;
+    // _controllerBiblioteca = searchQuery.biblioteca;
+    _controllerBusqueda.text = searchQuery.cadenaDeBusqueda;
     fetchXml();
-    _controllerTipoBusqueda.text = searchQuery.$1;
-    _controllerBiblioteca.text = searchQuery.$2;
-    _controllerBusqueda.text = searchQuery.$3;
   }
 
   Future<void> fetchXml() async {
-    final url = Uri.parse('placeholder');
+    // construir con el valor del controlador
+    final url = Uri.parse("");
     final response = await http.get(url);
 
     print(url);
@@ -84,7 +97,7 @@ abstract class SearchController extends State<SearchView> {
       _titulos.add(utf8.decode(title.trim().codeUnits));
 
     }
-      setState(() {}); // Update UI after adding each title
+      setState(() {}); // Update UI after adding the titles
   } else {
     throw Exception("Failed to load XML");
   }

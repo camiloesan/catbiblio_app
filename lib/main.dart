@@ -1,3 +1,4 @@
+import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Catálogo Bibliotecario UV',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
-      ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
       home: const HomeView(),
     );
   }

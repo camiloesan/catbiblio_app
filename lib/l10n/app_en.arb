@@ -1,0 +1,74 @@
+{
+  "home": "Home",
+  "@home": {
+    "description": "home view top bar title"
+  },
+  "searchBy": "Search by",
+  "@searchBy": {
+    "description": "Filter by dropdown hint"
+  },
+  "library": "Library",
+  "@library": {
+    "description": "Library selection dropdown hint"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search field hint"
+  },
+  "ourSelections": "Our Selections",
+  "@ourSelections": {
+    "description": "Our selections section title"
+  },
+  "news": "News",
+  "@news": {
+    "description": "News section title"
+  },
+  "searchHistory": "Search History",
+  "@searchHistory": {
+    "description": "Search history section title"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language selection hint"
+  },
+  "libraryDirectory": "Library Directory",
+  "@libraryDirectory": {
+    "description": "Library directory section title"
+  },
+  "electronicResources": "Electronic Resources",
+  "@electronicResources": {
+    "description": "Electronic resources section title"
+  },
+  "faq": "FAQ",
+  "@faq": {
+    "description": "Frequently asked questions section title"
+  },
+  "privacyNotice": "Privacy Notice",
+  "@privacyNotice": {
+    "description": "Privacy notice section title"
+  },
+  "searchTitle": "Search Results",
+  "@searchTitle": {
+    "description": "Search results view top bar title"
+  },
+  "titleEntry": "Title",
+  "@titleEntry": {
+    "description": "Title entry in search by dropdown"
+  },
+  "authorEntry": "Author",
+  "@authorEntry": {
+    "description": "Author entry in search by dropdown"
+  },
+  "subjectEntry": "Subject",
+  "@subjectEntry": {
+    "description": "Subject entry in search by dropdown"
+  },
+  "isbnEntry": "ISBN",
+  "@isbnEntry": {
+    "description": "ISBN entry in search by dropdown"
+  },
+  "issnEntry": "ISSN",
+  "@issnEntry": {
+    "description": "ISSN entry in search by dropdown"
+  }
+}

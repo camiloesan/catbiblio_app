@@ -7,6 +7,31 @@ abstract class HomeController extends State<HomeView> {
   late Future<List<Aviso>> futureAvisos;
   int _avisosIndex = 0;
 
+  List<DropdownMenuEntry<String>> get entradasTipoBusqueda {
+    return [
+      DropdownMenuEntry(
+        value: 'title',
+        label: AppLocalizations.of(context)!.titleEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'author',
+        label: AppLocalizations.of(context)!.authorEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'subject',
+        label: AppLocalizations.of(context)!.subjectEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'isbn',
+        label: AppLocalizations.of(context)!.isbnEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'issn',
+        label: AppLocalizations.of(context)!.issnEntry,
+      ),
+    ];
+  }
+
   @override
   initState() {
     super.initState();
@@ -33,10 +58,10 @@ abstract class HomeController extends State<HomeView> {
         MaterialPageRoute(
           builder: (context) => const SearchView(),
           settings: RouteSettings(
-            arguments: (
-              _controllerTipoBusqueda.text,
-              _controllerBiblioteca.text,
-              cadenaDeBusqueda,
+            arguments: QueryParams(
+              biblioteca: _controllerBiblioteca.text,
+              tipoBusqueda: _controllerTipoBusqueda.text,
+              cadenaDeBusqueda: cadenaDeBusqueda,
             ),
           ),
         ),

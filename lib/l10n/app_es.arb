@@ -1,0 +1,20 @@
+{
+    "home": "Inicio",
+    "searchBy": "Buscar por",
+    "library": "Biblioteca",
+    "search": "Buscar",
+    "ourSelections": "Nuestras selecciones",
+    "news": "Avisos",
+    "searchHistory": "Historial de búsqueda",
+    "language": "Idioma",
+    "libraryDirectory": "Directorio de bibliotecas",
+    "electronicResources": "Recursos electrónicos",
+    "faq": "Preguntas frecuentes",
+    "privacyNotice": "Aviso de privacidad",
+    "searchTitle": "Resultados de Búsqueda",
+    "titleEntry": "Título",
+    "authorEntry": "Autor",
+    "subjectEntry": "Materia",
+    "isbnEntry": "ISBN",
+    "issnEntry": "ISSN"
+}

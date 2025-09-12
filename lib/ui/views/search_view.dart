@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:catbiblio_app/l10n/app_localizations.dart';
+import 'package:catbiblio_app/models/query_params.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
@@ -19,11 +21,8 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
-    final (String, String, String) searchQuery =
-        ModalRoute.of(context)!.settings.arguments as (String, String, String);
-
     return Scaffold(
-      appBar: AppBar(title: Text('Búsqueda')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchTitle)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
@@ -32,18 +31,15 @@ class _SearchViewState extends SearchController {
             children: [
               DropdownMenu(
                 controller: _controllerTipoBusqueda,
-                label: const Text('Buscar por'),
+                label: Text(AppLocalizations.of(context)!.search),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(value: 'title', label: 'Título'),
-                  DropdownMenuEntry(value: 'author', label: 'Autor'),
-                ],
+                dropdownMenuEntries: entradasTipoBusqueda,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
               DropdownMenu(
                 controller: _controllerBiblioteca,
-                label: const Text('Biblioteca'),
+                label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
                   color: primaryColor,
@@ -64,7 +60,7 @@ class _SearchViewState extends SearchController {
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
                   suffixIcon: Icon(Icons.clear),
-                  labelText: 'Buscar',
+                  labelText: AppLocalizations.of(context)!.search,
                   border: OutlineInputBorder(),
                 ),
               ),
