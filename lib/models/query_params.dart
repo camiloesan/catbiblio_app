@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 class QueryParams {
   String tipoBusqueda;
   String biblioteca;
@@ -10,4 +8,9 @@ class QueryParams {
     required this.biblioteca,
     required this.cadenaDeBusqueda,
   });
+
+  @override
+  String toString() {
+    return 'QueryParams{tipoBusqueda: $tipoBusqueda, biblioteca: $biblioteca, cadenaDeBusqueda: $cadenaDeBusqueda}';
+  }
 }
