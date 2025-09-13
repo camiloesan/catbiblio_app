@@ -1,8 +1,8 @@
 part of '../views/home_view.dart';
 
 abstract class HomeController extends State<HomeView> {
-  late TextEditingController _controllerTipoBusqueda;
-  late TextEditingController _controllerBiblioteca;
+  String? _selectedTipoBusqueda;
+  String? _selectedBiblioteca;
   late TextEditingController _controllerBusqueda;
   late Future<List<Aviso>> futureAvisos;
   int _avisosIndex = 0;
@@ -35,8 +35,8 @@ abstract class HomeController extends State<HomeView> {
   @override
   initState() {
     super.initState();
-    _controllerTipoBusqueda = TextEditingController();
-    _controllerBiblioteca = TextEditingController();
+    //_controllerTipoBusqueda = TextEditingController();
+    //_controllerBiblioteca = TextEditingController();
     _controllerBusqueda = TextEditingController();
     futureAvisos = _obtenerAvisos();
   }
@@ -52,15 +52,17 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void onSubmitAction(String cadenaDeBusqueda) {
-    if (cadenaDeBusqueda.isNotEmpty) {
+    if (cadenaDeBusqueda.isNotEmpty &&
+        _selectedTipoBusqueda != null &&
+        _selectedBiblioteca != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SearchView(),
           settings: RouteSettings(
             arguments: QueryParams(
-              biblioteca: _controllerBiblioteca.text,
-              tipoBusqueda: _controllerTipoBusqueda.text,
+              tipoBusqueda: _selectedTipoBusqueda!,
+              biblioteca: _selectedBiblioteca!,
               cadenaDeBusqueda: cadenaDeBusqueda,
             ),
           ),

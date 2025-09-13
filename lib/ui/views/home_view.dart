@@ -106,7 +106,7 @@ class _HomeViewController extends HomeController {
                 ),
               ),
               DropdownMenu(
-                controller: _controllerTipoBusqueda,
+                onSelected: (value) => _selectedTipoBusqueda = value,
                 label: Text(AppLocalizations.of(context)!.searchBy),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
                 dropdownMenuEntries: entradasTipoBusqueda,
@@ -114,7 +114,7 @@ class _HomeViewController extends HomeController {
               ),
               const SizedBox(height: 8),
               DropdownMenu(
-                controller: _controllerBiblioteca,
+                onSelected: (value) => _selectedBiblioteca = value,
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
