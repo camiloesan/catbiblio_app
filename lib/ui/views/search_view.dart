@@ -30,7 +30,7 @@ class _SearchViewState extends SearchController {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DropdownMenu(
-                controller: _controllerTipoBusqueda,
+                onSelected: (value) => _selectedTipoBusqueda = value,
                 label: Text(AppLocalizations.of(context)!.search),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
                 dropdownMenuEntries: entradasTipoBusqueda,
@@ -38,7 +38,7 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               DropdownMenu(
-                controller: _controllerBiblioteca,
+                onSelected: (value) => _selectedBiblioteca = value,
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,

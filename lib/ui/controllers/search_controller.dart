@@ -1,8 +1,10 @@
 part of '../views/search_view.dart';
 
 abstract class SearchController extends State<SearchView> {
-  late TextEditingController _controllerBiblioteca;
-  late TextEditingController _controllerTipoBusqueda;
+  //  late TextEditingController _controllerBiblioteca;
+  //  late TextEditingController _controllerTipoBusqueda;
+  String? _selectedTipoBusqueda;
+  String? _selectedBiblioteca;
   late TextEditingController _controllerBusqueda;
   late QueryParams searchQuery;
   late List<String> _titulos = [];
@@ -20,45 +22,55 @@ abstract class SearchController extends State<SearchView> {
   @override
   void initState() {
     super.initState();
-    _controllerTipoBusqueda = TextEditingController();
-    _controllerBiblioteca = TextEditingController();
+    //_controllerTipoBusqueda = TextEditingController();
+    //_controllerBiblioteca = TextEditingController();
     _controllerBusqueda = TextEditingController();
     // can get the arguments before so its faster
   }
 
   @override
   void dispose() {
-    _controllerBusqueda.dispose();
+    //_controllerBusqueda.dispose();
     super.dispose();
   }
 
   void clearText() {
-    _controllerBusqueda.clear();
+    //_controllerBusqueda.clear();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    args.runtimeType;
+    //args.runtimeType;
+
     if (args is QueryParams) {
       searchQuery = args;
+      print("Received QueryParams: " + searchQuery.toString()); // Debug print
+      fetchXml();
+      // _controllerBiblioteca.text = searchQuery.biblioteca;
+      // _controllerTipoBusqueda.text = searchQuery.tipoBusqueda;
+      // _controllerBusqueda.text = searchQuery.cadenaDeBusqueda;
     } else {
       // searchQuery = QueryParams(bibliotecaController: TextEditingController(), tipoBusquedaController: TextEditingController(), cadenaDeBusqueda: '');
     }
     // no sirve
     // _controllerTipoBusqueda = searchQuery.tipoBusqueda;
     // _controllerBiblioteca = searchQuery.biblioteca;
-    _controllerBusqueda.text = searchQuery.cadenaDeBusqueda;
-    fetchXml();
+    //_controllerBusqueda.text = searchQuery.cadenaDeBusqueda;
+    //fetchXml();
   }
 
   Future<void> fetchXml() async {
     // construir con el valor del controlador
-    final url = Uri.parse("");
+    final url = Uri.parse(
+      //http://XXX.XXX.X.XX:XXXX/biblios?version=1.1&operation=searchRetrieve&query=title=derecho and koha.homebranch=USBI-X&maximumRecords=10&recordSchema=marcxml
+      'http://XXX.XXX.X.XX:XXXX/biblios?version=1.1&operation=searchRetrieve&query=${searchQuery.tipoBusqueda}=${searchQuery.cadenaDeBusqueda} and koha.homebranch=${searchQuery.biblioteca}&maximumRecords=10&recordSchema=marcxml',
+    );
+    print(searchQuery.toString()); // Debug print
     final response = await http.get(url);
 
-    print(url);
+    print("Fetching data from: " + url.toString()); // Debug print
 
     if (response.statusCode == 200) {
     final document = xml.XmlDocument.parse(response.body);
