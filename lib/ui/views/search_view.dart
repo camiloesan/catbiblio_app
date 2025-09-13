@@ -67,25 +67,26 @@ class _SearchViewState extends SearchController {
               const SizedBox(height: 8),
               Divider(color: Colors.grey),
               const SizedBox(height: 8),
-              ..._titulos.map(
-                (title) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        onTap: () {},
-                        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(
-                          'Por: Autor Desconocido \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
-                          style: TextStyle(fontWeight: FontWeight.normal),
-                        ),
-                        contentPadding: EdgeInsets.all(0),
-                        minVerticalPadding: 0,
+              ..._titulos.map((title) {
+                return Column(
+                  children: [
+                    ListTile(
+                      onTap: () {},
+                      title: Text(
+                        title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Divider(color: Colors.grey),
-                    ],
-                  );
-                },
-              ),
+                      subtitle: Text(
+                        'Por: Autor Desconocido \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                      contentPadding: EdgeInsets.all(0),
+                      minVerticalPadding: 0,
+                    ),
+                    Divider(color: Colors.grey),
+                  ],
+                );
+              }),
             ],
           ),
         ),
