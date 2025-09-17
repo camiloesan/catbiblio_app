@@ -15,11 +15,26 @@ abstract class SearchController extends State<SearchView> {
 
   List<DropdownMenuEntry<String>> get entradasTipoBusqueda {
     return [
-      DropdownMenuEntry(value: 'title', label: AppLocalizations.of(context)!.titleEntry),
-      DropdownMenuEntry(value: 'author', label: AppLocalizations.of(context)!.authorEntry),
-      DropdownMenuEntry(value: 'subject', label: AppLocalizations.of(context)!.subjectEntry),
-      DropdownMenuEntry(value: 'isbn', label: AppLocalizations.of(context)!.isbnEntry),
-      DropdownMenuEntry(value: 'issn', label: AppLocalizations.of(context)!.issnEntry),
+      DropdownMenuEntry(
+        value: 'title',
+        label: AppLocalizations.of(context)!.titleEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'author',
+        label: AppLocalizations.of(context)!.authorEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'subject',
+        label: AppLocalizations.of(context)!.subjectEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'isbn',
+        label: AppLocalizations.of(context)!.isbnEntry,
+      ),
+      DropdownMenuEntry(
+        value: 'issn',
+        label: AppLocalizations.of(context)!.issnEntry,
+      ),
     ];
   }
 
@@ -33,7 +48,6 @@ abstract class SearchController extends State<SearchView> {
 
   @override
   void dispose() {
-    _controllerBusqueda.dispose();
     super.dispose();
   }
 
@@ -52,15 +66,12 @@ abstract class SearchController extends State<SearchView> {
     _controllerTipoBusqueda = queryParams.filterController;
     _controllerBiblioteca = queryParams.libraryController;
     _controllerBusqueda.text = queryParams.searchQuery;
-    fetchXml();
+    fetchXml(queryParams.searchBy, queryParams.library, queryParams.searchQuery);
   }
 
-  Future<void> fetchXml() async {
-    // construir con el valor del controlador
-    final url = Uri.parse("");
+  Future<void> fetchXml(String filter, String library, String query) async {
+    final url = Uri.parse("http://148.226.6.25:9999/biblios?version=1.1&operation=searchRetrieve&query=$filter=$query and koha.homebranch=$library&maximumRecords=10&recordSchema=marcxml");
     final response = await http.get(url);
-
-    print(url);
 
     if (response.statusCode == 200) {
       final document = xml.XmlDocument.parse(response.body);
@@ -72,48 +83,47 @@ abstract class SearchController extends State<SearchView> {
         namespace: "http://www.loc.gov/zing/srw/",
       );
 
-    for (var recordData in records) {
-      final record = recordData.findElements("record", namespace: marcNamespace).firstOrNull;
-      
-      if (record == null) continue; // Skip if record not found
+      for (var recordData in records) {
+        final record = recordData
+            .findElements("record", namespace: marcNamespace)
+            .firstOrNull;
 
-      final datafield245 = record
-          .findElements("datafield", namespace: marcNamespace)
-          .firstWhereOrNull((df) => df.getAttribute("tag") == "245");
+        if (record == null) continue; // Skip if record not found
 
-      if (datafield245 == null) continue; // Skip if datafield245 not found
+        final datafield245 = record
+            .findElements("datafield", namespace: marcNamespace)
+            .firstWhereOrNull((df) => df.getAttribute("tag") == "245");
 
-      final subfieldA = datafield245
-          .findElements("subfield", namespace: marcNamespace)
-          .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
+        if (datafield245 == null) continue; // Skip if datafield245 not found
 
-      final subfieldB = datafield245
-          .findElements("subfield", namespace: marcNamespace)
-          .firstWhereOrNull((sf) => sf.getAttribute("code") == "b");
+        final subfieldA = datafield245
+            .findElements("subfield", namespace: marcNamespace)
+            .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
 
-      final subfieldC = datafield245
-          .findElements("subfield", namespace: marcNamespace)
-          .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
+        final subfieldB = datafield245
+            .findElements("subfield", namespace: marcNamespace)
+            .firstWhereOrNull((sf) => sf.getAttribute("code") == "b");
 
-      final title = "${subfieldA?.innerText ?? ''} ${subfieldB?.innerText ?? ''} ${subfieldC?.innerText ?? ''}";
-      _titulos.add(utf8.decode(title.trim().codeUnits));
+        final subfieldC = datafield245
+            .findElements("subfield", namespace: marcNamespace)
+            .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
 
-    }
+        final title =
+            "${subfieldA?.innerText ?? ''} ${subfieldB?.innerText ?? ''} ${subfieldC?.innerText ?? ''}";
+        _titulos.add(utf8.decode(title.trim().codeUnits));
+      }
       setState(() {}); // Update UI after adding the titles
-  } else {
-    throw Exception("Failed to load XML");
-  }
+    } else {
+      throw Exception("Failed to load XML");
+    }
   }
 
   void onSubmitAction(String cadenaDeBusqueda) {
-    // if (cadenaDeBusqueda.isNotEmpty) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => const SearchView(),
-    //       settings: RouteSettings(arguments: cadenaDeBusqueda),
-    //     ),
-    //   );
-    // }
+    if (cadenaDeBusqueda.isNotEmpty) {
+      setState(() {
+        _titulos.clear(); // Clear previous titles
+      });
+      fetchXml(_controllerTipoBusqueda.text, _controllerBiblioteca.text, cadenaDeBusqueda);
+    }
   }
 }

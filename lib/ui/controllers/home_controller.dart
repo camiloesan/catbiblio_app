@@ -1,8 +1,6 @@
 part of '../views/home_view.dart';
 
 abstract class HomeController extends State<HomeView> {
-  String? _selectedTipoBusqueda;
-  String? _selectedBiblioteca;
   late TextEditingController _controllerBusqueda;
   late Future<List<Aviso>> futureAvisos;
   late TextEditingController _controllerTipoBusqueda;
@@ -52,9 +50,6 @@ abstract class HomeController extends State<HomeView> {
 
   @override
   void dispose() {
-    _controllerTipoBusqueda.dispose();
-    _controllerBiblioteca.dispose();
-    _controllerBusqueda.dispose();
     super.dispose();
   }
 
@@ -63,9 +58,7 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void onSubmitAction(String cadenaDeBusqueda) {
-    if (cadenaDeBusqueda.isNotEmpty &&
-        _selectedTipoBusqueda != null &&
-        _selectedBiblioteca != null) {
+    if (cadenaDeBusqueda.isNotEmpty) {
       _queryParams.filterController = _controllerTipoBusqueda;
       _queryParams.libraryController = _controllerBiblioteca;
       _queryParams.searchQuery = cadenaDeBusqueda;
