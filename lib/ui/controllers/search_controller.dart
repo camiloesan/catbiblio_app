@@ -153,7 +153,7 @@ abstract class SearchController extends State<SearchView> {
       setState(() {
         books.clear(); // Clear previous titles
       });
-      fetchXml(_controllerTipoBusqueda.text, _controllerBiblioteca.text, cadenaDeBusqueda);
+      fetchXml(queryParams.searchBy, queryParams.library, cadenaDeBusqueda);
     }
   }
 }

@@ -35,6 +35,7 @@ class _SearchViewState extends SearchController {
                 label: Text(AppLocalizations.of(context)!.search),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
                 dropdownMenuEntries: entradasTipoBusqueda,
+                onSelected: (value) => queryParams.searchBy = value!,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
@@ -46,12 +47,11 @@ class _SearchViewState extends SearchController {
                   color: primaryColor,
                 ),
                 dropdownMenuEntries: const [
-                  DropdownMenuEntry(
-                    value: '',
-                    label: 'Todas las bibliotecas',
-                  ),
+                  DropdownMenuEntry(value: '', label: 'Todas las bibliotecas'),
                   DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
+                  DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
                 ],
+                onSelected: (value) => queryParams.library = value!,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
