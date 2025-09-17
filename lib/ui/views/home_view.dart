@@ -106,27 +106,25 @@ class _HomeViewController extends HomeController {
                 ),
               ),
               DropdownMenu(
-                onSelected: (value) => _selectedTipoBusqueda = value,
                 label: Text(AppLocalizations.of(context)!.searchBy),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: entradasTipoBusqueda,
+                dropdownMenuEntries: _entradasTipoBusqueda,
+                onSelected: (value) => _queryParams.searchBy = value!,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
               DropdownMenu(
-                onSelected: (value) => _selectedBiblioteca = value,
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
                   color: primaryColor,
                 ),
                 dropdownMenuEntries: const [
-                  DropdownMenuEntry(
-                    value: 'homebranch',
-                    label: 'Todas las bibliotecas',
-                  ),
+                  DropdownMenuEntry(value: '', label: 'Todas las bibliotecas'),
                   DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
+                  DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
                 ],
+                onSelected: (value) => _queryParams.library = value!,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
@@ -135,7 +133,12 @@ class _HomeViewController extends HomeController {
                 onSubmitted: (value) => onSubmitAction(value),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
-                  suffixIcon: Icon(Icons.clear),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      _controllerBusqueda.clear();
+                    },
+                  ),
                   labelText: AppLocalizations.of(context)!.search,
                   border: OutlineInputBorder(),
                 ),

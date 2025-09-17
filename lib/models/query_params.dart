@@ -1,16 +1,22 @@
+import 'package:flutter/widgets.dart';
+
 class QueryParams {
-  String tipoBusqueda;
-  String biblioteca;
-  String cadenaDeBusqueda;
+  String library;
+  String searchBy;
+  String searchQuery;
+  TextEditingController filterController;
+  TextEditingController libraryController;
 
   QueryParams({
-    required this.tipoBusqueda,
-    required this.biblioteca,
-    required this.cadenaDeBusqueda,
+    required this.library,
+    required this.searchBy,
+    required this.searchQuery,
+    required this.filterController,
+    required this.libraryController
   });
 
-  @override
-  String toString() {
-    return 'QueryParams{tipoBusqueda: $tipoBusqueda, biblioteca: $biblioteca, cadenaDeBusqueda: $cadenaDeBusqueda}';
-  }
+  // @override
+  // String toString() {
+  //   return 'QueryParams{tipoBusqueda: $tipoBusqueda, biblioteca: $biblioteca, cadenaDeBusqueda: $cadenaDeBusqueda}';
+  // }
 }

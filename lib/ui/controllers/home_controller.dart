@@ -5,9 +5,18 @@ abstract class HomeController extends State<HomeView> {
   String? _selectedBiblioteca;
   late TextEditingController _controllerBusqueda;
   late Future<List<Aviso>> futureAvisos;
+  late TextEditingController _controllerTipoBusqueda;
+  late TextEditingController _controllerBiblioteca;
+  final QueryParams _queryParams = QueryParams(
+    library: '',
+    searchBy: 'title',
+    searchQuery: '',
+    filterController: TextEditingController(),
+    libraryController: TextEditingController(),
+  );
   int _avisosIndex = 0;
 
-  List<DropdownMenuEntry<String>> get entradasTipoBusqueda {
+  List<DropdownMenuEntry<String>> get _entradasTipoBusqueda {
     return [
       DropdownMenuEntry(
         value: 'title',
@@ -35,14 +44,16 @@ abstract class HomeController extends State<HomeView> {
   @override
   initState() {
     super.initState();
-    //_controllerTipoBusqueda = TextEditingController();
-    //_controllerBiblioteca = TextEditingController();
+    _controllerTipoBusqueda = TextEditingController();
+    _controllerBiblioteca = TextEditingController();
     _controllerBusqueda = TextEditingController();
     futureAvisos = _obtenerAvisos();
   }
 
   @override
   void dispose() {
+    _controllerTipoBusqueda.dispose();
+    _controllerBiblioteca.dispose();
     _controllerBusqueda.dispose();
     super.dispose();
   }
@@ -55,17 +66,14 @@ abstract class HomeController extends State<HomeView> {
     if (cadenaDeBusqueda.isNotEmpty &&
         _selectedTipoBusqueda != null &&
         _selectedBiblioteca != null) {
+      _queryParams.filterController = _controllerTipoBusqueda;
+      _queryParams.libraryController = _controllerBiblioteca;
+      _queryParams.searchQuery = cadenaDeBusqueda;
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SearchView(),
-          settings: RouteSettings(
-            arguments: QueryParams(
-              tipoBusqueda: _selectedTipoBusqueda!,
-              biblioteca: _selectedBiblioteca!,
-              cadenaDeBusqueda: cadenaDeBusqueda,
-            ),
-          ),
+          settings: RouteSettings(arguments: _queryParams),
         ),
       );
     }

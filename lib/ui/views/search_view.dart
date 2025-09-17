@@ -30,7 +30,7 @@ class _SearchViewState extends SearchController {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DropdownMenu(
-                onSelected: (value) => _selectedTipoBusqueda = value,
+                controller: _controllerTipoBusqueda,
                 label: Text(AppLocalizations.of(context)!.search),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
                 dropdownMenuEntries: entradasTipoBusqueda,
@@ -38,7 +38,7 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               DropdownMenu(
-                onSelected: (value) => _selectedBiblioteca = value,
+                controller: _controllerBiblioteca,
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
@@ -46,7 +46,7 @@ class _SearchViewState extends SearchController {
                 ),
                 dropdownMenuEntries: const [
                   DropdownMenuEntry(
-                    value: 'homebranch',
+                    value: '',
                     label: 'Todas las bibliotecas',
                   ),
                   DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
@@ -59,7 +59,12 @@ class _SearchViewState extends SearchController {
                 onSubmitted: (value) => onSubmitAction(value),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
-                  suffixIcon: Icon(Icons.clear),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      _controllerBusqueda.clear();
+                    },
+                  ),
                   labelText: AppLocalizations.of(context)!.search,
                   border: OutlineInputBorder(),
                 ),
@@ -67,26 +72,25 @@ class _SearchViewState extends SearchController {
               const SizedBox(height: 8),
               Divider(color: Colors.grey),
               const SizedBox(height: 8),
-              ..._titulos.map((title) {
-                return Column(
-                  children: [
-                    ListTile(
-                      onTap: () {},
-                      title: Text(
-                        title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+              ..._titulos.map(
+                (title) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        onTap: () {},
+                        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text(
+                          'Por: Autor Desconocido \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
+                          style: TextStyle(fontWeight: FontWeight.normal),
+                        ),
+                        contentPadding: EdgeInsets.all(0),
+                        minVerticalPadding: 0,
                       ),
-                      subtitle: Text(
-                        'Por: Autor Desconocido \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
-                        style: TextStyle(fontWeight: FontWeight.normal),
-                      ),
-                      contentPadding: EdgeInsets.all(0),
-                      minVerticalPadding: 0,
-                    ),
-                    Divider(color: Colors.grey),
-                  ],
-                );
-              }),
+                      Divider(color: Colors.grey),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),
