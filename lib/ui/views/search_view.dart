@@ -84,7 +84,7 @@ class _SearchViewState extends SearchController {
                         onTap: () {},
                         title: Text(book.title, style: TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text(
-                          'Por: ${book.author} \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
+                          'Por: ${book.author} \nDisponibilidad: 1 biblioteca',
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                         contentPadding: EdgeInsets.all(0),
