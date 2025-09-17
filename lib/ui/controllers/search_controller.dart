@@ -11,7 +11,7 @@ abstract class SearchController extends State<SearchView> {
     filterController: TextEditingController(),
     libraryController: TextEditingController(),
   );
-  late List<String> _titulos = [];
+  late List<BookPreview> books = [];
 
   List<DropdownMenuEntry<String>> get entradasTipoBusqueda {
     return [
@@ -75,15 +75,19 @@ abstract class SearchController extends State<SearchView> {
 
     if (response.statusCode == 200) {
       final document = xml.XmlDocument.parse(response.body);
-
       const marcNamespace = "http://www.loc.gov/MARC21/slim";
-
       final records = document.findAllElements(
         "recordData",
         namespace: "http://www.loc.gov/zing/srw/",
       );
 
       for (var recordData in records) {
+        BookPreview book = BookPreview(
+          title: '',
+          author: '',
+          coverUrl: '',
+        );
+
         final record = recordData
             .findElements("record", namespace: marcNamespace)
             .firstOrNull;
@@ -95,6 +99,18 @@ abstract class SearchController extends State<SearchView> {
             .firstWhereOrNull((df) => df.getAttribute("tag") == "245");
 
         if (datafield245 == null) continue; // Skip if datafield245 not found
+        
+        final datafield100 = record
+            .findElements("datafield", namespace: marcNamespace)
+            .firstWhereOrNull((df) => df.getAttribute("tag") == "100");
+        if (datafield100 != null) {
+          var a100 = datafield100
+              .findElements("subfield", namespace: marcNamespace)
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
+          if (a100 != null) {
+            book.author = utf8.decode(a100.innerText.trim().codeUnits);
+          }
+        }
 
         final subfieldA = datafield245
             .findElements("subfield", namespace: marcNamespace)
@@ -110,7 +126,9 @@ abstract class SearchController extends State<SearchView> {
 
         final title =
             "${subfieldA?.innerText ?? ''} ${subfieldB?.innerText ?? ''} ${subfieldC?.innerText ?? ''}";
-        _titulos.add(utf8.decode(title.trim().codeUnits));
+        book.title = utf8.decode(title.trim().codeUnits);
+
+        books.add(book);
       }
       setState(() {}); // Update UI after adding the titles
     } else {
@@ -121,7 +139,7 @@ abstract class SearchController extends State<SearchView> {
   void onSubmitAction(String cadenaDeBusqueda) {
     if (cadenaDeBusqueda.isNotEmpty) {
       setState(() {
-        _titulos.clear(); // Clear previous titles
+        books.clear(); // Clear previous titles
       });
       fetchXml(_controllerTipoBusqueda.text, _controllerBiblioteca.text, cadenaDeBusqueda);
     }

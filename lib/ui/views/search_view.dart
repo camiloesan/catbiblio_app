@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:catbiblio_app/l10n/app_localizations.dart';
+import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -72,15 +73,15 @@ class _SearchViewState extends SearchController {
               const SizedBox(height: 8),
               Divider(color: Colors.grey),
               const SizedBox(height: 8),
-              ..._titulos.map(
-                (title) {
+              ...books.map(
+                (book) {
                   return Column(
                     children: [
                       ListTile(
                         onTap: () {},
-                        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+                        title: Text(book.title, style: TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text(
-                          'Por: Autor Desconocido \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
+                          'Por: ${book.author} \nDisponibilidad: 1 biblioteca \nOtro título: Título relacionado',
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                         contentPadding: EdgeInsets.all(0),
