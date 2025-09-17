@@ -112,6 +112,8 @@ class _HomeViewController extends HomeController {
                 dropdownMenuEntries: _entradasTipoBusqueda,
                 onSelected: (value) => _queryParams.searchBy = value!,
                 width: double.infinity,
+                enableFilter: false,
+                requestFocusOnTap: false,
               ),
               const SizedBox(height: 8),
               DropdownMenu(
@@ -127,6 +129,8 @@ class _HomeViewController extends HomeController {
                   DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
                 ],
                 onSelected: (value) => _queryParams.library = value!,
+                enableFilter: false,
+                requestFocusOnTap: false,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
