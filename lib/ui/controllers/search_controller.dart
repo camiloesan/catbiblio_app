@@ -86,6 +86,7 @@ abstract class SearchController extends State<SearchView> {
           title: '',
           author: '',
           coverUrl: '',
+          biblioNumber: '',
         );
 
         final record = recordData
@@ -112,6 +113,18 @@ abstract class SearchController extends State<SearchView> {
           }
         }
 
+        final datafield999 = record
+            .findElements("datafield", namespace: marcNamespace)
+            .firstWhereOrNull((df) => df.getAttribute("tag") == "999");
+        if (datafield999 != null) {
+          var a999 = datafield999
+              .findElements("subfield", namespace: marcNamespace)
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
+          if (a999 != null) {
+            book.biblioNumber = utf8.decode(a999.innerText.trim().codeUnits);
+          }
+        }
+
         final subfieldA = datafield245
             .findElements("subfield", namespace: marcNamespace)
             .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
@@ -123,7 +136,6 @@ abstract class SearchController extends State<SearchView> {
         final subfieldC = datafield245
             .findElements("subfield", namespace: marcNamespace)
             .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
-
         final title =
             "${subfieldA?.innerText ?? ''} ${subfieldB?.innerText ?? ''} ${subfieldC?.innerText ?? ''}";
         book.title = utf8.decode(title.trim().codeUnits);
