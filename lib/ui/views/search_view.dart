@@ -76,7 +76,6 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               Divider(color: Colors.grey),
-              const SizedBox(height: 8),
               ...books.map(
                 (book) {
                   return Column(
