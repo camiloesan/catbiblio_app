@@ -73,4 +73,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get allLibraries => 'Todas';
+
+  @override
+  String get detailsTitle => 'Detalles';
 }

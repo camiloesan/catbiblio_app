@@ -1,6 +1,7 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
+import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/svc/search.dart';
 
@@ -72,7 +73,15 @@ class _SearchViewState extends SearchController {
                 return Column(
                   children: [
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BookView(biblioNumber: book.biblioNumber),
+                          ),
+                        );
+                      },
                       title: Text(
                         book.title,
                         style: TextStyle(fontWeight: FontWeight.bold),
