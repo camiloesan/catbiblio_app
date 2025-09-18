@@ -229,6 +229,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get allLibraries;
+
+  /// Details title in book view
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get detailsTitle;
 }
 
 class _AppLocalizationsDelegate

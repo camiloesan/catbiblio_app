@@ -17,10 +17,10 @@ class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewController();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewController extends HomeController {
+class _HomeViewState extends HomeController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
