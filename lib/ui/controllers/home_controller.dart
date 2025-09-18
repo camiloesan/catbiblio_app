@@ -1,10 +1,10 @@
 part of '../views/home_view.dart';
 
 abstract class HomeController extends State<HomeView> {
-  late TextEditingController _controllerBusqueda;
-  late Future<List<Aviso>> futureAvisos;
-  late TextEditingController _controllerTipoBusqueda;
-  late TextEditingController _controllerBiblioteca;
+  late TextEditingController _searchController;
+  late Future<List<Aviso>> futureNews;
+  late TextEditingController _searchFilterController;
+  late TextEditingController _libraryController;
   final QueryParams _queryParams = QueryParams(
     library: 'all',
     searchBy: 'title',
@@ -12,9 +12,9 @@ abstract class HomeController extends State<HomeView> {
     filterController: TextEditingController(),
     libraryController: TextEditingController(),
   );
-  int _avisosIndex = 0;
+  int _newsIndex = 0;
 
-  List<DropdownMenuEntry<String>> get _entradasTipoBusqueda {
+  List<DropdownMenuEntry<String>> get _filterEntries {
     return [
       DropdownMenuEntry(
         value: 'title',
@@ -39,7 +39,7 @@ abstract class HomeController extends State<HomeView> {
     ];
   }
 
-  List<DropdownMenuEntry<String>> get _entriesLibraries {
+  List<DropdownMenuEntry<String>> get _libraryEntries {
     return [
       DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
       DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
@@ -50,10 +50,10 @@ abstract class HomeController extends State<HomeView> {
   @override
   initState() {
     super.initState();
-    _controllerTipoBusqueda = TextEditingController();
-    _controllerBiblioteca = TextEditingController();
-    _controllerBusqueda = TextEditingController();
-    futureAvisos = _obtenerAvisos();
+    _searchFilterController = TextEditingController();
+    _libraryController = TextEditingController();
+    _searchController = TextEditingController();
+    futureNews = _getNews();
   }
 
   @override
@@ -62,14 +62,14 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void clearText() {
-    _controllerBusqueda.clear();
+    _searchController.clear();
   }
 
-  void onSubmitAction(String cadenaDeBusqueda) {
-    if (cadenaDeBusqueda.isNotEmpty) {
-      _queryParams.filterController = _controllerTipoBusqueda;
-      _queryParams.libraryController = _controllerBiblioteca;
-      _queryParams.searchQuery = cadenaDeBusqueda;
+  void onSubmitAction(String searchQuery) {
+    if (searchQuery.isNotEmpty) {
+      _queryParams.filterController = _searchFilterController;
+      _queryParams.libraryController = _libraryController;
+      _queryParams.searchQuery = searchQuery;
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -80,14 +80,14 @@ abstract class HomeController extends State<HomeView> {
     }
   }
 
-  Future<List<Aviso>> _obtenerAvisos() async {
+  Future<List<Aviso>> _getNews() async {
     /// https://www.example.com/avisos.json
     final String response = await rootBundle.loadString('assets/avisos.json');
     final List<dynamic> data = json.decode(response);
     return data.map((item) => Aviso.fromJson(item)).toList();
   }
 
-  Future<void> abrirEnlace(String url) async {
+  Future<void> openLink(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (mounted) {
@@ -98,21 +98,21 @@ abstract class HomeController extends State<HomeView> {
     }
   }
 
-  void avisoCambiado(int index, CarouselPageChangedReason reason) {
+  void newChanged(int index, CarouselPageChangedReason reason) {
     setState(() {
-      _avisosIndex = index;
+      _newsIndex = index;
     });
   }
 
-  Widget construirCarousel(List<Aviso> avisos) {
+  Widget buildCarousel(List<Aviso> news) {
     return Column(
       children: [
         CarouselSlider.builder(
-          itemCount: avisos.length,
+          itemCount: news.length,
           itemBuilder: (context, index, realIndex) {
-            final aviso = avisos[index];
+            final aviso = news[index];
             return GestureDetector(
-              onTap: () => abrirEnlace(aviso.enlace),
+              onTap: () => openLink(aviso.enlace),
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
@@ -147,7 +147,7 @@ abstract class HomeController extends State<HomeView> {
             enlargeCenterPage: true,
             viewportFraction: 1,
             aspectRatio: 16 / 6,
-            onPageChanged: (index, reason) => avisoCambiado(index, reason),
+            onPageChanged: (index, reason) => newChanged(index, reason),
           ),
         ),
         const SizedBox(height: 12),
@@ -155,14 +155,14 @@ abstract class HomeController extends State<HomeView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
-            avisos.length,
+            news.length,
             (index) => Container(
               width: 9,
               height: 9,
               margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _avisosIndex == index
+                color: _newsIndex == index
                     ? Theme.of(context).primaryColor
                     : Colors.grey.shade400,
               ),
