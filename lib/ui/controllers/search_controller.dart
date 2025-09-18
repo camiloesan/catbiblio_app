@@ -1,9 +1,9 @@
 part of '../views/search_view.dart';
 
 abstract class SearchController extends State<SearchView> {
-  late TextEditingController _controllerBiblioteca;
-  late TextEditingController _controllerTipoBusqueda;
-  late TextEditingController _controllerBusqueda;
+  late TextEditingController _libraryController;
+  late TextEditingController _filterController;
+  late TextEditingController _searchController;
   QueryParams queryParams = QueryParams(
     library: '',
     searchBy: 'title',
@@ -13,7 +13,7 @@ abstract class SearchController extends State<SearchView> {
   );
   late List<BookPreview> books = [];
 
-  List<DropdownMenuEntry<String>> get entradasTipoBusqueda {
+  List<DropdownMenuEntry<String>> get _filterEntries {
     return [
       DropdownMenuEntry(
         value: 'title',
@@ -38,7 +38,7 @@ abstract class SearchController extends State<SearchView> {
     ];
   }
 
-  List<DropdownMenuEntry<String>> get _entriesLibraries {
+  List<DropdownMenuEntry<String>> get _libraryEntries {
     return [
       DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
       DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
@@ -49,9 +49,9 @@ abstract class SearchController extends State<SearchView> {
   @override
   void initState() {
     super.initState();
-    _controllerTipoBusqueda = TextEditingController();
-    _controllerBiblioteca = TextEditingController();
-    _controllerBusqueda = TextEditingController();
+    _filterController = TextEditingController();
+    _libraryController = TextEditingController();
+    _searchController = TextEditingController();
   }
 
   @override
@@ -60,7 +60,7 @@ abstract class SearchController extends State<SearchView> {
   }
 
   void clearText() {
-    _controllerBusqueda.clear();
+    _searchController.clear();
   }
 
   @override
@@ -71,9 +71,9 @@ abstract class SearchController extends State<SearchView> {
     if (args is QueryParams) {
       queryParams = args;
     }
-    _controllerTipoBusqueda = queryParams.filterController;
-    _controllerBiblioteca = queryParams.libraryController;
-    _controllerBusqueda.text = queryParams.searchQuery;
+    _filterController = queryParams.filterController;
+    _libraryController = queryParams.libraryController;
+    _searchController.text = queryParams.searchQuery;
     fetchXml(queryParams.searchBy, queryParams.library, queryParams.searchQuery);
   }
 

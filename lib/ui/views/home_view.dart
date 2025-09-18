@@ -57,7 +57,7 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () => abrirEnlace('https://www.uv.mx/dgbuv/#mapa'),
+            onTap: () => openLink('https://www.uv.mx/dgbuv/#mapa'),
           ),
           ListTile(
             leading: const Icon(Icons.computer, color: primaryColor),
@@ -66,7 +66,7 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () => abrirEnlace('https://www.uv.mx/dgbuv/#descubridor'),
+            onTap: () => openLink('https://www.uv.mx/dgbuv/#descubridor'),
           ),
           ListTile(
             leading: const Icon(Icons.help, color: primaryColor),
@@ -76,7 +76,7 @@ class _HomeViewController extends HomeController {
               child: const Icon(Icons.open_in_new),
             ),
             onTap: () =>
-                abrirEnlace('https://www.uv.mx/dgbuv/preguntas-frecuentes/'),
+                openLink('https://www.uv.mx/dgbuv/preguntas-frecuentes/'),
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip, color: primaryColor),
@@ -85,7 +85,7 @@ class _HomeViewController extends HomeController {
               scale: 0.8,
               child: const Icon(Icons.open_in_new),
             ),
-            onTap: () => abrirEnlace(
+            onTap: () => openLink(
               'https://catbiblio.uv.mx/avisos/aviso-privacidad-integral-sib.pdf',
             ),
           ),
@@ -106,10 +106,10 @@ class _HomeViewController extends HomeController {
                 ),
               ),
               DropdownMenu(
-                controller: _controllerTipoBusqueda,
+                controller: _searchFilterController,
                 label: Text(AppLocalizations.of(context)!.searchBy),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: _entradasTipoBusqueda,
+                dropdownMenuEntries: _filterEntries,
                 initialSelection: _queryParams.searchBy,
                 onSelected: (value) => _queryParams.searchBy = value!,
                 width: double.infinity,
@@ -118,14 +118,14 @@ class _HomeViewController extends HomeController {
               ),
               const SizedBox(height: 8),
               DropdownMenu(
-                controller: _controllerBiblioteca,
+                controller: _libraryController,
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
                   color: primaryColor,
                 ),
                 initialSelection: _queryParams.library,
-                dropdownMenuEntries: _entriesLibraries,
+                dropdownMenuEntries: _libraryEntries,
                 onSelected: (value) => _queryParams.library = value!,
                 enableFilter: false,
                 requestFocusOnTap: false,
@@ -133,14 +133,14 @@ class _HomeViewController extends HomeController {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: _controllerBusqueda,
+                controller: _searchController,
                 onSubmitted: (value) => onSubmitAction(value),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
-                      _controllerBusqueda.clear();
+                      _searchController.clear();
                     },
                   ),
                   labelText: AppLocalizations.of(context)!.search,
@@ -165,7 +165,7 @@ class _HomeViewController extends HomeController {
               ),
               const SizedBox(height: 12),
               FutureBuilder<List<Aviso>>(
-                future: futureAvisos,
+                future: futureNews,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const SizedBox(
@@ -179,7 +179,7 @@ class _HomeViewController extends HomeController {
                     );
                   }
                   if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    return construirCarousel(snapshot.data!);
+                    return buildCarousel(snapshot.data!);
                   }
                   return const Center(
                     child: Text('No hay avisos disponibles.'),

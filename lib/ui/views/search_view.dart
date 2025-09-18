@@ -31,10 +31,10 @@ class _SearchViewState extends SearchController {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DropdownMenu(
-                controller: _controllerTipoBusqueda,
+                controller: _filterController,
                 label: Text(AppLocalizations.of(context)!.search),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: entradasTipoBusqueda,
+                dropdownMenuEntries: _filterEntries,
                 onSelected: (value) => queryParams.searchBy = value!,
                 enableFilter: false,
                 requestFocusOnTap: false,
@@ -42,13 +42,13 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               DropdownMenu(
-                controller: _controllerBiblioteca,
+                controller: _libraryController,
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
                   color: primaryColor,
                 ),
-                dropdownMenuEntries: _entriesLibraries,
+                dropdownMenuEntries: _libraryEntries,
                 onSelected: (value) => queryParams.library = value!,
                 enableFilter: false,
                 requestFocusOnTap: false,
@@ -56,14 +56,14 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: _controllerBusqueda,
+                controller: _searchController,
                 onSubmitted: (value) => onSubmitAction(value),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
-                      _controllerBusqueda.clear();
+                      _searchController.clear();
                     },
                   ),
                   labelText: AppLocalizations.of(context)!.search,
