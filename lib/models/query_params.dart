@@ -12,11 +12,11 @@ class QueryParams {
     required this.searchBy,
     required this.searchQuery,
     required this.filterController,
-    required this.libraryController
+    required this.libraryController,
   });
 
-  // @override
-  // String toString() {
-  //   return 'QueryParams{tipoBusqueda: $tipoBusqueda, biblioteca: $biblioteca, cadenaDeBusqueda: $cadenaDeBusqueda}';
-  // }
+  @override
+  String toString() {
+    return 'QueryParams(library: $library, searchBy: $searchBy, searchQuery: $searchQuery)';
+  }
 }
