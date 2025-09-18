@@ -235,6 +235,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Details'**
   String get detailsTitle;
+
+  /// Snackbar message shown when the language is changed to Spanish
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to Spanish'**
+  String get languageChanged;
 }
 
 class _AppLocalizationsDelegate
