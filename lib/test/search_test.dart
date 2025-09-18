@@ -6,21 +6,18 @@ import 'package:catbiblio_app/services/svc/search.dart';
 
 void main() {
   group('SruService', () {
-    final sruService = SruService();
-
     test('searchBooks returns a list of BookPreview', () async {
       final queryParams = QueryParams(
         library: 'USBI-X',
         searchBy: 'title',
-        searchQuery: 'Dune',
+        searchQuery: 'sistemas operativos',
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
 
-      final response = await sruService.searchBooks(queryParams);
-      final books = await sruService.searchBooks(queryParams);
+      final response = await SruService.searchBooks(queryParams);
 
-      expect(response, equals(200));
+      expect(response, isA<List<BookPreview>>());
     });
   });
 }
