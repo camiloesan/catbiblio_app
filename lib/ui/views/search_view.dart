@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:xml/xml.dart' as xml;
-import 'package:collection/collection.dart';
+import 'package:catbiblio_app/services/svc/search.dart';
 
 part '../controllers/search_controller.dart';
 
@@ -73,32 +69,26 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               Divider(color: Colors.grey),
-              ...books.map(
-                (book) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BookView(biblioNumber: book.biblioNumber),
-                            ),
-                          );
-                        },
-                        title: Text(book.title, style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(
-                          '${AppLocalizations.of(context)!.byAuthor}: ${book.author}\n${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails} \n${AppLocalizations.of(context)!.availability}: 1 biblioteca',
-                          style: TextStyle(fontWeight: FontWeight.normal),
-                        ),
-                        contentPadding: EdgeInsets.all(0),
-                        minVerticalPadding: 0,
+              ...books.map((book) {
+                return Column(
+                  children: [
+                    ListTile(
+                      onTap: () {},
+                      title: Text(
+                        book.title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Divider(color: Colors.grey),
-                    ],
-                  );
-                },
-              ),
+                      subtitle: Text(
+                        '${AppLocalizations.of(context)!.byAuthor}: ${book.author}\n${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails} \n${AppLocalizations.of(context)!.availability}: 1 biblioteca',
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                      contentPadding: EdgeInsets.all(0),
+                      minVerticalPadding: 0,
+                    ),
+                    Divider(color: Colors.grey),
+                  ],
+                );
+              }),
             ],
           ),
         ),
