@@ -47,7 +47,9 @@ class _HomeViewState extends HomeController {
           ListTile(
             leading: const Icon(Icons.language, color: primaryColor),
             title: Text(AppLocalizations.of(context)!.language),
-            onTap: () {},
+            // onTap: () => AppLocalizations.of(context)!.localeName == 'es'
+            //     ? AppLocalizations.of(context)!.setLocale(const Locale('en'))
+            //     : AppLocalizations.of(context)!.setLocale(const Locale('es')),
           ),
           const Divider(),
           ListTile(
