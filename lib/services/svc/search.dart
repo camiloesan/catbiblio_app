@@ -1,45 +1,52 @@
-//import 'dart:convert';
-// import 'package:dio/dio.dart'; TODO: look into documentation
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:collection/collection.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 
 class SruService {
-  // ejemplo: http://{{baseUrl}}/cgi-bin/koha/svc/bibliosItems?title=dunde&branch=USBI-X
-  // ejemplo: http://{{baseUrl}}/cgi-bin/koha/svc/bibliosItems?author=frank+herbert
-  // ejemplo: http://{{baseUrl}}/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
+  static final Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: 'http://148.226.6.25',
+      responseType: ResponseType.plain,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {'Accept': 'application/xml'},
+    ),
+  );
+
+  // TODO: break into smaller single responsibility methods
+  /// Searches for books based on the provided query parameters
+  ///
+  /// Examples:
+  /// - Title search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?title=dune&branch=USBI-X
+  /// - Author search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?author=frank+herbert
+  /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
   static Future<List<BookPreview>> searchBooks(QueryParams params) async {
-    final String _baseUrl = 'http://148.226.6.25';
     final queryParameters = {
       'title': params.searchBy == 'title' ? params.searchQuery : null,
       'author': params.searchBy == 'author' ? params.searchQuery : null,
       'subject': params.searchBy == 'subject' ? params.searchQuery : null,
       'isbn': params.searchBy == 'isbn' ? params.searchQuery : null,
       'issn': params.searchBy == 'issn' ? params.searchQuery : null,
-      'branch': params.library.isNotEmpty ? params.library : null,
+      'branch': params.library != 'all' ? params.library : null,
     }..removeWhere((key, value) => value == null || value.isEmpty);
 
-    print('Query Parameters: $queryParameters');
+    try {
+      final response = await _dio.get(
+        '/cgi-bin/koha/svc/bibliosItems',
+        queryParameters: queryParameters,
+      );
 
-    final url = Uri.parse(
-      '$_baseUrl/cgi-bin/koha/svc/bibliosItems',
-    ).replace(queryParameters: queryParameters);
-
-    late List<BookPreview> books = [];
-
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final document = xml.XmlDocument.parse(response.body);
+      final document = xml.XmlDocument.parse(response.data);
       const marcNamespace = "http://www.loc.gov/MARC21/slim";
       final records = document.findAllElements(
         "recordData",
         namespace: "http://www.loc.gov/zing/srw/",
       );
 
-      //TODO: manejar utf8
+      List<BookPreview> books = [];
+
       for (var recordData in records) {
         BookPreview book = BookPreview(
           title: '',
@@ -120,10 +127,9 @@ class SruService {
 
         books.add(book);
       }
-      // setState(() {}); // Update UI after adding the titles
       return books;
-    } else {
-      throw Exception("Failed to load XML");
+    } on DioException catch (e) {
+      throw Exception("Failed to load XML: ${e.message}");
     }
   }
 }

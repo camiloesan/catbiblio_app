@@ -77,7 +77,8 @@ class _SearchViewState extends SearchController {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BookView(biblioNumber: book.biblioNumber),
+                            builder: (context) =>
+                                BookView(biblioNumber: book.biblioNumber),
                           ),
                         );
                       },
