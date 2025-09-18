@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:xml/xml.dart' as xml;
-import 'package:collection/collection.dart';
 import 'package:catbiblio_app/services/svc/search.dart';
 
 part '../controllers/search_controller.dart';
