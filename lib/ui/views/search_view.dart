@@ -48,11 +48,7 @@ class _SearchViewState extends SearchController {
                   Icons.location_city,
                   color: primaryColor,
                 ),
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(value: '', label: 'Todas las bibliotecas'),
-                  DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
-                  DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
-                ],
+                dropdownMenuEntries: _entriesLibraries,
                 onSelected: (value) => queryParams.library = value!,
                 enableFilter: false,
                 requestFocusOnTap: false,
@@ -84,7 +80,7 @@ class _SearchViewState extends SearchController {
                         onTap: () {},
                         title: Text(book.title, style: TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text(
-                          'Por: ${book.author} \nDisponibilidad: 1 biblioteca',
+                          '${AppLocalizations.of(context)!.byAuthor}: ${book.author}\n${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails} \n${AppLocalizations.of(context)!.availability}: 1 biblioteca',
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                         contentPadding: EdgeInsets.all(0),

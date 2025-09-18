@@ -205,6 +205,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ISSN'**
   String get issnEntry;
+
+  /// By author label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'By'**
+  String get byAuthor;
+
+  /// Publishing details label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Publishing details'**
+  String get publishingDetails;
+
+  /// Availability label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Availability'**
+  String get availability;
+
+  /// All libraries entry in library selection dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allLibraries;
 }
 
 class _AppLocalizationsDelegate

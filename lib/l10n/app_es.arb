@@ -16,5 +16,9 @@
     "authorEntry": "Autor",
     "subjectEntry": "Materia",
     "isbnEntry": "ISBN",
-    "issnEntry": "ISSN"
+    "issnEntry": "ISSN",
+    "byAuthor": "Por",
+    "publishingDetails": "Detalles de publicación",
+    "availability": "Disponibilidad",
+    "allLibraries": "Todas"
 }

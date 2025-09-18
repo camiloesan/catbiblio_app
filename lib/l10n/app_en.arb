@@ -70,5 +70,21 @@
   "issnEntry": "ISSN",
   "@issnEntry": {
     "description": "ISSN entry in search by dropdown"
+  },
+  "byAuthor": "By",
+  "@byAuthor": {
+    "description": "By author label in book preview"
+  },
+  "publishingDetails": "Publishing details",
+  "@publishingDetails": {
+    "description": "Publishing details label in book preview"
+  },
+  "availability": "Availability",
+  "@availability": {
+    "description": "Availability label in book preview"
+  },
+  "allLibraries": "All",
+  "@allLibraries": {
+    "description": "All libraries entry in library selection dropdown"
   }
 }

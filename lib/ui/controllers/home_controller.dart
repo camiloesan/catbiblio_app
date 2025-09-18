@@ -6,7 +6,7 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _controllerTipoBusqueda;
   late TextEditingController _controllerBiblioteca;
   final QueryParams _queryParams = QueryParams(
-    library: '',
+    library: 'all',
     searchBy: 'title',
     searchQuery: '',
     filterController: TextEditingController(),
@@ -36,6 +36,14 @@ abstract class HomeController extends State<HomeView> {
         value: 'issn',
         label: AppLocalizations.of(context)!.issnEntry,
       ),
+    ];
+  }
+
+  List<DropdownMenuEntry<String>> get _entriesLibraries {
+    return [
+      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
+      DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
+      DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
     ];
   }
 

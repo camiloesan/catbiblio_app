@@ -38,6 +38,14 @@ abstract class SearchController extends State<SearchView> {
     ];
   }
 
+  List<DropdownMenuEntry<String>> get _entriesLibraries {
+    return [
+      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
+      DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
+      DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
+    ];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -87,6 +95,7 @@ abstract class SearchController extends State<SearchView> {
           author: '',
           coverUrl: '',
           biblioNumber: '',
+          publishingDetails: '',
         );
 
         final record = recordData
@@ -139,6 +148,24 @@ abstract class SearchController extends State<SearchView> {
         final title =
             "${subfieldA?.innerText ?? ''} ${subfieldB?.innerText ?? ''} ${subfieldC?.innerText ?? ''}";
         book.title = utf8.decode(title.trim().codeUnits);
+
+        final datafield260 = record
+            .findElements("datafield", namespace: marcNamespace)
+            .firstWhereOrNull((df) => df.getAttribute("tag") == "260");
+        if (datafield260 != null) {
+          var a260 = datafield260
+              .findElements("subfield", namespace: marcNamespace)
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
+          var b260 = datafield260
+              .findElements("subfield", namespace: marcNamespace)
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == "b");
+          var c260 = datafield260
+              .findElements("subfield", namespace: marcNamespace)
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
+          var publishingDetails =
+              "${a260?.innerText ?? ''} ${b260?.innerText ?? ''} ${c260?.innerText ?? ''}";
+          book.publishingDetails = utf8.decode(publishingDetails.trim().codeUnits);
+        }
 
         books.add(book);
       }
