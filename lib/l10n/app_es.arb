@@ -20,5 +20,6 @@
     "byAuthor": "Por",
     "publishingDetails": "Detalles de publicación",
     "availability": "Disponibilidad",
-    "allLibraries": "Todas"
+    "allLibraries": "Todas",
+    "detailsTitle": "Detalles"
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
+import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
@@ -77,7 +78,14 @@ class _SearchViewState extends SearchController {
                   return Column(
                     children: [
                       ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookView(biblioNumber: book.biblioNumber),
+                            ),
+                          );
+                        },
                         title: Text(book.title, style: TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text(
                           '${AppLocalizations.of(context)!.byAuthor}: ${book.author}\n${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails} \n${AppLocalizations.of(context)!.availability}: 1 biblioteca',

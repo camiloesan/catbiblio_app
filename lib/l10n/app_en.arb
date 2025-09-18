@@ -86,5 +86,9 @@
   "allLibraries": "All",
   "@allLibraries": {
     "description": "All libraries entry in library selection dropdown"
+  },
+  "detailsTitle": "Details",
+  "@detailsTitle": {
+    "description": "Details title in book view"
   }
 }
