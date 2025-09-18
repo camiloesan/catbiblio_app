@@ -61,4 +61,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get issnEntry => 'ISSN';
+
+  @override
+  String get byAuthor => 'Por';
+
+  @override
+  String get publishingDetails => 'Detalles de publicación';
+
+  @override
+  String get availability => 'Disponibilidad';
+
+  @override
+  String get allLibraries => 'Todas';
 }
