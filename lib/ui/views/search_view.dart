@@ -73,7 +73,14 @@ class _SearchViewState extends SearchController {
                 return Column(
                   children: [
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookView(biblioNumber: book.biblioNumber),
+                          ),
+                        );
+                      },
                       title: Text(
                         book.title,
                         style: TextStyle(fontWeight: FontWeight.bold),

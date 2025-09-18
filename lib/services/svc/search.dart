@@ -79,7 +79,7 @@ class SruService {
         if (datafield999 != null) {
           var a999 = datafield999
               .findElements("subfield", namespace: marcNamespace)
-              .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
           if (a999 != null) {
             book.biblioNumber = a999.innerText;
           }
