@@ -90,5 +90,9 @@
   "detailsTitle": "Details",
   "@detailsTitle": {
     "description": "Details title in book view"
+  },
+  "languageChanged": "Language changed to Spanish",
+  "@languageChanged": {
+    "description": "Snackbar message shown when the language is changed to Spanish"
   }
 }

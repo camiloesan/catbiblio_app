@@ -14,7 +14,9 @@ part '../controllers/home_controller.dart';
 const Color primaryColor = Color(0xFF003466);
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final Function(Locale locale) onLocaleChange;
+
+  const HomeView({super.key, required this.onLocaleChange});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -47,7 +49,19 @@ class _HomeViewState extends HomeController {
           ListTile(
             leading: const Icon(Icons.language, color: primaryColor),
             title: Text(AppLocalizations.of(context)!.language),
-            onTap: () {},
+            onTap: () {
+              widget.onLocaleChange(
+                AppLocalizations.of(context)!.localeName == 'es'
+                    ? const Locale('en')
+                    : const Locale('es'),
+              );
+              Navigator.pop(context);
+              SnackBar snackBar = SnackBar(
+                content: Text(AppLocalizations.of(context)!.languageChanged),
+                duration: const Duration(seconds: 2),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
           ),
           const Divider(),
           ListTile(
