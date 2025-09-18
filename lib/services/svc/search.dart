@@ -23,14 +23,7 @@ class SruService {
   /// - Author search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?author=frank+herbert
   /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
   static Future<List<BookPreview>> searchBooks(QueryParams params) async {
-    final queryParameters = {
-      'title': params.searchBy == 'title' ? params.searchQuery : null,
-      'author': params.searchBy == 'author' ? params.searchQuery : null,
-      'subject': params.searchBy == 'subject' ? params.searchQuery : null,
-      'isbn': params.searchBy == 'isbn' ? params.searchQuery : null,
-      'issn': params.searchBy == 'issn' ? params.searchQuery : null,
-      'branch': params.library != 'all' ? params.library : null,
-    }..removeWhere((key, value) => value == null || value.isEmpty);
+    final queryParameters = _buildQueryParameters(params);
 
     try {
       final response = await _dio.get(
@@ -131,5 +124,24 @@ class SruService {
     } on DioException catch (e) {
       throw Exception("Failed to load XML: ${e.message}");
     }
+  }
+
+  static Map<String, dynamic> _buildQueryParameters(QueryParams params) {
+    final queryParameters =
+        <String, dynamic>{
+          'title': params.searchBy == 'title' ? params.searchQuery : null,
+          'author': params.searchBy == 'author' ? params.searchQuery : null,
+          'subject': params.searchBy == 'subject' ? params.searchQuery : null,
+          'isbn': params.searchBy == 'isbn' ? params.searchQuery : null,
+          'issn': params.searchBy == 'issn' ? params.searchQuery : null,
+          'branch': params.library != 'all' ? params.library : null,
+        }..removeWhere(
+          (key, value) =>
+              value == null ||
+              value.isEmpty ||
+              (value is String && value.isEmpty),
+        );
+
+    return queryParameters;
   }
 }
