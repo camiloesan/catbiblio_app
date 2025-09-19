@@ -84,9 +84,9 @@ abstract class SearchController extends State<SearchView> {
     });
   }
 
-  void onSubmitAction(String cadenaDeBusqueda) {
-    if (cadenaDeBusqueda.isNotEmpty) {
-      queryParams.searchQuery = cadenaDeBusqueda;
+  void onSubmitAction(String searchQuery) {
+    if (searchQuery.isNotEmpty) {
+      queryParams.searchQuery = searchQuery;
       SruService.searchBooks(queryParams).then((result) {
         setState(() {
           books.clear();
