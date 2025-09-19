@@ -65,11 +65,14 @@ abstract class HomeController extends State<HomeView> {
     _searchController.clear();
   }
 
-  void onSubmitAction(String searchQuery) {
-    if (searchQuery.isNotEmpty) {
-      _queryParams.filterController = _searchFilterController;
-      _queryParams.libraryController = _libraryController;
-      _queryParams.searchQuery = searchQuery;
+  void onSubmitAction() {
+    if (_searchController.text.isNotEmpty) {
+      setState(() {
+        _queryParams.startRecord = 1;
+        _queryParams.filterController = _searchFilterController;
+        _queryParams.libraryController = _libraryController;
+        _queryParams.searchQuery = _searchController.text;
+      });
       Navigator.push(
         context,
         MaterialPageRoute(
