@@ -4,6 +4,7 @@ class QueryParams {
   String library;
   String searchBy;
   String searchQuery;
+  int startRecord;
   TextEditingController filterController;
   TextEditingController libraryController;
 
@@ -11,12 +12,13 @@ class QueryParams {
     required this.library,
     required this.searchBy,
     required this.searchQuery,
+    this.startRecord = 1,
     required this.filterController,
     required this.libraryController,
   });
 
   @override
   String toString() {
-    return 'QueryParams(library: $library, searchBy: $searchBy, searchQuery: $searchQuery)';
+    return 'QueryParams(library: $library, searchBy: $searchBy, searchQuery: $searchQuery, startRecord: $startRecord)';
   }
 }

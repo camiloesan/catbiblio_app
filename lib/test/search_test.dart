@@ -6,7 +6,8 @@ import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/svc/search.dart';
 
 void main() {
-  group('SruService', () {
+  group('SruService requests', () {
+    debugPrint('Testing SruService searchBooks method');
     // title search tests
     test('test searchBooks: title and branch', () async {
       final queryParams = QueryParams(
@@ -418,6 +419,137 @@ void main() {
           reason: 'Failed for search type: ${searchTypes[i]}',
         );
       }
+    });
+  });
+  group('SruService helper methods', () {
+    debugPrint('Testing SruService helper methods');
+    test('test buildQueryParameters', () {
+      final params = QueryParams(
+        library: 'USBI-X',
+        searchBy: 'title',
+        searchQuery: 'sistemas operativos',
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {
+        'title': 'sistemas operativos',
+        'branch': 'USBI-X',
+      };
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+
+    test('test buildQueryParameters with all libraries', () {
+      final params = QueryParams(
+        library: 'all',
+        searchBy: 'author',
+        searchQuery: 'frank herbert',
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {'author': 'frank herbert'};
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+
+    test('test buildQueryParameters with empty search query', () {
+      final params = QueryParams(
+        library: 'all',
+        searchBy: 'title',
+        searchQuery: '',
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {};
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+
+    test('test buildQueryParameters completely empty', () {
+      final params = QueryParams(
+        library: '',
+        searchBy: '',
+        searchQuery: '',
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {};
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+
+    test('test buildQueryParameters with startRecord', () {
+      final params = QueryParams(
+        library: 'USBI-X',
+        searchBy: 'title',
+        searchQuery: 'sistemas operativos',
+        startRecord: 5,
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {
+        'title': 'sistemas operativos',
+        'branch': 'USBI-X',
+        'startRecord': 5,
+      };
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+
+    test('test buildQueryParameters with large startRecord', () {
+      final params = QueryParams(
+        library: 'USBI-X',
+        searchBy: 'title',
+        searchQuery: 'sistemas operativos',
+        startRecord: 100,
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {
+        'title': 'sistemas operativos',
+        'branch': 'USBI-X',
+        'startRecord': 100,
+      };
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+
+    test('test buildQueryParameters with negative startRecord', () {
+      final params = QueryParams(
+        library: 'USBI-X',
+        searchBy: 'title',
+        searchQuery: 'sistemas operativos',
+        startRecord: -10,
+        filterController: TextEditingController(),
+        libraryController: TextEditingController(),
+      );
+
+      final expectedParams = {
+        'title': 'sistemas operativos',
+        'branch': 'USBI-X',
+      };
+
+      final queryParameters = SruService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
     });
   });
 }
