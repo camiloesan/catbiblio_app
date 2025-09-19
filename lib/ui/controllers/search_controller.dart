@@ -4,6 +4,7 @@ abstract class SearchController extends State<SearchView> {
   late TextEditingController _libraryController;
   late TextEditingController _filterController;
   late TextEditingController _searchController;
+  late ScrollController _scrollController;
   QueryParams queryParams = QueryParams(
     library: '',
     searchBy: 'title',
@@ -12,6 +13,10 @@ abstract class SearchController extends State<SearchView> {
     libraryController: TextEditingController(),
   );
   late List<BookPreview> books = [];
+  int currentPage = 1;
+  int totalPages = 10;
+  int setUpperLimit = 10;
+  int setLowerLimit = 1;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -55,6 +60,7 @@ abstract class SearchController extends State<SearchView> {
     _filterController = TextEditingController();
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
+    _scrollController = ScrollController();
   }
 
   @override
@@ -86,13 +92,76 @@ abstract class SearchController extends State<SearchView> {
 
   void onSubmitAction(String searchQuery) {
     if (searchQuery.isNotEmpty) {
-      queryParams.searchQuery = searchQuery;
-      SruService.searchBooks(queryParams).then((result) {
-        setState(() {
-          books.clear();
-          books = result;
-        });
+      setState(() {
+        queryParams.searchQuery = searchQuery;
+        books.clear(); // Clear previous titles
+        currentPage = 1;
+        setUpperLimit = 10;
+        setLowerLimit = 1;
+        updatePageResults();
       });
     }
+  }
+
+  void updatePageResults() {
+    queryParams.startRecord = (currentPage - 1) * 10 + 1;
+    SruService.searchBooks(queryParams).then((result) {
+      setState(() {
+        books = result;
+      });
+    });
+  }
+
+  void paginationBehavior(int selectedIndex) {
+    /// This allows for pagination to continue forward.
+    if (currentPage + 1 == setUpperLimit && selectedIndex == setUpperLimit) {
+      setState(() {
+        setUpperLimit += 8;
+        setLowerLimit += 8;
+        currentPage++;
+        updatePageResults();
+      });
+      return;
+    }
+
+    /// This allows for pagination to continue backwards.
+    if (currentPage - 1 == setLowerLimit &&
+        selectedIndex == setLowerLimit &&
+        currentPage > 9) {
+      setState(() {
+        setUpperLimit -= 8;
+        setLowerLimit -= 8;
+        currentPage--;
+        updatePageResults();
+      });
+      return;
+    }
+
+    /// This prevents reloading the same page.
+    if (selectedIndex == currentPage) return;
+
+    /// This allows for pagination to continue forward one page.
+    if (selectedIndex == setUpperLimit) {
+      setState(() {
+        currentPage++;
+        updatePageResults();
+      });
+      return;
+    }
+
+    /// This allows for pagination to continue backwards one page.
+    if (selectedIndex == setLowerLimit && currentPage > 9) {
+      setState(() {
+        currentPage--;
+        updatePageResults();
+      });
+      return;
+    }
+
+    /// This allows for pagination to jump to a specific page.
+    setState(() {
+      currentPage = selectedIndex;
+      updatePageResults();
+    });
   }
 }

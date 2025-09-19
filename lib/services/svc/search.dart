@@ -71,6 +71,8 @@ class SruService {
           if (a100 != null) {
             book.author = a100.innerText;
           }
+        } else {
+          book.author = 'N/A';
         }
 
         final datafield999 = record
@@ -116,6 +118,8 @@ class SruService {
           var publishingDetails =
               "${a260?.innerText ?? ''} ${b260?.innerText ?? ''} ${c260?.innerText ?? ''}";
           book.publishingDetails = publishingDetails;
+        } else {
+          book.publishingDetails = 'N/A';
         }
 
         books.add(book);

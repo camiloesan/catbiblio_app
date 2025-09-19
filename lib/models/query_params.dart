@@ -21,4 +21,13 @@ class QueryParams {
   String toString() {
     return 'QueryParams(library: $library, searchBy: $searchBy, searchQuery: $searchQuery, startRecord: $startRecord)';
   }
+
+  void reset() {
+    library = 'all';
+    searchBy = 'title';
+    searchQuery = '';
+    startRecord = 1;
+    filterController.clear();
+    libraryController.clear();
+  }
 }

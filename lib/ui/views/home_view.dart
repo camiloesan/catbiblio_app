@@ -148,7 +148,7 @@ class _HomeViewState extends HomeController {
               const SizedBox(height: 8),
               TextField(
                 controller: _searchController,
-                onSubmitted: (value) => onSubmitAction(value),
+                onSubmitted: (value) => onSubmitAction(),
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: primaryColor),
                   suffixIcon: IconButton(

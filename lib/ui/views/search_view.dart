@@ -22,6 +22,7 @@ class _SearchViewState extends SearchController {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchTitle)),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
           child: Column(
@@ -68,6 +69,32 @@ class _SearchViewState extends SearchController {
                 ),
               ),
               const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  for (int i = setLowerLimit; i <= setUpperLimit; i++)
+                    OutlinedButton(
+                      onPressed: () => paginationBehavior(i),
+                      style: i == currentPage
+                          ? OutlinedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: Colors.white,
+                              minimumSize: Size(36, 36),
+                              padding: EdgeInsets.zero,
+                            )
+                          : OutlinedButton.styleFrom(
+                              foregroundColor: primaryColor,
+                              minimumSize: Size(36, 36),
+                              padding: EdgeInsets.zero,
+                            ),
+                      child: i == setUpperLimit
+                          ? const Icon(Icons.arrow_forward)
+                          : i == setLowerLimit && i > 8
+                          ? const Icon(Icons.arrow_back)
+                          : Text('$i'),
+                    ),
+                ],
+              ),
               Divider(color: Colors.grey),
               ...books.map((book) {
                 return Column(
@@ -97,6 +124,38 @@ class _SearchViewState extends SearchController {
                   ],
                 );
               }),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    for (int i = setLowerLimit; i <= setUpperLimit; i++)
+                      OutlinedButton(
+                        onPressed: () {
+                          paginationBehavior(i);
+                          _scrollController.position.maxScrollExtent;
+                        },
+                        style: i == currentPage
+                            ? OutlinedButton.styleFrom(
+                                backgroundColor: primaryColor,
+                                foregroundColor: Colors.white,
+                                minimumSize: Size(36, 36),
+                                padding: EdgeInsets.zero,
+                              )
+                            : OutlinedButton.styleFrom(
+                                foregroundColor: primaryColor,
+                                minimumSize: Size(36, 36),
+                                padding: EdgeInsets.zero,
+                              ),
+                        child: i == setUpperLimit
+                            ? const Icon(Icons.arrow_forward)
+                            : i == setLowerLimit && i > 8
+                            ? const Icon(Icons.arrow_back)
+                            : Text('$i'),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
