@@ -108,7 +108,7 @@ class _HomeViewState extends HomeController {
       drawerEnableOpenDragGesture: true,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

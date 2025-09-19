@@ -23,7 +23,7 @@ class _SearchViewState extends SearchController {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchTitle)),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
