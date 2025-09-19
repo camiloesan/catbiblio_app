@@ -138,11 +138,12 @@ class SruService {
             'isbn': params.searchBy == 'isbn' ? params.searchQuery : null,
             'issn': params.searchBy == 'issn' ? params.searchQuery : null,
             'branch': params.library != 'all' ? params.library : null,
+            'startRecord': params.startRecord > 1 ? params.startRecord : null,
           }..removeWhere(
             (key, value) =>
                 value == null ||
-                value.isEmpty ||
-                (value is String && value.isEmpty),
+                (value is String && value.isEmpty) ||
+                (value is int && value <= 1),
           );
     } catch (e) {
       throw Exception("Error building query parameters: ${e.toString()}");
