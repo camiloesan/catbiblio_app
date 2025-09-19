@@ -14,6 +14,8 @@ abstract class SearchController extends State<SearchView> {
   late List<BookPreview> books = [];
   int currentPage = 1;
   int totalPages = 10;
+  int setUpperLimit = 10;
+  int setLowerLimit = 1;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -89,6 +91,9 @@ abstract class SearchController extends State<SearchView> {
   void onSubmitAction(String searchQuery) {
     if (searchQuery.isNotEmpty) {
       queryParams.searchQuery = searchQuery;
+      currentPage = 1;
+      setUpperLimit = 10;
+      setLowerLimit = 1;
       SruService.searchBooks(queryParams).then((result) {
         setState(() {
           books.clear();
@@ -96,5 +101,45 @@ abstract class SearchController extends State<SearchView> {
         });
       });
     }
+  }
+
+  void paginationBehavior(int selectedIndex) {
+    if (currentPage + 1 == setUpperLimit && selectedIndex == setUpperLimit) {
+      setState(() {
+        setUpperLimit += 8;
+        setLowerLimit += 8;
+        currentPage++;
+      });
+      return;
+    }
+
+    if (currentPage - 1 == setLowerLimit && selectedIndex == setLowerLimit && currentPage > 9) {
+      setState(() {
+        setUpperLimit -= 8;
+        setLowerLimit -= 8;
+        currentPage--;
+      });
+      return;
+    }
+
+    if (selectedIndex == currentPage) return;
+
+    if (selectedIndex == setUpperLimit) {
+      setState(() {
+        currentPage++;
+      });
+      return;
+    }
+
+    if (selectedIndex == setLowerLimit && currentPage > 9) {
+      setState(() {
+        currentPage--;
+      });
+      return;
+    }
+
+    setState(() {
+      currentPage = selectedIndex;
+    });
   }
 }

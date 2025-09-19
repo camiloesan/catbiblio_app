@@ -71,13 +71,9 @@ class _SearchViewState extends SearchController {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  for (int i = 1; i <= 10; i++)
+                  for (int i = setLowerLimit; i <= setUpperLimit; i++)
                     OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          currentPage = i;
-                        });
-                      },
+                      onPressed:() => paginationBehavior(i),
                       style: i == currentPage
                           ? OutlinedButton.styleFrom(
                               backgroundColor: primaryColor,
@@ -90,11 +86,15 @@ class _SearchViewState extends SearchController {
                               minimumSize: Size(36, 36),
                               padding: EdgeInsets.zero,
                             ),
-                      child: i == 10
+                      child: i == setUpperLimit
                           ? const Icon(
                               Icons.arrow_forward,
                             )
-                          : Text('$i'),
+                          : i == setLowerLimit && i > 8
+                              ? const Icon(
+                                  Icons.arrow_back,
+                                )
+                              : Text('$i'),
                     ),
                 ],
               ),
@@ -132,31 +132,31 @@ class _SearchViewState extends SearchController {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    for (int i = 1; i <= 10; i++)
-                      OutlinedButton(
-                        onPressed: () {
-                          setState(() {
-                            currentPage = i;
-                          });
-                        },
-                        style: i == currentPage
-                            ? OutlinedButton.styleFrom(
-                                backgroundColor: primaryColor,
-                                foregroundColor: Colors.white,
-                                minimumSize: Size(36, 36),
-                                padding: EdgeInsets.zero,
-                              )
-                            : OutlinedButton.styleFrom(
-                                foregroundColor: primaryColor,
-                                minimumSize: Size(36, 36),
-                                padding: EdgeInsets.zero,
-                              ),
-                        child: i == 10
-                            ? const Icon(
-                                Icons.arrow_forward,
-                              )
-                            : Text('$i'),
-                      ),
+                    for (int i = setLowerLimit; i <= setUpperLimit; i++)
+                    OutlinedButton(
+                      onPressed:() => paginationBehavior(i),
+                      style: i == currentPage
+                          ? OutlinedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: Colors.white,
+                              minimumSize: Size(36, 36),
+                              padding: EdgeInsets.zero,
+                            )
+                          : OutlinedButton.styleFrom(
+                              foregroundColor: primaryColor,
+                              minimumSize: Size(36, 36),
+                              padding: EdgeInsets.zero,
+                            ),
+                      child: i == setUpperLimit
+                          ? const Icon(
+                              Icons.arrow_forward,
+                            )
+                          : i == setLowerLimit && i > 8
+                              ? const Icon(
+                                  Icons.arrow_back,
+                                )
+                              : Text('$i'),
+                    ),
                   ],
                 ),
               ),
