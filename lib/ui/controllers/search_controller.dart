@@ -12,6 +12,8 @@ abstract class SearchController extends State<SearchView> {
     libraryController: TextEditingController(),
   );
   late List<BookPreview> books = [];
+  int currentPage = 1;
+  int totalPages = 10;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [

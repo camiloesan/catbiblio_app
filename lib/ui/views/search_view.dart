@@ -68,6 +68,36 @@ class _SearchViewState extends SearchController {
                 ),
               ),
               const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  for (int i = 1; i <= 10; i++)
+                    OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          currentPage = i;
+                        });
+                      },
+                      style: i == currentPage
+                          ? OutlinedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: Colors.white,
+                              minimumSize: Size(36, 36),
+                              padding: EdgeInsets.zero,
+                            )
+                          : OutlinedButton.styleFrom(
+                              foregroundColor: primaryColor,
+                              minimumSize: Size(36, 36),
+                              padding: EdgeInsets.zero,
+                            ),
+                      child: i == 10
+                          ? const Icon(
+                              Icons.arrow_forward,
+                            )
+                          : Text('$i'),
+                    ),
+                ],
+              ),
               Divider(color: Colors.grey),
               ...books.map((book) {
                 return Column(
@@ -97,6 +127,39 @@ class _SearchViewState extends SearchController {
                   ],
                 );
               }),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    for (int i = 1; i <= 10; i++)
+                      OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            currentPage = i;
+                          });
+                        },
+                        style: i == currentPage
+                            ? OutlinedButton.styleFrom(
+                                backgroundColor: primaryColor,
+                                foregroundColor: Colors.white,
+                                minimumSize: Size(36, 36),
+                                padding: EdgeInsets.zero,
+                              )
+                            : OutlinedButton.styleFrom(
+                                foregroundColor: primaryColor,
+                                minimumSize: Size(36, 36),
+                                padding: EdgeInsets.zero,
+                              ),
+                        child: i == 10
+                            ? const Icon(
+                                Icons.arrow_forward,
+                              )
+                            : Text('$i'),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
