@@ -97,7 +97,7 @@ abstract class SearchController extends State<SearchView> {
     if (searchQuery.isNotEmpty) {
       setState(() {
         queryParams.searchQuery = searchQuery;
-        books.clear(); 
+        books.clear();
         totalRecords = 0;
         currentPage = 1;
         setUpperLimit = 10;
@@ -113,6 +113,7 @@ abstract class SearchController extends State<SearchView> {
       setState(() {
         books = result.$1;
         totalRecords = result.$2;
+        totalPages = (totalRecords / 10).ceil();
       });
     });
   }
