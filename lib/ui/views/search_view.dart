@@ -72,7 +72,7 @@ class _SearchViewState extends SearchController {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  for (int i = setLowerLimit; i <= setUpperLimit; i++)
+                  for (int i = setLowerLimit; i <= setUpperLimit && i <= totalPages; i++)
                     OutlinedButton(
                       onPressed: () => paginationBehavior(i),
                       style: i == currentPage
@@ -94,6 +94,11 @@ class _SearchViewState extends SearchController {
                           : Text('$i'),
                     ),
                 ],
+              ),
+              SizedBox(height: 8),
+              Text(
+                '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Divider(color: Colors.grey),
               ...books.map((book) {

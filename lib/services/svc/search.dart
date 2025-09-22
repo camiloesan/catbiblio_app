@@ -22,7 +22,7 @@ class SruService {
   /// - Title search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?title=dune&branch=USBI-X
   /// - Author search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?author=frank+herbert
   /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
-  static Future<List<BookPreview>> searchBooks(QueryParams params) async {
+  static Future<(List<BookPreview>, int)> searchBooks(QueryParams params) async {
     final queryParameters = buildQueryParameters(params);
 
     try {
@@ -33,6 +33,14 @@ class SruService {
 
       final document = xml.XmlDocument.parse(response.data);
       const marcNamespace = "http://www.loc.gov/MARC21/slim";
+
+      final numberOfRecords = document.findAllElements(
+        "numberOfRecords",
+        namespace: "http://www.loc.gov/zing/srw/",
+      ).firstOrNull?.innerText;
+
+      final totalRecords = int.tryParse(numberOfRecords ?? '0') ?? 0;
+
       final records = document.findAllElements(
         "recordData",
         namespace: "http://www.loc.gov/zing/srw/",
@@ -90,7 +98,8 @@ class SruService {
 
         books.add(book);
       }
-      return books;
+      
+      return (books, totalRecords);
     } on DioException catch (e) {
       throw Exception("Failed to load XML: ${e.message}");
     }

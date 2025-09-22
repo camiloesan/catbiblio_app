@@ -241,6 +241,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language changed to Spanish'**
   String get languageChanged;
+
+  /// Label for total number of search results
+  ///
+  /// In en, this message translates to:
+  /// **'results'**
+  String get totalResults;
 }
 
 class _AppLocalizationsDelegate

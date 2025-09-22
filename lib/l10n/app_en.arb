@@ -94,5 +94,9 @@
   "languageChanged": "Language changed to Spanish",
   "@languageChanged": {
     "description": "Snackbar message shown when the language is changed to Spanish"
+  },
+  "totalResults": "results",
+  "@totalResults": {
+    "description": "Label for total number of search results"
   }
 }

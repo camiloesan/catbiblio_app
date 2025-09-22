@@ -14,9 +14,10 @@ abstract class SearchController extends State<SearchView> {
   );
   late List<BookPreview> books = [];
   int currentPage = 1;
-  int totalPages = 10;
+  int totalPages = 0;
   int setUpperLimit = 10;
   int setLowerLimit = 1;
+  int totalRecords = 0;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -85,7 +86,9 @@ abstract class SearchController extends State<SearchView> {
     _searchController.text = queryParams.searchQuery;
     SruService.searchBooks(queryParams).then((result) {
       setState(() {
-        books = result;
+        books = result.$1;
+        totalRecords = result.$2;
+        totalPages = (totalRecords / 10).ceil();
       });
     });
   }
@@ -94,7 +97,8 @@ abstract class SearchController extends State<SearchView> {
     if (searchQuery.isNotEmpty) {
       setState(() {
         queryParams.searchQuery = searchQuery;
-        books.clear(); // Clear previous titles
+        books.clear(); 
+        totalRecords = 0;
         currentPage = 1;
         setUpperLimit = 10;
         setLowerLimit = 1;
@@ -107,7 +111,8 @@ abstract class SearchController extends State<SearchView> {
     queryParams.startRecord = (currentPage - 1) * 10 + 1;
     SruService.searchBooks(queryParams).then((result) {
       setState(() {
-        books = result;
+        books = result.$1;
+        totalRecords = result.$2;
       });
     });
   }
