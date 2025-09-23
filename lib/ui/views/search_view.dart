@@ -72,7 +72,7 @@ class _SearchViewState extends SearchController {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  for (int i = setLowerLimit; i <= setUpperLimit && i <= totalPages; i++)
+                  for (int i = setLowerLimit; i <= setUpperLimit && i <= totalPages && totalPages > 1; i++)
                     OutlinedButton(
                       onPressed: () => paginationBehavior(i),
                       style: i == currentPage
@@ -134,7 +134,7 @@ class _SearchViewState extends SearchController {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    for (int i = setLowerLimit; books.length > 5 && i <= setUpperLimit && i <= totalPages; i++)
+                    for (int i = setLowerLimit; books.length > 5 && i <= setUpperLimit && i <= totalPages && totalPages > 1; i++)
                       OutlinedButton(
                         onPressed: () {
                           paginationBehavior(i);
