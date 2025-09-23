@@ -135,7 +135,7 @@ class _SearchViewState extends SearchController {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image.network(
-                              'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?imagenumber=${book.biblioNumber}',
+                              'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblioNumber}',
                               width: 100,
                               fit: BoxFit.fitHeight,
                               loadingBuilder: (context, child, loadingProgress) {
