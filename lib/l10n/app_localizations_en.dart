@@ -79,4 +79,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageChanged => 'Language changed to Spanish';
+
+  @override
+  String get totalResults => 'results';
+
+  @override
+  String get noResults => 'No results found';
 }

@@ -22,5 +22,7 @@
     "availability": "Disponibilidad",
     "allLibraries": "Todas",
     "detailsTitle": "Detalles",
-    "languageChanged": "Idioma cambiado a Inglés"
+    "languageChanged": "Idioma cambiado a Inglés",
+    "totalResults": "coincidencias",
+    "noResults": "No se encontraron coincidencias"
 }

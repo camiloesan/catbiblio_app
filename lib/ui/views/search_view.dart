@@ -72,7 +72,11 @@ class _SearchViewState extends SearchController {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  for (int i = setLowerLimit; i <= setUpperLimit; i++)
+                  for (
+                    int i = setLowerLimit;
+                    i <= setUpperLimit && i <= totalPages && totalPages > 1;
+                    i++
+                  )
                     OutlinedButton(
                       onPressed: () => paginationBehavior(i),
                       style: i == currentPage
@@ -95,11 +99,27 @@ class _SearchViewState extends SearchController {
                     ),
                 ],
               ),
+              SizedBox(height: 8),
+              if (isInitialRequestLoading)
+                Center(child: LinearProgressIndicator())
+              else if (books.isEmpty)
+                Text(
+                  AppLocalizations.of(context)!.noResults,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              else
+              Text(
+                '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Divider(color: Colors.grey),
+              if (isPageLoading) Center(child: LinearProgressIndicator())
+              else
               ...books.map((book) {
                 return Column(
                   children: [
-                    ListTile(
+                    InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -109,17 +129,74 @@ class _SearchViewState extends SearchController {
                           ),
                         );
                       },
-                      title: Text(
-                        book.title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.network(
+                              'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?imagenumber=${book.biblioNumber}',
+                              width: 100,
+                              fit: BoxFit.fitHeight,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return SizedBox(
+                                  width: 100,
+                                  height: 150,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      value: loadingProgress
+                                                  .expectedTotalBytes !=
+                                              null
+                                          ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes!
+                                          : null,
+                                    ),
+                                  ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const SizedBox.shrink();
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    book.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  book.author.isEmpty
+                                      ? const SizedBox.shrink()
+                                      : Text(
+                                          '${AppLocalizations.of(context)!.byAuthor}: ${book.author}',
+                                        ),
+                                  book.publishingDetails.isEmpty
+                                      ? const SizedBox.shrink()
+                                      : Text(
+                                          '${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails}',
+                                        ),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.availability}: 1 biblioteca',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                        ),
                       ),
-                      subtitle: Text(
-                        '${AppLocalizations.of(context)!.byAuthor}: ${book.author}\n${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails} \n${AppLocalizations.of(context)!.availability}: 1 biblioteca',
-                        style: TextStyle(fontWeight: FontWeight.normal),
-                      ),
-                      contentPadding: EdgeInsets.all(0),
-                      minVerticalPadding: 0,
                     ),
+
                     Divider(color: Colors.grey),
                   ],
                 );
@@ -129,7 +206,14 @@ class _SearchViewState extends SearchController {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    for (int i = setLowerLimit; i <= setUpperLimit; i++)
+                    for (
+                      int i = setLowerLimit;
+                      books.length > 5 &&
+                          i <= setUpperLimit &&
+                          i <= totalPages &&
+                          totalPages > 1;
+                      i++
+                    )
                       OutlinedButton(
                         onPressed: () {
                           paginationBehavior(i);
