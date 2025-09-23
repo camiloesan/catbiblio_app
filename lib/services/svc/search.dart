@@ -83,7 +83,7 @@ class SruService {
           publishingDetails: '',
         );
 
-        book.author = getSubfield(datafield100, "a") ?? "N/A";
+        book.author = getSubfield(datafield100, "a") ?? "";
         book.biblioNumber = getSubfield(datafield999, "c") ?? "";
         book.title = [
           getSubfield(datafield245, "a"),

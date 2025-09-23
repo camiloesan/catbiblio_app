@@ -247,6 +247,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'results'**
   String get totalResults;
+
+  /// Message shown when no search results are found
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResults;
 }
 
 class _AppLocalizationsDelegate

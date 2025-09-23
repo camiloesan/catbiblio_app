@@ -82,4 +82,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get totalResults => 'coincidencias';
+
+  @override
+  String get noResults => 'No se encontraron coincidencias';
 }

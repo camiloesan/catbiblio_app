@@ -82,4 +82,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get totalResults => 'results';
+
+  @override
+  String get noResults => 'No results found';
 }

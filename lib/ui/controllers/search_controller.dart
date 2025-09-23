@@ -18,6 +18,8 @@ abstract class SearchController extends State<SearchView> {
   int setUpperLimit = 10;
   int setLowerLimit = 1;
   int totalRecords = 0;
+  bool isInitialRequestLoading = false;
+  bool isPageLoading = false;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -102,6 +104,8 @@ abstract class SearchController extends State<SearchView> {
         currentPage = 1;
         setUpperLimit = 10;
         setLowerLimit = 1;
+        totalPages = 0;
+        isInitialRequestLoading = true;
         updatePageResults();
       });
     }
@@ -114,6 +118,8 @@ abstract class SearchController extends State<SearchView> {
         books = result.$1;
         totalRecords = result.$2;
         totalPages = (totalRecords / 10).ceil();
+        isInitialRequestLoading = false;
+        isPageLoading = false;
       });
     });
   }
@@ -125,6 +131,7 @@ abstract class SearchController extends State<SearchView> {
         setUpperLimit += 8;
         setLowerLimit += 8;
         currentPage++;
+        isInitialRequestLoading = true;
         updatePageResults();
       });
       return;
@@ -138,6 +145,7 @@ abstract class SearchController extends State<SearchView> {
         setUpperLimit -= 8;
         setLowerLimit -= 8;
         currentPage--;
+        isInitialRequestLoading = true;
         updatePageResults();
       });
       return;

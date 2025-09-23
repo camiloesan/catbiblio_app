@@ -30,7 +30,16 @@ class _MainAppState extends State<MainApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
+      theme: ThemeData(
+        useMaterial3: true,
+        drawerTheme: DrawerThemeData(backgroundColor: Colors.white, surfaceTintColor: primaryColor),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          surfaceTintColor: primaryColor,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+      ),
       home: HomeView(onLocaleChange: setLocale),
     );
   }

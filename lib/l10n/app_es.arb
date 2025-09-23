@@ -23,5 +23,6 @@
     "allLibraries": "Todas",
     "detailsTitle": "Detalles",
     "languageChanged": "Idioma cambiado a Inglés",
-    "totalResults": "coincidencias"
+    "totalResults": "coincidencias",
+    "noResults": "No se encontraron coincidencias"
 }
