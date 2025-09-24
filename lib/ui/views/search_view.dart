@@ -71,7 +71,7 @@ class _SearchViewState extends SearchController {
               ),
               const SizedBox(height: 8),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -118,6 +118,7 @@ class _SearchViewState extends SearchController {
                 )
               else
                 Text(
+                  textAlign: TextAlign.center,
                   '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -154,9 +155,7 @@ class _SearchViewState extends SearchController {
                                     return const SizedBox.shrink();
                                   } else {
                                     // Show the actual image
-                                    return SizedBox(
-                                      child: snapshot.data!,
-                                    );
+                                    return SizedBox(child: snapshot.data!);
                                   }
                                 },
                               ),
@@ -205,7 +204,7 @@ class _SearchViewState extends SearchController {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
