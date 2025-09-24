@@ -79,4 +79,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageChanged => 'Idioma cambiado a Inglés';
+
+  @override
+  String get totalResults => 'coincidencias';
+
+  @override
+  String get noResults => 'No se encontraron coincidencias';
 }

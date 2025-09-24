@@ -11,7 +11,7 @@ class SruService {
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/xml'},
+      headers: {'Accept': 'application/xml', 'x-api-key': '12345'},
     ),
   );
 
@@ -22,7 +22,7 @@ class SruService {
   /// - Title search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?title=dune&branch=USBI-X
   /// - Author search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?author=frank+herbert
   /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
-  static Future<List<BookPreview>> searchBooks(QueryParams params) async {
+  static Future<(List<BookPreview>, int)> searchBooks(QueryParams params) async {
     final queryParameters = buildQueryParameters(params);
 
     try {
@@ -33,6 +33,14 @@ class SruService {
 
       final document = xml.XmlDocument.parse(response.data);
       const marcNamespace = "http://www.loc.gov/MARC21/slim";
+
+      final numberOfRecords = document.findAllElements(
+        "numberOfRecords",
+        namespace: "http://www.loc.gov/zing/srw/",
+      ).firstOrNull?.innerText;
+
+      final totalRecords = int.tryParse(numberOfRecords ?? '0') ?? 0;
+
       final records = document.findAllElements(
         "recordData",
         namespace: "http://www.loc.gov/zing/srw/",
@@ -41,6 +49,32 @@ class SruService {
       List<BookPreview> books = [];
 
       for (var recordData in records) {
+        final record = recordData
+            .findElements("record", namespace: marcNamespace)
+            .firstOrNull;
+        if (record == null) continue;
+
+        final datafields = record.findElements(
+          "datafield",
+          namespace: marcNamespace,
+        );
+
+        xml.XmlElement? df(String tag) => datafields.firstWhereOrNull(
+          (element) => element.getAttribute("tag") == tag,
+        );
+
+        String? getSubfield(xml.XmlElement? df, String code) {
+          return df
+              ?.findElements("subfield", namespace: marcNamespace)
+              .firstWhereOrNull((sf) => sf.getAttribute("code") == code)
+              ?.innerText;
+        }
+
+        final datafield245 = df("245");
+        final datafield100 = df("100");
+        final datafield999 = df("999");
+        final datafield260 = df("260");
+
         BookPreview book = BookPreview(
           title: '',
           author: '',
@@ -49,82 +83,23 @@ class SruService {
           publishingDetails: '',
         );
 
-        final record = recordData
-            .findElements("record", namespace: marcNamespace)
-            .firstOrNull;
-
-        if (record == null) continue; // Skip if record not found
-
-        final datafield245 = record
-            .findElements("datafield", namespace: marcNamespace)
-            .firstWhereOrNull((df) => df.getAttribute("tag") == "245");
-
-        if (datafield245 == null) continue; // Skip if datafield245 not found
-
-        final datafield100 = record
-            .findElements("datafield", namespace: marcNamespace)
-            .firstWhereOrNull((df) => df.getAttribute("tag") == "100");
-        if (datafield100 != null) {
-          var a100 = datafield100
-              .findElements("subfield", namespace: marcNamespace)
-              .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
-          if (a100 != null) {
-            book.author = a100.innerText;
-          }
-        } else {
-          book.author = 'N/A';
-        }
-
-        final datafield999 = record
-            .findElements("datafield", namespace: marcNamespace)
-            .firstWhereOrNull((df) => df.getAttribute("tag") == "999");
-        if (datafield999 != null) {
-          var a999 = datafield999
-              .findElements("subfield", namespace: marcNamespace)
-              .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
-          if (a999 != null) {
-            book.biblioNumber = a999.innerText;
-          }
-        }
-
-        final subfieldA = datafield245
-            .findElements("subfield", namespace: marcNamespace)
-            .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
-
-        final subfieldB = datafield245
-            .findElements("subfield", namespace: marcNamespace)
-            .firstWhereOrNull((sf) => sf.getAttribute("code") == "b");
-
-        final subfieldC = datafield245
-            .findElements("subfield", namespace: marcNamespace)
-            .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
-        final title =
-            "${subfieldA?.innerText ?? ''} ${subfieldB?.innerText ?? ''} ${subfieldC?.innerText ?? ''}";
-        book.title = title;
-
-        final datafield260 = record
-            .findElements("datafield", namespace: marcNamespace)
-            .firstWhereOrNull((df) => df.getAttribute("tag") == "260");
-        if (datafield260 != null) {
-          var a260 = datafield260
-              .findElements("subfield", namespace: marcNamespace)
-              .firstWhereOrNull((sf) => sf.getAttribute("code") == "a");
-          var b260 = datafield260
-              .findElements("subfield", namespace: marcNamespace)
-              .firstWhereOrNull((sf) => sf.getAttribute("code") == "b");
-          var c260 = datafield260
-              .findElements("subfield", namespace: marcNamespace)
-              .firstWhereOrNull((sf) => sf.getAttribute("code") == "c");
-          var publishingDetails =
-              "${a260?.innerText ?? ''} ${b260?.innerText ?? ''} ${c260?.innerText ?? ''}";
-          book.publishingDetails = publishingDetails;
-        } else {
-          book.publishingDetails = 'N/A';
-        }
+        book.author = getSubfield(datafield100, "a") ?? "";
+        book.biblioNumber = getSubfield(datafield999, "c") ?? "";
+        book.title = [
+          getSubfield(datafield245, "a"),
+          getSubfield(datafield245, "b"),
+          getSubfield(datafield245, "c"),
+        ].where((e) => e?.isNotEmpty ?? false).join(" ");
+        book.publishingDetails = [
+          getSubfield(datafield260, "a"),
+          getSubfield(datafield260, "b"),
+          getSubfield(datafield260, "c"),
+        ].where((e) => e?.isNotEmpty ?? false).join(" ");
 
         books.add(book);
       }
-      return books;
+      
+      return (books, totalRecords);
     } on DioException catch (e) {
       throw Exception("Failed to load XML: ${e.message}");
     }
