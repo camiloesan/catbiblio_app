@@ -4,6 +4,7 @@ import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/svc/search.dart';
+import 'package:catbiblio_app/services/svc/images.dart';
 
 part '../controllers/search_controller.dart';
 
@@ -109,98 +110,91 @@ class _SearchViewState extends SearchController {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 )
               else
-              Text(
-                '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+                Text(
+                  '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               Divider(color: Colors.grey),
-              if (isPageLoading) Center(child: LinearProgressIndicator())
+              if (isPageLoading)
+                Center(child: LinearProgressIndicator())
               else
-              ...books.map((book) {
-                return Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                BookView(biblioNumber: book.biblioNumber),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?imagenumber=${book.biblioNumber}',
-                              width: 100,
-                              fit: BoxFit.fitHeight,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return SizedBox(
-                                  width: 100,
-                                  height: 150,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      value: loadingProgress
-                                                  .expectedTotalBytes !=
-                                              null
-                                          ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes!
-                                          : null,
-                                    ),
-                                  ),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return const SizedBox.shrink();
-                              },
+                ...books.map((book) {
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BookView(biblioNumber: book.biblioNumber),
                             ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    book.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  book.author.isEmpty
-                                      ? const SizedBox.shrink()
-                                      : Text(
-                                          '${AppLocalizations.of(context)!.byAuthor}: ${book.author}',
-                                        ),
-                                  book.publishingDetails.isEmpty
-                                      ? const SizedBox.shrink()
-                                      : Text(
-                                          '${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails}',
-                                        ),
-                                  Text(
-                                    '${AppLocalizations.of(context)!.availability}: 1 biblioteca',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder<Image?>(
+                                future: ImageService.fetchImageUrl(
+                                  book.biblioNumber,
+                                ),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError ||
+                                      snapshot.data == null) {
+                                    // Error or not PNG
+                                    return const SizedBox.shrink();
+                                  } else {
+                                    // Show the actual image
+                                    return SizedBox(
+                                      child: snapshot.data!,
+                                    );
+                                  }
+                                },
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                          ],
+
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      book.title,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    book.author.isEmpty
+                                        ? const SizedBox.shrink()
+                                        : Text(
+                                            '${AppLocalizations.of(context)!.byAuthor}: ${book.author}',
+                                          ),
+                                    book.publishingDetails.isEmpty
+                                        ? const SizedBox.shrink()
+                                        : Text(
+                                            '${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails}',
+                                          ),
+                                    Text(
+                                      '${AppLocalizations.of(context)!.availability}: 1 biblioteca',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
-                    Divider(color: Colors.grey),
-                  ],
-                );
-              }),
+                      Divider(color: Colors.grey),
+                    ],
+                  );
+                }),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: Row(
