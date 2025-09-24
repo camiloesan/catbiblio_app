@@ -18,5 +18,13 @@ void main() {
 
       expect(libraries, isA<List<Library>>());
     });
+    test('getLibraries are ordered by library_id', () async {
+      final libraries = await LibrariesService.getLibraries();
+
+      final sortedLibraries = List<Library>.from(libraries)
+        ..sort((a, b) => a.libraryId.compareTo(b.libraryId));
+
+      expect(libraries, isNot(equals(sortedLibraries)));
+    });
   });
 }

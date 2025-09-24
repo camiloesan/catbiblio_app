@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 class LibrariesService {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl:
-          'http://148.226.6.25', //Planear si a https://catbiblio.uv.mx o al svc
+      baseUrl: 'http://148.226.6.25',
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
@@ -15,14 +14,11 @@ class LibrariesService {
     ),
   );
 
-  /// Fetches the list of libraries from the API
-  /// Example: http://{{baseUrl}}/api/v1/public/libraries?_per_page=255
+  /// Fetches the list of libraries from a Koha-based service
+  /// Example: http://{{baseUrl}}/cgi-bin/koha/svc/libraries
   static Future<List<Library>> getLibraries() async {
     try {
-      final response = await _dio.get(
-        '/api/v1/public/libraries',
-        queryParameters: {'_per_page': 255},
-      );
+      final response = await _dio.get('/cgi-bin/koha/svc/libraries');
 
       final List<dynamic> librariesJson = json.decode(response.data);
 
