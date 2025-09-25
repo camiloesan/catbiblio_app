@@ -92,6 +92,7 @@ abstract class SearchController extends State<SearchView> {
       isError = false;
     });
     SruService.searchBooks(queryParams).then((result) {
+      /**  Used with searchBooksOld()
       if (result == null) {
         setState(() {
           isInitialRequestLoading = false;
@@ -99,9 +100,10 @@ abstract class SearchController extends State<SearchView> {
         });
         return;
       }
+      */
       setState(() {
-        books = result.$1;
-        totalRecords = result.$2;
+        books = result.books;
+        totalRecords = result.totalRecords;
         totalPages = (totalRecords / 10).ceil();
         isInitialRequestLoading = false;
         isError = false;
@@ -129,6 +131,7 @@ abstract class SearchController extends State<SearchView> {
     queryParams.startRecord = (currentPage - 1) * 10 + 1;
 
     SruService.searchBooks(queryParams).then((result) {
+      /**  Used with searchBooksOld()
       if (result == null) {
         setState(() {
           isInitialRequestLoading = false;
@@ -136,9 +139,10 @@ abstract class SearchController extends State<SearchView> {
         });
         return;
       }
+      */
       setState(() {
-        books = result.$1;
-        totalRecords = result.$2;
+        books = result.books;
+        totalRecords = result.totalRecords;
         totalPages = (totalRecords / 10).ceil();
         isInitialRequestLoading = false;
         isError = false;
