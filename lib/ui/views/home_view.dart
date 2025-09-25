@@ -1,5 +1,7 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
+import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
+import 'package:catbiblio_app/services/rest/libraries.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 
@@ -131,19 +133,49 @@ class _HomeViewState extends HomeController {
                 requestFocusOnTap: false,
               ),
               const SizedBox(height: 8),
-              DropdownMenu(
-                controller: _libraryController,
-                label: Text(AppLocalizations.of(context)!.library),
-                leadingIcon: const Icon(
-                  Icons.location_city,
-                  color: primaryColor,
-                ),
-                initialSelection: _queryParams.library,
-                dropdownMenuEntries: _libraryEntries,
-                onSelected: (value) => _queryParams.library = value!,
-                enableFilter: false,
-                requestFocusOnTap: false,
-                width: double.infinity,
+              FutureBuilder(
+                future: _librariesFuture,
+                builder: (context, asyncSnapshot) {
+                  if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox(
+                      height: 56,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (asyncSnapshot.hasError) {
+                    return Center(
+                      child: Text('${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}'),
+                    );
+                  }
+                  final libraries = asyncSnapshot.data!;
+                  final libraryEntries = libraries.map((library) {
+                    return DropdownMenuEntry(
+                      value: library.libraryId,
+                      label: library.name,
+                    );
+                  }).toList();
+                  return DropdownMenu(
+                    controller: _libraryController,
+                    label: Text(AppLocalizations.of(context)!.library),
+                    enableSearch: true,
+                    menuHeight: 300,
+                    leadingIcon: const Icon(
+                      Icons.location_city,
+                      color: primaryColor,
+                    ),
+                    initialSelection: _queryParams.library,
+                    dropdownMenuEntries: [
+                      const DropdownMenuEntry(value: 'all', label: 'Todas'),
+                      ...libraryEntries,
+                    ],
+                    onSelected: (value) {
+                      setState(() {
+                        _queryParams.library = value!;
+                      });
+                    },
+                    width: double.infinity,
+                  );
+                }
               ),
               const SizedBox(height: 8),
               TextField(

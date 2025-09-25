@@ -25,5 +25,6 @@
     "languageChanged": "Idioma cambiado a Inglés",
     "totalResults": "coincidencias",
     "noResults": "No se encontraron coincidencias",
-    "errorOccurred": "Ocurrió un error al obtener los datos. Por favor, inténtelo de nuevo."
+    "errorOccurred": "Ocurrió un error al obtener los datos. Por favor, inténtelo de nuevo.",
+    "errorLoadingLibraries": "Error al cargar las bibliotecas"
 }

@@ -259,6 +259,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred while fetching data. Please try again.'**
   String get errorOccurred;
+
+  /// Message shown when there is an error loading the libraries
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading libraries'**
+  String get errorLoadingLibraries;
 }
 
 class _AppLocalizationsDelegate

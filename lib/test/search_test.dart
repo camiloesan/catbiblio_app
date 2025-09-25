@@ -117,7 +117,6 @@ void main() {
 
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
-
       expect(response?.$1, isA<List<BookPreview>>());
       expect(response?.$1.isEmpty, true);
       expect(response?.$2, 0);
