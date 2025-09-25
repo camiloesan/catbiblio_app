@@ -137,7 +137,7 @@ abstract class SearchController extends State<SearchView> {
         return;
       }
       setState(() {
-        books = result!.$1;
+        books = result.$1;
         totalRecords = result.$2;
         totalPages = (totalRecords / 10).ceil();
         isInitialRequestLoading = false;
