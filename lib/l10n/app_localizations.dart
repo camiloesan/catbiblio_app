@@ -253,6 +253,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No results found'**
   String get noResults;
+
+  /// Message shown when an error occurs during data fetching
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while fetching data. Please try again.'**
+  String get errorOccurred;
 }
 
 class _AppLocalizationsDelegate

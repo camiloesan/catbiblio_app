@@ -24,5 +24,6 @@
     "detailsTitle": "Detalles",
     "languageChanged": "Idioma cambiado a Inglés",
     "totalResults": "coincidencias",
-    "noResults": "No se encontraron coincidencias"
+    "noResults": "No se encontraron coincidencias",
+    "errorOccurred": "Ocurrió un error al obtener los datos. Por favor, inténtelo de nuevo."
 }

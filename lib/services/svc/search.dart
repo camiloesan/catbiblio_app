@@ -22,7 +22,7 @@ class SruService {
   /// - Title search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?title=dune&branch=USBI-X
   /// - Author search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?author=frank+herbert
   /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
-  static Future<(List<BookPreview>, int)> searchBooks(QueryParams params) async {
+  static Future<(List<BookPreview>, int)?> searchBooks(QueryParams params) async {
     final queryParameters = buildQueryParameters(params);
 
     try {
@@ -100,8 +100,8 @@ class SruService {
       }
       
       return (books, totalRecords);
-    } on DioException catch (e) {
-      throw Exception("Failed to load XML: ${e.message}");
+    } on DioException {
+      return null;
     }
   }
 

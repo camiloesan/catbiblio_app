@@ -85,4 +85,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noResults => 'No se encontraron coincidencias';
+
+  @override
+  String get errorOccurred =>
+      'Ocurrió un error al obtener los datos. Por favor, inténtelo de nuevo.';
 }
