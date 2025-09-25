@@ -21,7 +21,8 @@ void main() {
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: title and no branch', () async {
@@ -36,7 +37,8 @@ void main() {
       final response = await SruService.searchBooks(queryParams);
       //debugPrint(" Response: $response");
 
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // author search tests
@@ -52,7 +54,8 @@ void main() {
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: author and no branch', () async {
@@ -67,7 +70,8 @@ void main() {
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: subject and no branch', () async {
@@ -82,7 +86,8 @@ void main() {
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: subject and branch', () async {
@@ -97,7 +102,8 @@ void main() {
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: empty query', () async {
@@ -111,9 +117,9 @@ void main() {
 
       final response = await SruService.searchBooks(queryParams);
       //debugPrint("Response: $response");
-
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
       expect(response?.$1.isEmpty, true);
+      expect(response?.$2, 0);
     });
 
     // ISBN search tests
@@ -125,8 +131,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: ISBN with branch', () async {
@@ -137,8 +145,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // ISSN search tests
@@ -150,8 +160,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: ISSN with branch', () async {
@@ -162,8 +174,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Different branch tests
@@ -175,8 +189,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Special characters and encoding tests
@@ -188,8 +204,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: author with special characters', () async {
@@ -200,8 +218,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Multiple word searches
@@ -213,8 +233,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: multi-word author search', () async {
@@ -225,8 +247,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Edge case tests
@@ -238,8 +262,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: very long search query', () async {
@@ -251,8 +277,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Whitespace handling tests
@@ -264,8 +292,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: query with multiple spaces', () async {
@@ -276,8 +306,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Case sensitivity tests
@@ -289,8 +321,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: mixed case query', () async {
@@ -301,8 +335,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Numeric queries
@@ -314,8 +350,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Response validation tests
@@ -327,8 +365,9 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
 
       // If response is not empty, check structure
       if (response?.$1.isNotEmpty ?? false) {
@@ -350,9 +389,11 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
       expect(response?.$1.isEmpty, true);
+      expect(response?.$2, 0);
     });
 
     // Different search combinations
@@ -364,8 +405,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     test('test searchBooks: author with accents', () async {
@@ -376,8 +419,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Performance/load tests (basic)
@@ -389,8 +434,10 @@ void main() {
         filterController: TextEditingController(),
         libraryController: TextEditingController(),
       );
+
       final response = await SruService.searchBooks(queryParams);
-      expect(response, isA<List<BookPreview>>());
+      expect(response?.$1, isA<List<BookPreview>>());
+      expect(response?.$2, isA<int>());
     });
 
     // Test with different valid search types
@@ -414,7 +461,7 @@ void main() {
         );
         final response = await SruService.searchBooks(queryParams);
         expect(
-          response,
+          response?.$1,
           isA<List<BookPreview>>(),
           reason: 'Failed for search type: ${searchTypes[i]}',
         );
