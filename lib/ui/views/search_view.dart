@@ -108,15 +108,23 @@ class _SearchViewState extends SearchController {
                 ),
               ),
               SizedBox(height: 8),
+
               if (isInitialRequestLoading)
-                Center(child: LinearProgressIndicator())
-              else if (books.isEmpty)
+                Center(child: LinearProgressIndicator()),
+
+              if (isError)
+                Text(
+                  AppLocalizations.of(context)!.errorOccurred,
+                  textAlign: TextAlign.center,
+                ),
+              
+              if (books.isEmpty && !isInitialRequestLoading && !isError)
                 Text(
                   AppLocalizations.of(context)!.noResults,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 )
-              else
+              else if (!isInitialRequestLoading && !isError)
                 Text(
                   textAlign: TextAlign.center,
                   '$totalRecords ${AppLocalizations.of(context)!.totalResults}',

@@ -102,5 +102,9 @@
   "noResults": "No results found",
   "@noResults": {
     "description": "Message shown when no search results are found"
+  },
+  "errorOccurred": "An error occurred while fetching data. Please try again.",
+  "@errorOccurred": {
+    "description": "Message shown when an error occurs during data fetching"
   }
 }

@@ -85,4 +85,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noResults => 'No results found';
+
+  @override
+  String get errorOccurred =>
+      'An error occurred while fetching data. Please try again.';
 }

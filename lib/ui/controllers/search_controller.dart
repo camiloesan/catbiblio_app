@@ -20,6 +20,7 @@ abstract class SearchController extends State<SearchView> {
   int totalRecords = 0;
   bool isInitialRequestLoading = false;
   bool isPageLoading = false;
+  bool isError = false;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -86,11 +87,24 @@ abstract class SearchController extends State<SearchView> {
     _filterController = queryParams.filterController;
     _libraryController = queryParams.libraryController;
     _searchController.text = queryParams.searchQuery;
+    setState(() {
+      isInitialRequestLoading = true;
+      isError = false;
+    });
     SruService.searchBooks(queryParams).then((result) {
+      if (result == null) {
+        setState(() {
+          isInitialRequestLoading = false;
+          isError = true;
+        });
+        return;
+      }
       setState(() {
         books = result.$1;
         totalRecords = result.$2;
         totalPages = (totalRecords / 10).ceil();
+        isInitialRequestLoading = false;
+        isError = false;
       });
     });
   }
@@ -113,12 +127,21 @@ abstract class SearchController extends State<SearchView> {
 
   void updatePageResults() {
     queryParams.startRecord = (currentPage - 1) * 10 + 1;
+
     SruService.searchBooks(queryParams).then((result) {
+      if (result == null) {
+        setState(() {
+          isInitialRequestLoading = false;
+          isError = true;
+        });
+        return;
+      }
       setState(() {
-        books = result.$1;
+        books = result!.$1;
         totalRecords = result.$2;
         totalPages = (totalRecords / 10).ceil();
         isInitialRequestLoading = false;
+        isError = false;
         isPageLoading = false;
       });
     });
