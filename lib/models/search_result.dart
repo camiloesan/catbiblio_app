@@ -5,4 +5,9 @@ class SearchResult {
   final int totalRecords;
 
   SearchResult({required this.books, required this.totalRecords});
+
+  @override
+  String toString() {
+    return 'SearchResult(totalRecords: $totalRecords, books: $books)';
+  }
 }
