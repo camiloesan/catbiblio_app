@@ -89,4 +89,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get errorOccurred =>
       'Ocurrió un error al obtener los datos. Por favor, inténtelo de nuevo.';
+
+  @override
+  String get errorLoadingLibraries => 'Error al cargar las bibliotecas';
 }

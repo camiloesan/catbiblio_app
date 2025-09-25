@@ -89,4 +89,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorOccurred =>
       'An error occurred while fetching data. Please try again.';
+
+  @override
+  String get errorLoadingLibraries => 'Error loading libraries';
 }

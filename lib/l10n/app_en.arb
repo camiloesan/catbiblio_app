@@ -106,5 +106,9 @@
   "errorOccurred": "An error occurred while fetching data. Please try again.",
   "@errorOccurred": {
     "description": "Message shown when an error occurs during data fetching"
+  },
+  "errorLoadingLibraries": "Error loading libraries",
+  "@errorLoadingLibraries": {
+    "description": "Message shown when there is an error loading the libraries"
   }
 }
