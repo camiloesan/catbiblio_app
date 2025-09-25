@@ -113,7 +113,7 @@ void main() {
       //debugPrint("Response: $response");
 
       expect(response, isA<List<BookPreview>>());
-      expect(response.$1.isEmpty, true);
+      expect(response?.$1.isEmpty, true);
     });
 
     // ISBN search tests
@@ -331,13 +331,13 @@ void main() {
       expect(response, isA<List<BookPreview>>());
 
       // If response is not empty, check structure
-      if (response.$1.isNotEmpty) {
-        final firstBook = response.$1.first;
-        expect(firstBook.title, isA<String>());
-        expect(firstBook.author, isA<String>());
-        expect(firstBook.coverUrl, isA<String>());
-        expect(firstBook.biblioNumber, isA<String>());
-        expect(firstBook.publishingDetails, isA<String>());
+      if (response?.$1.isNotEmpty ?? false) {
+        final firstBook = response?.$1.first;
+        expect(firstBook?.title, isA<String>());
+        expect(firstBook?.author, isA<String>());
+        expect(firstBook?.coverUrl, isA<String>());
+        expect(firstBook?.biblioNumber, isA<String>());
+        expect(firstBook?.publishingDetails, isA<String>());
       }
     });
 
@@ -352,7 +352,7 @@ void main() {
       );
       final response = await SruService.searchBooks(queryParams);
       expect(response, isA<List<BookPreview>>());
-      expect(response.$1.isEmpty, true);
+      expect(response?.$1.isEmpty, true);
     });
 
     // Different search combinations
