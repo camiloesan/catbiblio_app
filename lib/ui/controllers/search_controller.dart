@@ -92,21 +92,17 @@ abstract class SearchController extends State<SearchView> {
       isError = false;
     });
     SruService.searchBooks(queryParams).then((result) {
-      /**  Used with searchBooksOld()
-      if (result == null) {
-        setState(() {
-          isInitialRequestLoading = false;
-          isError = true;
-        });
-        return;
-      }
-      */
       setState(() {
         books = result.books;
         totalRecords = result.totalRecords;
         totalPages = (totalRecords / 10).ceil();
         isInitialRequestLoading = false;
         isError = false;
+      });
+    }).catchError((error) {
+      setState(() {
+        isInitialRequestLoading = false;
+        isError = true;
       });
     });
   }
@@ -121,7 +117,6 @@ abstract class SearchController extends State<SearchView> {
         setUpperLimit = 10;
         setLowerLimit = 1;
         totalPages = 0;
-        isInitialRequestLoading = true;
         updatePageResults();
       });
     }
@@ -130,22 +125,22 @@ abstract class SearchController extends State<SearchView> {
   void updatePageResults() {
     queryParams.startRecord = (currentPage - 1) * 10 + 1;
 
+    setState(() {
+      isPageLoading = true;
+    });
     SruService.searchBooks(queryParams).then((result) {
-      /**  Used with searchBooksOld()
-      if (result == null) {
-        setState(() {
-          isInitialRequestLoading = false;
-          isError = true;
-        });
-        return;
-      }
-      */
       setState(() {
         books = result.books;
         totalRecords = result.totalRecords;
         totalPages = (totalRecords / 10).ceil();
         isInitialRequestLoading = false;
         isError = false;
+        isPageLoading = false;
+      });
+    }).catchError((error) {
+      setState(() {
+        isInitialRequestLoading = false;
+        isError = true;
         isPageLoading = false;
       });
     });
@@ -158,7 +153,6 @@ abstract class SearchController extends State<SearchView> {
         setUpperLimit += 8;
         setLowerLimit += 8;
         currentPage++;
-        isInitialRequestLoading = true;
         updatePageResults();
       });
       return;
@@ -172,7 +166,6 @@ abstract class SearchController extends State<SearchView> {
         setUpperLimit -= 8;
         setLowerLimit -= 8;
         currentPage--;
-        isInitialRequestLoading = true;
         updatePageResults();
       });
       return;
