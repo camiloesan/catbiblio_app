@@ -51,7 +51,10 @@ class _SearchViewState extends SearchController {
                   Icons.location_city,
                   color: primaryColor,
                 ),
-                dropdownMenuEntries: widget.controllersData.libraryEntries,
+                dropdownMenuEntries: [
+                      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
+                      ...widget.controllersData.libraryEntries,
+                    ],
                 menuHeight: 300,
                 onSelected: (value) => widget.queryParams.library = value!,
                 width: double.infinity,

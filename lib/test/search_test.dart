@@ -15,8 +15,6 @@ void main() {
         library: 'USBI-X',
         searchBy: 'title',
         searchQuery: 'sistemas operativos',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -32,8 +30,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'sistemas operativos',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -50,8 +46,6 @@ void main() {
         library: 'USBI-X',
         searchBy: 'author',
         searchQuery: 'frank herbert',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -67,8 +61,6 @@ void main() {
         library: 'all',
         searchBy: 'author',
         searchQuery: 'frank herbert',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -84,8 +76,6 @@ void main() {
         library: 'all',
         searchBy: 'subject',
         searchQuery: 'ciencia ficcion',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -101,8 +91,6 @@ void main() {
         library: 'USBI-X',
         searchBy: 'subject',
         searchQuery: 'ciencia ficcion',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -118,8 +106,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: '',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -137,8 +123,6 @@ void main() {
         library: 'all',
         searchBy: 'isbn',
         searchQuery: '9780123456789',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -152,8 +136,6 @@ void main() {
         library: 'USBI-V',
         searchBy: 'isbn',
         searchQuery: '9780123456789',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -169,8 +151,6 @@ void main() {
         library: 'all',
         searchBy: 'issn',
         searchQuery: '1234-5678',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -184,8 +164,6 @@ void main() {
         library: 'USBI-V',
         searchBy: 'issn',
         searchQuery: '1234-5678',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -200,8 +178,6 @@ void main() {
         library: 'USBI-V',
         searchBy: 'title',
         searchQuery: 'programacion',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -216,8 +192,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'programación básica',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -231,8 +205,6 @@ void main() {
         library: 'all',
         searchBy: 'author',
         searchQuery: 'josé martínez',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -247,8 +219,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'introduction to computer science',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -262,8 +232,6 @@ void main() {
         library: 'all',
         searchBy: 'author',
         searchQuery: 'garcia marquez',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -278,8 +246,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'a',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -294,8 +260,6 @@ void main() {
         searchBy: 'title',
         searchQuery:
             'this is a very long search query that might test the limits of the search system and how it handles extensive input',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -310,8 +274,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: '  programming  ',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -325,8 +287,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'computer    science',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -341,8 +301,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'PROGRAMMING',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -356,8 +314,6 @@ void main() {
         library: 'all',
         searchBy: 'author',
         searchQuery: 'Frank Herbert',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -372,8 +328,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: '2024',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -388,8 +342,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'test',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -413,8 +365,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: '',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -430,8 +380,6 @@ void main() {
         library: 'USBI-V',
         searchBy: 'subject',
         searchQuery: 'matematicas',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -445,8 +393,6 @@ void main() {
         library: 'all',
         searchBy: 'author',
         searchQuery: 'garcía márquez',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -461,8 +407,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: 'el',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final response = await SruService.searchBooks(queryParams);
@@ -487,8 +431,6 @@ void main() {
           library: 'all',
           searchBy: searchTypes[i],
           searchQuery: searchQueries[i],
-          filterController: TextEditingController(),
-          libraryController: TextEditingController(),
         );
         final response = await SruService.searchBooks(queryParams);
         expect(
@@ -506,8 +448,6 @@ void main() {
         library: 'USBI-X',
         searchBy: 'title',
         searchQuery: 'sistemas operativos',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {
@@ -525,8 +465,6 @@ void main() {
         library: 'all',
         searchBy: 'author',
         searchQuery: 'frank herbert',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {'author': 'frank herbert'};
@@ -541,8 +479,6 @@ void main() {
         library: 'all',
         searchBy: 'title',
         searchQuery: '',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {};
@@ -557,8 +493,6 @@ void main() {
         library: '',
         searchBy: '',
         searchQuery: '',
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {};
@@ -574,8 +508,6 @@ void main() {
         searchBy: 'title',
         searchQuery: 'sistemas operativos',
         startRecord: 5,
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {
@@ -595,8 +527,6 @@ void main() {
         searchBy: 'title',
         searchQuery: 'sistemas operativos',
         startRecord: 100,
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {
@@ -616,8 +546,6 @@ void main() {
         searchBy: 'title',
         searchQuery: 'sistemas operativos',
         startRecord: -10,
-        filterController: TextEditingController(),
-        libraryController: TextEditingController(),
       );
 
       final expectedParams = {
