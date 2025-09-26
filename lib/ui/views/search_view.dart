@@ -15,7 +15,11 @@ class SearchView extends StatefulWidget {
   final ControllersData controllersData;
   final QueryParams queryParams;
 
-  const SearchView({super.key, required this.controllersData, required this.queryParams});
+  const SearchView({
+    super.key,
+    required this.controllersData,
+    required this.queryParams,
+  });
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -36,7 +40,10 @@ class _SearchViewState extends SearchController {
               DropdownMenu(
                 controller: _filterController,
                 label: Text(AppLocalizations.of(context)!.search),
-                leadingIcon: const Icon(Icons.filter_list, color: primaryUVColor),
+                leadingIcon: const Icon(
+                  Icons.filter_list,
+                  color: primaryUVColor,
+                ),
                 dropdownMenuEntries: _filterEntries,
                 onSelected: (value) => widget.queryParams.searchBy = value!,
                 enableFilter: false,
@@ -52,9 +59,12 @@ class _SearchViewState extends SearchController {
                   color: primaryUVColor,
                 ),
                 dropdownMenuEntries: [
-                      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
-                      ...widget.controllersData.libraryEntries,
-                    ],
+                  DropdownMenuEntry(
+                    value: 'all',
+                    label: AppLocalizations.of(context)!.allLibraries,
+                  ),
+                  ...widget.controllersData.libraryEntries,
+                ],
                 menuHeight: 300,
                 onSelected: (value) => widget.queryParams.library = value!,
                 width: double.infinity,
@@ -123,7 +133,7 @@ class _SearchViewState extends SearchController {
                   AppLocalizations.of(context)!.errorOccurred,
                   textAlign: TextAlign.center,
                 ),
-              
+
               if (books.isEmpty && !isInitialRequestLoading && !isError)
                 Text(
                   AppLocalizations.of(context)!.noResults,
@@ -165,10 +175,8 @@ class _SearchViewState extends SearchController {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError ||
                                       snapshot.data == null) {
-                                    // Error or not PNG
                                     return const SizedBox.shrink();
                                   } else {
-                                    // Show the actual image
                                     return SizedBox(child: snapshot.data!);
                                   }
                                 },
@@ -210,11 +218,11 @@ class _SearchViewState extends SearchController {
                           ),
                         ),
                       ),
-
                       Divider(color: Colors.grey),
                     ],
                   );
                 }),
+
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: Align(
