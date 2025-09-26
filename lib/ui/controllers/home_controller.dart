@@ -6,6 +6,7 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _searchFilterController;
   late TextEditingController _libraryController;
   late Future<List<Library>> _librariesFuture;
+  late List<DropdownMenuEntry<String>> _libraryEntries = [];
   final QueryParams _queryParams = QueryParams(
     library: 'all',
     searchBy: 'title',
@@ -46,7 +47,9 @@ abstract class HomeController extends State<HomeView> {
     _searchFilterController = TextEditingController();
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
-    _librariesFuture = LibrariesService.getLibraries();
+    if (_libraryEntries.isEmpty) {
+      _librariesFuture = LibrariesService.getLibraries();
+    }
     futureNews = _getNews();
   }
 
@@ -61,6 +64,12 @@ abstract class HomeController extends State<HomeView> {
 
   void onSubmitAction() {
     if (_searchController.text.isNotEmpty) {
+
+      ControllersData controllersData = ControllersData(
+        filterController: _searchFilterController,
+        libraryController: _libraryController,
+        libraryEntries: _libraryEntries,
+      );
       setState(() {
         _queryParams.startRecord = 1;
         _queryParams.filterController = _searchFilterController;
@@ -70,8 +79,7 @@ abstract class HomeController extends State<HomeView> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const SearchView(),
-          settings: RouteSettings(arguments: _queryParams),
+          builder: (context) => SearchView(controllersData: controllersData, queryParams: _queryParams),
         ),
       );
     }

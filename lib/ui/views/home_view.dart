@@ -1,4 +1,5 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
+import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/rest/libraries.dart';
@@ -148,7 +149,7 @@ class _HomeViewState extends HomeController {
                     );
                   }
                   final libraries = asyncSnapshot.data!;
-                  final libraryEntries = libraries.map((library) {
+                  _libraryEntries = libraries.map((library) {
                     return DropdownMenuEntry(
                       value: library.libraryId,
                       label: library.name,
@@ -166,7 +167,7 @@ class _HomeViewState extends HomeController {
                     initialSelection: _queryParams.library,
                     dropdownMenuEntries: [
                       DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
-                      ...libraryEntries,
+                      ..._libraryEntries,
                     ],
                     onSelected: (value) {
                       setState(() {

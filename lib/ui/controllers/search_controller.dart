@@ -5,13 +5,6 @@ abstract class SearchController extends State<SearchView> {
   late TextEditingController _filterController;
   late TextEditingController _searchController;
   late ScrollController _scrollController;
-  QueryParams queryParams = QueryParams(
-    library: '',
-    searchBy: 'title',
-    searchQuery: '',
-    filterController: TextEditingController(),
-    libraryController: TextEditingController(),
-  );
   late List<BookPreview> books = [];
   int currentPage = 1;
   int totalPages = 0;
@@ -47,23 +40,13 @@ abstract class SearchController extends State<SearchView> {
     ];
   }
 
-  List<DropdownMenuEntry<String>> get _libraryEntries {
-    return [
-      DropdownMenuEntry(
-        value: 'all',
-        label: AppLocalizations.of(context)!.allLibraries,
-      ),
-      DropdownMenuEntry(value: 'USBI-X', label: 'USBI Xalapa'),
-      DropdownMenuEntry(value: 'USBI-V', label: 'USBI Veracruz'),
-    ];
-  }
-
   @override
   void initState() {
     super.initState();
-    _filterController = TextEditingController();
-    _libraryController = TextEditingController();
+    _filterController = widget.controllersData.filterController;
+    _libraryController = widget.controllersData.libraryController;
     _searchController = TextEditingController();
+    _searchController.text = widget.queryParams.searchQuery;
     _scrollController = ScrollController();
   }
 
@@ -79,19 +62,11 @@ abstract class SearchController extends State<SearchView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args = ModalRoute.of(context)?.settings.arguments;
-    args.runtimeType;
-    if (args is QueryParams) {
-      queryParams = args;
-    }
-    _filterController = queryParams.filterController;
-    _libraryController = queryParams.libraryController;
-    _searchController.text = queryParams.searchQuery;
     setState(() {
       isInitialRequestLoading = true;
       isError = false;
     });
-    SruService.searchBooks(queryParams).then((result) {
+    SruService.searchBooks(widget.queryParams).then((result) {
       setState(() {
         books = result.books;
         totalRecords = result.totalRecords;
@@ -110,7 +85,7 @@ abstract class SearchController extends State<SearchView> {
   void onSubmitAction(String searchQuery) {
     if (searchQuery.isNotEmpty) {
       setState(() {
-        queryParams.searchQuery = searchQuery;
+        widget.queryParams.searchQuery = searchQuery;
         books.clear();
         totalRecords = 0;
         currentPage = 1;
@@ -123,12 +98,12 @@ abstract class SearchController extends State<SearchView> {
   }
 
   void updatePageResults() {
-    queryParams.startRecord = (currentPage - 1) * 10 + 1;
+    widget.queryParams.startRecord = (currentPage - 1) * 10 + 1;
 
     setState(() {
       isPageLoading = true;
     });
-    SruService.searchBooks(queryParams).then((result) {
+    SruService.searchBooks(widget.queryParams).then((result) {
       setState(() {
         books = result.books;
         totalRecords = result.totalRecords;

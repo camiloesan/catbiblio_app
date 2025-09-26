@@ -1,5 +1,6 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
+import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ part '../controllers/search_controller.dart';
 const Color primaryColor = Color(0xFF003466);
 
 class SearchView extends StatefulWidget {
-  const SearchView({super.key});
+  final ControllersData controllersData;
+  final QueryParams queryParams;
+
+  const SearchView({super.key, required this.controllersData, required this.queryParams});
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -34,7 +38,7 @@ class _SearchViewState extends SearchController {
                 label: Text(AppLocalizations.of(context)!.search),
                 leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
                 dropdownMenuEntries: _filterEntries,
-                onSelected: (value) => queryParams.searchBy = value!,
+                onSelected: (value) => widget.queryParams.searchBy = value!,
                 enableFilter: false,
                 requestFocusOnTap: false,
                 width: double.infinity,
@@ -47,10 +51,9 @@ class _SearchViewState extends SearchController {
                   Icons.location_city,
                   color: primaryColor,
                 ),
-                dropdownMenuEntries: _libraryEntries,
-                onSelected: (value) => queryParams.library = value!,
-                enableFilter: false,
-                requestFocusOnTap: false,
+                dropdownMenuEntries: widget.controllersData.libraryEntries,
+                menuHeight: 300,
+                onSelected: (value) => widget.queryParams.library = value!,
                 width: double.infinity,
               ),
               const SizedBox(height: 8),
