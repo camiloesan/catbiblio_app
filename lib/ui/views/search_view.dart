@@ -29,11 +29,11 @@ class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchTitle)),
+      // appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchTitle)),
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
