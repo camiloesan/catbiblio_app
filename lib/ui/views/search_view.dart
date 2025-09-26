@@ -246,7 +246,11 @@ class _SearchViewState extends SearchController {
                           OutlinedButton(
                             onPressed: () {
                               paginationBehavior(i);
-                              _scrollController.position.maxScrollExtent;
+                              _scrollController.animateTo(
+                                0,
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
                             },
                             style: i == currentPage
                                 ? OutlinedButton.styleFrom(
