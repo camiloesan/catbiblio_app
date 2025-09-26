@@ -165,7 +165,7 @@ class _HomeViewState extends HomeController {
                     ),
                     initialSelection: _queryParams.library,
                     dropdownMenuEntries: [
-                      const DropdownMenuEntry(value: 'all', label: 'Todas'),
+                      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
                       ...libraryEntries,
                     ],
                     onSelected: (value) {
