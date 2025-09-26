@@ -9,7 +9,7 @@ import 'package:catbiblio_app/services/svc/images.dart';
 
 part '../controllers/search_controller.dart';
 
-const Color primaryColor = Color(0xFF003466);
+const Color primaryUVColor = Color(0xFF003466);
 
 class SearchView extends StatefulWidget {
   final ControllersData controllersData;
@@ -36,7 +36,7 @@ class _SearchViewState extends SearchController {
               DropdownMenu(
                 controller: _filterController,
                 label: Text(AppLocalizations.of(context)!.search),
-                leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
+                leadingIcon: const Icon(Icons.filter_list, color: primaryUVColor),
                 dropdownMenuEntries: _filterEntries,
                 onSelected: (value) => widget.queryParams.searchBy = value!,
                 enableFilter: false,
@@ -49,7 +49,7 @@ class _SearchViewState extends SearchController {
                 label: Text(AppLocalizations.of(context)!.library),
                 leadingIcon: const Icon(
                   Icons.location_city,
-                  color: primaryColor,
+                  color: primaryUVColor,
                 ),
                 dropdownMenuEntries: [
                       DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
@@ -64,7 +64,7 @@ class _SearchViewState extends SearchController {
                 controller: _searchController,
                 onSubmitted: (value) => onSubmitAction(value),
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: primaryColor),
+                  prefixIcon: Icon(Icons.search, color: primaryUVColor),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
@@ -93,13 +93,13 @@ class _SearchViewState extends SearchController {
                           onPressed: () => paginationBehavior(i),
                           style: i == currentPage
                               ? OutlinedButton.styleFrom(
-                                  backgroundColor: primaryColor,
+                                  backgroundColor: primaryUVColor,
                                   foregroundColor: Colors.white,
                                   minimumSize: Size(36, 36),
                                   padding: EdgeInsets.zero,
                                 )
                               : OutlinedButton.styleFrom(
-                                  foregroundColor: primaryColor,
+                                  foregroundColor: primaryUVColor,
                                   minimumSize: Size(36, 36),
                                   padding: EdgeInsets.zero,
                                 ),
@@ -240,13 +240,13 @@ class _SearchViewState extends SearchController {
                             },
                             style: i == currentPage
                                 ? OutlinedButton.styleFrom(
-                                    backgroundColor: primaryColor,
+                                    backgroundColor: primaryUVColor,
                                     foregroundColor: Colors.white,
                                     minimumSize: Size(36, 36),
                                     padding: EdgeInsets.zero,
                                   )
                                 : OutlinedButton.styleFrom(
-                                    foregroundColor: primaryColor,
+                                    foregroundColor: primaryUVColor,
                                     minimumSize: Size(36, 36),
                                     padding: EdgeInsets.zero,
                                   ),
