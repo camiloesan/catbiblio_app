@@ -134,19 +134,20 @@ class _SearchViewState extends SearchController {
                   textAlign: TextAlign.center,
                 ),
 
-              if (books.isEmpty && !isInitialRequestLoading && !isError)
+              if (books.isEmpty && !isInitialRequestLoading && !isError && !isPageLoading)
                 Text(
                   AppLocalizations.of(context)!.noResults,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 )
-              else if (!isInitialRequestLoading && !isError)
+              else if (!isInitialRequestLoading && !isError && !isPageLoading)
                 Text(
                   textAlign: TextAlign.center,
                   '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               Divider(color: Colors.grey),
+
               if (isPageLoading)
                 Center(child: LinearProgressIndicator())
               else
@@ -223,6 +224,7 @@ class _SearchViewState extends SearchController {
                   );
                 }),
 
+              if (!isPageLoading) 
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: Align(
