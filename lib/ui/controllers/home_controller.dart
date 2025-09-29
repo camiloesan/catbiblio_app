@@ -2,13 +2,11 @@ part of '../views/home_view.dart';
 
 abstract class HomeController extends State<HomeView> {
   late TextEditingController _searchController;
-  late Future<List<Aviso>> futureNews;
   late TextEditingController _searchFilterController;
   late TextEditingController _libraryController;
   late Future<List<Library>> _librariesFuture;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   final QueryParams _queryParams = QueryParams();
-  int _newsIndex = 0;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -44,7 +42,6 @@ abstract class HomeController extends State<HomeView> {
     if (_libraryEntries.isEmpty) {
       _librariesFuture = LibrariesService.getLibraries();
     }
-    futureNews = _getNews();
   }
 
   @override
@@ -68,17 +65,13 @@ abstract class HomeController extends State<HomeView> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchView(controllersData: controllersData, queryParams: _queryParams),
+          builder: (context) => SearchView(
+            controllersData: controllersData,
+            queryParams: _queryParams,
+          ),
         ),
       );
     }
-  }
-
-  Future<List<Aviso>> _getNews() async {
-    /// https://www.example.com/avisos.json
-    final String response = await rootBundle.loadString('assets/avisos.json');
-    final List<dynamic> data = json.decode(response);
-    return data.map((item) => Aviso.fromJson(item)).toList();
   }
 
   Future<void> openLink(String url) async {
@@ -90,80 +83,5 @@ abstract class HomeController extends State<HomeView> {
         );
       }
     }
-  }
-
-  void newChanged(int index, CarouselPageChangedReason reason) {
-    setState(() {
-      _newsIndex = index;
-    });
-  }
-
-  Widget buildCarousel(List<Aviso> news) {
-    return Column(
-      children: [
-        CarouselSlider.builder(
-          itemCount: news.length,
-          itemBuilder: (context, index, realIndex) {
-            final aviso = news[index];
-            return GestureDetector(
-              onTap: () => openLink(aviso.enlace),
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  // Contenedor de la Imagen
-                  SizedBox(
-                    width: double.infinity,
-                    child: Image.network(
-                      aviso.imagen,
-                      fit: BoxFit.contain,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset('assets/images/aviso.png');
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-          options: CarouselOptions(
-            autoPlay: true,
-            enlargeCenterPage: true,
-            viewportFraction: 1,
-            aspectRatio: 16 / 6,
-            onPageChanged: (index, reason) => newChanged(index, reason),
-          ),
-        ),
-        const SizedBox(height: 12),
-        // Indicadores dinámicos
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            news.length,
-            (index) => Container(
-              width: 9,
-              height: 9,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _newsIndex == index
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey.shade400,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

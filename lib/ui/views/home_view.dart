@@ -5,12 +5,7 @@ import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/rest/libraries.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:catbiblio_app/classes/aviso.dart';
 
 part '../controllers/home_controller.dart';
 
@@ -137,7 +132,8 @@ class _HomeViewState extends HomeController {
               FutureBuilder(
                 future: _librariesFuture,
                 builder: (context, asyncSnapshot) {
-                  if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                  if (asyncSnapshot.connectionState ==
+                      ConnectionState.waiting) {
                     return const SizedBox(
                       height: 56,
                       child: Center(child: CircularProgressIndicator()),
@@ -145,7 +141,9 @@ class _HomeViewState extends HomeController {
                   }
                   if (asyncSnapshot.hasError) {
                     return Center(
-                      child: Text('${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}'),
+                      child: Text(
+                        '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
+                      ),
                     );
                   }
                   final libraries = asyncSnapshot.data!;
@@ -166,7 +164,10 @@ class _HomeViewState extends HomeController {
                     ),
                     initialSelection: _queryParams.library,
                     dropdownMenuEntries: [
-                      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
+                      DropdownMenuEntry(
+                        value: 'all',
+                        label: AppLocalizations.of(context)!.allLibraries,
+                      ),
                       ..._libraryEntries,
                     ],
                     onSelected: (value) {
@@ -176,7 +177,7 @@ class _HomeViewState extends HomeController {
                     },
                     width: double.infinity,
                   );
-                }
+                },
               ),
               const SizedBox(height: 8),
               TextField(
@@ -211,28 +212,6 @@ class _HomeViewState extends HomeController {
                 ),
               ),
               const SizedBox(height: 12),
-              FutureBuilder<List<Aviso>>(
-                future: futureNews,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 202, // Altura del carrusel + indicadores
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error al cargar avisos: ${snapshot.error}'),
-                    );
-                  }
-                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    return buildCarousel(snapshot.data!);
-                  }
-                  return const Center(
-                    child: Text('No hay avisos disponibles.'),
-                  );
-                },
-              ),
             ],
           ),
         ),
