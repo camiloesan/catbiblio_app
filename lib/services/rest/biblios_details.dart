@@ -22,8 +22,32 @@ class BibliosDetailsService {
       final List<dynamic> titleFields = bibliosJson['fields'];
 
       return BibliosDetails(
-        title: getSubfieldData(titleFields, '245', 'a') ?? 'Unknown Title',
-        author: getSubfieldData(titleFields, '100', 'a') ?? 'Unknown Author',
+        title:
+            '${getSubfieldData(titleFields, '245', 'a') ?? ''} ${getSubfieldData(titleFields, '245', 'b') ?? ''} ${getSubfieldData(titleFields, '245', 'c') ?? ''}'
+                .trim(),
+        author: getSubfieldData(titleFields, '100', 'a') ?? '',
+        isbn: getSubfieldData(titleFields, '020', 'a') ?? '',
+        language: getSubfieldData(titleFields, '041', 'a') ?? '',
+        originalLanguage: getSubfieldData(titleFields, '041', 'h') ?? '',
+        subject: getSubfieldData(titleFields, '650', 'a') ?? '',
+        collaborators: getSubfieldData(titleFields, '700', 'a') ?? '',
+        summary: getSubfieldData(titleFields, '520', 'a') ?? '',
+        cdd:
+            '${getSubfieldData(titleFields, '082', 'a') ?? ''} ${getSubfieldData(titleFields, '082', 'b') ?? ''} ${getSubfieldData(titleFields, '082', '2') ?? ''}'
+                .trim(),
+        loc:
+            '${getSubfieldData(titleFields, '050', 'a') ?? ''} ${getSubfieldData(titleFields, '050', 'b') ?? ''}'
+                .trim(),
+        editor:
+            '${getSubfieldData(titleFields, '260', 'a') ?? ''} ${getSubfieldData(titleFields, '260', 'b') ?? ''} ${getSubfieldData(titleFields, '260', 'c') ?? ''} ${getSubfieldData(titleFields, '264', 'a') ?? ''} ${getSubfieldData(titleFields, '264', 'b') ?? ''} ${getSubfieldData(titleFields, '264', 'c') ?? ''}'
+                .trim(),
+        edition: getSubfieldData(titleFields, '250', 'a') ?? '',
+        description:
+            '${getSubfieldData(titleFields, '300', 'a') ?? ''} ${getSubfieldData(titleFields, '300', 'b') ?? ''} ${getSubfieldData(titleFields, '300', 'c') ?? ''}'
+                .trim(),
+        otherClassification: getSubfieldData(titleFields, '084', 'a') ?? '',
+        lawClassification: '${getSubfieldData(titleFields, '099', 'a') ?? ''} ${getSubfieldData(titleFields, '099', 'b') ?? ''} ${getSubfieldData(titleFields, '099', 'c') ?? ''}'
+            .trim(),
       );
     } on DioException catch (e) {
       // Log the error for debugging
@@ -58,44 +82,61 @@ class BibliosDetailsService {
     }
   }
 
-  // Helper function to find a value by its tag in the 'fields' list
+  /// Helper function to find all values for a given tag and subfield,
+  /// concatenating them with a pipe '|' if multiple are found.
   static String? getSubfieldData(
     List<dynamic> fields,
     String tag,
     String subfieldCode,
   ) {
-    // 1. Find the map that contains the main tag (e.g., {"245": {...}})
-  final fieldContainer = fields.firstWhere(
-    (element) => (element as Map).containsKey(tag),
-    orElse: () => null,
-  );
-
-  // If no field with that tag exists, stop here.
-  if (fieldContainer == null) {
-    return null;
-  }
-
-  // 2. Get the value associated with the tag. This should be a map.
-  final tagData = fieldContainer[tag];
-
-  // 3. Check if the tag's data is a Map and contains the "subfields" key.
-  if (tagData is Map && tagData.containsKey('subfields')) {
-    // 4. Get the list of subfields.
-    final List<dynamic> subfieldsList = tagData['subfields'];
-
-    // 5. Search the list to find the first map containing our subfieldCode.
-    final subfieldMap = subfieldsList.firstWhere(
-      (subfield) => (subfield as Map).containsKey(subfieldCode),
-      orElse: () => null,
+    // 1. Find ALL maps that contain the main tag (e.g., {"020": {...}}).
+    // We use 'where' instead of 'firstWhere' to get all occurrences.
+    final fieldContainers = fields.where(
+      (element) => (element as Map).containsKey(tag),
     );
 
-    // 6. If we found a matching subfield, return its value.
-    if (subfieldMap != null) {
-      return subfieldMap[subfieldCode] as String?;
+    // If no fields with that tag exist, stop here.
+    if (fieldContainers.isEmpty) {
+      return null;
     }
-  }
 
-  // Return null if anything was not found along the way.
-  return null;
+    // A list to hold the data from each found subfield.
+    final List<String> results = [];
+
+    // 2. Loop through each of the found field containers.
+    for (final fieldContainer in fieldContainers) {
+      // 3. Get the value associated with the tag (e.g., the map with "ind1", "subfields").
+      final tagData = fieldContainer[tag];
+
+      // 4. Check if the tag's data is a Map and contains the "subfields" key.
+      if (tagData is Map && tagData.containsKey('subfields')) {
+        // 5. Get the list of subfields.
+        final List<dynamic> subfieldsList = tagData['subfields'];
+
+        // 6. Search the list to find the first map containing our subfieldCode.
+        // (It's rare for the same subfield code to repeat within a single field).
+        final subfieldMap = subfieldsList.firstWhere(
+          (subfield) => (subfield as Map).containsKey(subfieldCode),
+          orElse: () => null,
+        );
+
+        // 7. If we found a matching subfield, add its value to our results list.
+        if (subfieldMap != null) {
+          final value = subfieldMap[subfieldCode];
+          if (value is String) {
+            results.add(value);
+          }
+        }
+      }
+    }
+
+    // 8. After checking all fields, process the collected results.
+    if (results.isEmpty) {
+      // If we looped through everything but found no matching subfields.
+      return null;
+    } else {
+      // Join all found values with a " | " and return the final string.
+      return results.join(' | ');
+    }
   }
 }
