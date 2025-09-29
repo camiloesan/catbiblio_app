@@ -110,5 +110,85 @@
   "errorLoadingLibraries": "Error loading libraries",
   "@errorLoadingLibraries": {
     "description": "Message shown when there is an error loading the libraries"
+  },
+  "originalLanguage": "Original Language",
+  "@originalLanguage": {
+    "description": "Label for the original language of a book"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "spanish": "Spanish",
+  "@spanish": {
+    "description": "Spanish language option"
+  },
+  "french": "French",
+  "@french": {
+    "description": "French language option"
+  },
+  "german": "German",
+  "@german": {
+    "description": "German language option"
+  },
+  "japanese": "Japanese",
+  "@japanese": {
+    "description": "Japanese language option"
+  },
+  "italian": "Italian",
+  "@italian": {
+    "description": "Italian language option"
+  },
+  "portuguese": "Portuguese",
+  "@portuguese": {
+    "description": "Portuguese language option"
+  },
+  "russian": "Russian",
+  "@russian": {
+    "description": "Russian language option"
+  },
+  "chinese": "Chinese",
+  "@chinese": {
+    "description": "Chinese language option"
+  },
+  "subject": "Subject",
+  "@subject": {
+    "description": "Label for the subject of a book"
+  },
+  "collaborators": "Collaborators",
+  "@collaborators": {
+    "description": "Label for the collaborators of a book"
+  },
+  "summary": "Summary",
+  "@summary": {
+    "description": "Label for the summary of a book"
+  },
+  "readMore": "Read More",
+  "@readMore": {
+    "description": "Button text to expand the summary"
+  },
+  "showLess": "Show Less",
+  "@showLess": {
+    "description": "Button text to collapse the summary"
+  },
+  "editor": "Editor",
+  "@editor": {
+    "description": "Editor label in book preview"
+  },
+  "edition": "Edition",
+  "@edition": {
+    "description": "Edition label in book preview"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description label in book preview"
+  },
+  "otherClassification": "Other Classification",
+  "@otherClassification": {
+    "description": "Other Classification label in book preview"
+  },
+  "lawClassification": "Law Classification",
+  "@lawClassification": {
+    "description": "Law Classification label in book preview"
   }
 }

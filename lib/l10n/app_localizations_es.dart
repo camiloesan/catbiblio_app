@@ -92,4 +92,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorLoadingLibraries => 'Error al cargar las bibliotecas';
+
+  @override
+  String get originalLanguage => 'Idioma original';
+
+  @override
+  String get english => 'Inglés';
+
+  @override
+  String get spanish => 'Español';
+
+  @override
+  String get french => 'Francés';
+
+  @override
+  String get german => 'Alemán';
+
+  @override
+  String get japanese => 'Japonés';
+
+  @override
+  String get italian => 'Italiano';
+
+  @override
+  String get portuguese => 'Portugués';
+
+  @override
+  String get russian => 'Ruso';
+
+  @override
+  String get chinese => 'Chino';
+
+  @override
+  String get subject => 'Tema';
+
+  @override
+  String get collaborators => 'Colaboradores';
+
+  @override
+  String get summary => 'Resumen';
+
+  @override
+  String get readMore => 'Leer más';
+
+  @override
+  String get showLess => 'Mostrar menos';
+
+  @override
+  String get editor => 'Editor';
+
+  @override
+  String get edition => 'Edición';
+
+  @override
+  String get description => 'Descripción';
+
+  @override
+  String get otherClassification => 'Other Classification';
+
+  @override
+  String get lawClassification => 'Clasificación de Derecho';
 }

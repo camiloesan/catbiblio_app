@@ -265,6 +265,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading libraries'**
   String get errorLoadingLibraries;
+
+  /// Label for the original language of a book
+  ///
+  /// In en, this message translates to:
+  /// **'Original Language'**
+  String get originalLanguage;
+
+  /// English language option
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// Spanish language option
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanish;
+
+  /// French language option
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
+
+  /// German language option
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get german;
+
+  /// Japanese language option
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese'**
+  String get japanese;
+
+  /// Italian language option
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get italian;
+
+  /// Portuguese language option
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get portuguese;
+
+  /// Russian language option
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get russian;
+
+  /// Chinese language option
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get chinese;
+
+  /// Label for the subject of a book
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get subject;
+
+  /// Label for the collaborators of a book
+  ///
+  /// In en, this message translates to:
+  /// **'Collaborators'**
+  String get collaborators;
+
+  /// Label for the summary of a book
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary;
+
+  /// Button text to expand the summary
+  ///
+  /// In en, this message translates to:
+  /// **'Read More'**
+  String get readMore;
+
+  /// Button text to collapse the summary
+  ///
+  /// In en, this message translates to:
+  /// **'Show Less'**
+  String get showLess;
+
+  /// Editor label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Editor'**
+  String get editor;
+
+  /// Edition label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Edition'**
+  String get edition;
+
+  /// Description label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// Other Classification label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Other Classification'**
+  String get otherClassification;
+
+  /// Law Classification label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Law Classification'**
+  String get lawClassification;
 }
 
 class _AppLocalizationsDelegate
