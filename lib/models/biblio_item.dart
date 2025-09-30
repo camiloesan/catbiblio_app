@@ -1,9 +1,12 @@
 //import 'package:catbiblio_app/models/item_location.dart';
 
 class BiblioItem {
-  String itemType; // Currently only displaying the id: item_types endpoint
-  String holdingLibrary; // Currently only displaying the id: libraries endpoint
-  String collection; // Currently only displaying the id: CCODE authorised value
+  String itemTypeId;
+  String itemType;
+  String holdingLibraryId;
+  String holdingLibrary;
+  String collectionCode;
+  String collection;
   String callNumber;
   String callNumberSort;
   String copyNumber;
@@ -16,8 +19,11 @@ class BiblioItem {
   */
 
   BiblioItem({
+    required this.itemTypeId,
     required this.itemType,
+    required this.holdingLibraryId,
     required this.holdingLibrary,
+    required this.collectionCode,
     required this.collection,
     required this.callNumber,
     required this.callNumberSort,
@@ -33,9 +39,12 @@ class BiblioItem {
 
   factory BiblioItem.fromJson(Map<String, dynamic> json) {
     return BiblioItem(
-      itemType: json['item_type_id'],
-      holdingLibrary: json['holding_library_id'],
-      collection: json['collection_code'],
+      itemTypeId: json['item_type_id'],
+      itemType: json['item_type'],
+      holdingLibraryId: json['holding_library_id'],
+      holdingLibrary: json['holding_library'],
+      collectionCode: json['collection_code'],
+      collection: json['collection'],
       callNumber: json['callnumber'],
       callNumberSort: json['call_number_sort'],
       copyNumber: json['copy_number'],
@@ -47,6 +56,6 @@ class BiblioItem {
 
   @override
   String toString() {
-    return 'BiblioItem(itemType: $itemType, holdingLibrary: $holdingLibrary, collection: $collection, callNumber: $callNumber, callNumberSort: $callNumberSort, copyNumber: $copyNumber, notForLoanStatus: $notForLoanStatus, checkedOutDate: $checkedOutDate, borrowedStatus: $borrowedStatus)';
+    return 'BiblioItem(itemTypeId: $itemTypeId, itemType: $itemType, holdingLibraryId: $holdingLibraryId, holdingLibrary: $holdingLibrary, collectionCode: $collectionCode, collection: $collection, callNumber: $callNumber, callNumberSort: $callNumberSort, copyNumber: $copyNumber, notForLoanStatus: $notForLoanStatus, checkedOutDate: $checkedOutDate, borrowedStatus: $borrowedStatus)';
   }
 }
