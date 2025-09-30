@@ -144,7 +144,6 @@ class _SearchViewState extends SearchController {
                 Text(
                   textAlign: TextAlign.center,
                   '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               Divider(color: Colors.grey),
 
