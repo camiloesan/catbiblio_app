@@ -198,5 +198,17 @@
   "author": "Author",
   "@author": {
     "description": "Author label in book preview"
+  },
+  "copies": "Copies",
+  "@copies": {
+    "description": "Copies label in book preview"
+  },
+  "noCopiesFound": "No copies found",
+  "@noCopiesFound": {
+    "description": "Message shown when no copies are found for a book"
+  },
+  "classification": "Classification",
+  "@classification": {
+    "description": "Classification label in book preview"
   }
 }

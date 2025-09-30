@@ -158,4 +158,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get author => 'Autor';
+
+  @override
+  String get copies => 'Existencias';
+
+  @override
+  String get noCopiesFound => 'No se encontraron existencias';
+
+  @override
+  String get classification => 'Clasificación';
 }
