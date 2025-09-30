@@ -17,7 +17,7 @@ class BibliosItemsService {
     ),
   );
 
-  /// Fetches de list of items for a given title by its biblionumber from a Koha-based service
+  /// Fetches the list of items for a given title by its biblionumber from a Koha-based service
   ///
   /// Returns a [BiblioItem] list containing the items for the specified [biblioNumber].
   ///
