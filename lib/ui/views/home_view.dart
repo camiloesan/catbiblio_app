@@ -133,7 +133,7 @@ class _HomeViewState extends HomeController {
                 enableFilter: false,
                 requestFocusOnTap: false,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               FutureBuilder(
                 future: _librariesFuture,
                 builder: (context, asyncSnapshot) {
@@ -178,7 +178,7 @@ class _HomeViewState extends HomeController {
                   );
                 }
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               TextField(
                 controller: _searchController,
                 onSubmitted: (value) => onSubmitAction(),

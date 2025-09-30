@@ -1,6 +1,7 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/services/svc/images.dart';
+import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/rest/biblios_details.dart';
 import 'package:readmore/readmore.dart';
@@ -43,41 +44,58 @@ class _BookViewState extends BookController {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 4.0,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FutureBuilder<Image?>(
-                        future: ImageService.fetchImageUrl(widget.biblioNumber),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError || snapshot.data == null) {
-                            return const SizedBox.shrink();
-                          } else {
-                            return Row(
-                              children: [
-                                SizedBox(width: 120, child: snapshot.data!),
-                                const SizedBox(width: 16.0),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                      Expanded(
-                        child: Text(
-                          bibliosDetails.title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      color: primaryUVColor,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FutureBuilder<Image?>(
+                            future: ImageService.fetchImageUrl(
+                              widget.biblioNumber,
+                            ),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError || snapshot.data == null) {
+                                return const SizedBox.shrink();
+                              } else {
+                                return Row(
+                                  children: [
+                                    SizedBox(width: 120, child: snapshot.data!),
+                                    const SizedBox(width: 16.0),
+                                  ],
+                                );
+                              }
+                            },
                           ),
-                        ),
+                          Expanded(
+                            child: Text(
+                              bibliosDetails.title,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                   const Divider(),
+                  Text(
+                    AppLocalizations.of(context)!.bibliographicDetails,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   if (bibliosDetails.author.isNotEmpty)
                     Wrap(
                       children: [
                         Text(
-                          '${AppLocalizations.of(context)?.byAuthor}: ',
+                          '${AppLocalizations.of(context)?.author}: ',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(bibliosDetails.author),

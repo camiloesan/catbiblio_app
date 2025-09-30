@@ -33,7 +33,7 @@ class _SearchViewState extends SearchController {
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Padding(
-          padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -50,7 +50,7 @@ class _SearchViewState extends SearchController {
                 requestFocusOnTap: false,
                 width: double.infinity,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               DropdownMenu(
                 controller: _libraryController,
                 label: Text(AppLocalizations.of(context)!.library),
@@ -69,7 +69,7 @@ class _SearchViewState extends SearchController {
                 onSelected: (value) => widget.queryParams.library = value!,
                 width: double.infinity,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               TextField(
                 controller: _searchController,
                 onSubmitted: (value) => onSubmitAction(value),
@@ -85,7 +85,7 @@ class _SearchViewState extends SearchController {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Align(
                 alignment: Alignment.center,
                 child: SingleChildScrollView(

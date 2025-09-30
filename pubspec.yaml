@@ -1,6 +1,6 @@
 name: catbiblio_app
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -17,7 +17,7 @@ dependencies:
     sdk: flutter
   intl: any
   dio: ^5.9.0
-  provider: ^6.1.5  
+  provider: ^6.1.5
   readmore: ^3.0.0
 
 dev_dependencies:
@@ -32,3 +32,18 @@ flutter:
   assets:
     - assets/images/
     - assets/avisos.json
+  fonts:
+  - family: Inter
+    fonts:
+      - asset: assets/fonts/Inter_24pt-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/Inter_24pt-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Inter_24pt-SemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/Inter_24pt-Bold.ttf
+        weight: 700
+      - asset: assets/fonts/Inter_24pt-ExtraBold.ttf
+        weight: 800
+      - asset: assets/fonts/Inter_24pt-Black.ttf
+        weight: 900

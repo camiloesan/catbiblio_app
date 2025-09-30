@@ -152,4 +152,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lawClassification => 'Law Classification';
+
+  @override
+  String get bibliographicDetails => 'Bibliographic Details';
+
+  @override
+  String get author => 'Author';
 }

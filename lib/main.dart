@@ -32,6 +32,7 @@ class _MainAppState extends State<MainApp> {
       locale: _locale,
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'Inter',
         drawerTheme: DrawerThemeData(backgroundColor: Colors.white, surfaceTintColor: primaryColor),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,

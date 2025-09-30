@@ -45,5 +45,8 @@
     "editor": "Editor",
     "edition": "Edición",
     "description": "Descripción",
-    "lawClassification": "Clasificación de Derecho"
+    "otherClassification": "Otras Clasificaciones",
+    "lawClassification": "Clasificación de Derecho",
+    "bibliographicDetails": "Detalles bibliográficos",
+    "author": "Autor"
 }
