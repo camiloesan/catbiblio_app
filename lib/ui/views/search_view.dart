@@ -29,253 +29,227 @@ class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: Text(AppLocalizations.of(context)!.searchTitle)),
-      body: SingleChildScrollView(
+      body: CustomScrollView(
         controller: _scrollController,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              DropdownMenu(
-                controller: _filterController,
-                label: Text(AppLocalizations.of(context)!.searchBy),
-                leadingIcon: const Icon(
-                  Icons.filter_list,
-                  color: primaryUVColor,
-                ),
-                dropdownMenuEntries: _filterEntries,
-                onSelected: (value) => widget.queryParams.searchBy = value!,
-                enableFilter: false,
-                requestFocusOnTap: false,
-                width: double.infinity,
-              ),
-              const SizedBox(height: 12),
-              DropdownMenu(
-                controller: _libraryController,
-                label: Text(AppLocalizations.of(context)!.library),
-                leadingIcon: const Icon(
-                  Icons.location_city,
-                  color: primaryUVColor,
-                ),
-                dropdownMenuEntries: [
-                  DropdownMenuEntry(
-                    value: 'all',
-                    label: AppLocalizations.of(context)!.allLibraries,
+        slivers: [
+          // Top controls
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  DropdownMenu(
+                    controller: _filterController,
+                    label: Text(AppLocalizations.of(context)!.searchBy),
+                    leadingIcon: const Icon(
+                      Icons.filter_list,
+                      color: primaryUVColor,
+                    ),
+                    dropdownMenuEntries: _filterEntries,
+                    onSelected: (value) => widget.queryParams.searchBy = value!,
+                    enableFilter: false,
+                    requestFocusOnTap: false,
+                    width: double.infinity,
                   ),
-                  ...widget.controllersData.libraryEntries,
-                ],
-                menuHeight: 300,
-                onSelected: (value) => widget.queryParams.library = value!,
-                width: double.infinity,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _searchController,
-                onSubmitted: (value) => onSubmitAction(value),
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: primaryUVColor),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      _searchController.clear();
-                    },
-                  ),
-                  labelText: AppLocalizations.of(context)!.search,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.center,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 2.0,
-                    children: [
-                      for (
-                        int i = setLowerLimit;
-                        i <= setUpperLimit && i <= totalPages && totalPages > 1;
-                        i++
-                      )
-                        OutlinedButton(
-                          onPressed: () => paginationBehavior(i),
-                          style: i == currentPage
-                              ? OutlinedButton.styleFrom(
-                                  backgroundColor: primaryUVColor,
-                                  foregroundColor: Colors.white,
-                                  minimumSize: Size(36, 36),
-                                  padding: EdgeInsets.zero,
-                                )
-                              : OutlinedButton.styleFrom(
-                                  foregroundColor: primaryUVColor,
-                                  minimumSize: Size(36, 36),
-                                  padding: EdgeInsets.zero,
-                                ),
-                          child: i == setUpperLimit
-                              ? const Icon(Icons.arrow_forward)
-                              : i == setLowerLimit && i > 8
-                              ? const Icon(Icons.arrow_back)
-                              : Text('$i'),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 8),
-
-              if (isInitialRequestLoading)
-                Center(child: LinearProgressIndicator()),
-
-              if (isError)
-                Text(
-                  AppLocalizations.of(context)!.errorOccurred,
-                  textAlign: TextAlign.center,
-                ),
-
-              if (books.isEmpty && !isInitialRequestLoading && !isError && !isPageLoading)
-                Text(
-                  AppLocalizations.of(context)!.noResults,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )
-              else if (!isInitialRequestLoading && !isError && !isPageLoading)
-                Text(
-                  textAlign: TextAlign.center,
-                  '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
-                ),
-              Divider(color: Colors.grey),
-
-              if (isPageLoading)
-                Center(child: LinearProgressIndicator())
-              else
-                ...books.map((book) {
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BookView(biblioNumber: book.biblioNumber),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FutureBuilder<Image?>(
-                                future: ImageService.fetchImageUrl(
-                                  book.biblioNumber,
-                                ),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasError ||
-                                      snapshot.data == null) {
-                                    return const SizedBox.shrink();
-                                  } else {
-                                    return SizedBox(child: snapshot.data!);
-                                  }
-                                },
-                              ),
-
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      book.title,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    book.author.isEmpty
-                                        ? const SizedBox.shrink()
-                                        : Text(
-                                            '${AppLocalizations.of(context)!.byAuthor}: ${book.author}',
-                                          ),
-                                    book.publishingDetails.isEmpty
-                                        ? const SizedBox.shrink()
-                                        : Text(
-                                            '${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails}',
-                                          ),
-                                    Text(
-                                      '${AppLocalizations.of(context)!.availability}: 1 biblioteca',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                            ],
-                          ),
-                        ),
+                  const SizedBox(height: 12),
+                  DropdownMenu(
+                    controller: _libraryController,
+                    label: Text(AppLocalizations.of(context)!.library),
+                    leadingIcon: const Icon(
+                      Icons.location_city,
+                      color: primaryUVColor,
+                    ),
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(
+                        value: 'all',
+                        label: AppLocalizations.of(context)!.allLibraries,
                       ),
-                      Divider(color: Colors.grey),
+                      ...widget.controllersData.libraryEntries,
                     ],
-                  );
-                }),
-
-              if (!isPageLoading) 
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      spacing: 2.0,
-                      children: [
-                        for (
-                          int i = setLowerLimit;
-                          books.length > 5 &&
-                              i <= setUpperLimit &&
-                              i <= totalPages &&
-                              totalPages > 1;
-                          i++
-                        )
-                          OutlinedButton(
-                            onPressed: () {
-                              paginationBehavior(i);
-                              _scrollController.animateTo(
-                                0,
-                                duration: Duration(milliseconds: 500),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            style: i == currentPage
-                                ? OutlinedButton.styleFrom(
-                                    backgroundColor: primaryUVColor,
-                                    foregroundColor: Colors.white,
-                                    minimumSize: Size(36, 36),
-                                    padding: EdgeInsets.zero,
-                                  )
-                                : OutlinedButton.styleFrom(
-                                    foregroundColor: primaryUVColor,
-                                    minimumSize: Size(36, 36),
-                                    padding: EdgeInsets.zero,
-                                  ),
-                            child: i == setUpperLimit
-                                ? const Icon(Icons.arrow_forward)
-                                : i == setLowerLimit && i > 8
-                                ? const Icon(Icons.arrow_back)
-                                : Text('$i'),
-                          ),
-                      ],
+                    menuHeight: 300,
+                    onSelected: (value) => widget.queryParams.library = value!,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _searchController,
+                    onSubmitted: (value) => onSubmitAction(value),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search, color: primaryUVColor),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () => _searchController.clear(),
+                      ),
+                      labelText: AppLocalizations.of(context)!.search,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  // Pagination row on top
+                  buildPaginationRow(),
+                  const SizedBox(height: 8),
+                  if (isInitialRequestLoading)
+                    const Center(child: LinearProgressIndicator()),
+                  if (isError)
+                    Text(
+                      AppLocalizations.of(context)!.errorOccurred,
+                      textAlign: TextAlign.center,
+                    ),
+                  if (books.isEmpty &&
+                      !isInitialRequestLoading &&
+                      !isError &&
+                      !isPageLoading)
+                    Text(
+                      AppLocalizations.of(context)!.noResults,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    )
+                  else if (!isInitialRequestLoading &&
+                      !isError &&
+                      !isPageLoading)
+                    Text(
+                      '$totalRecords ${AppLocalizations.of(context)!.totalResults}',
+                      textAlign: TextAlign.center,
+                    ),
+                  const Divider(color: Colors.grey),
+                  if (isPageLoading)
+                    const Center(child: LinearProgressIndicator()),
+                ],
               ),
-            ],
+            ),
           ),
+
+          // Book list (only rendered if not page loading)
+          if (!isPageLoading)
+            SliverList.builder(
+              itemCount: books.length,
+              itemBuilder: (context, index) {
+                final book = books[index];
+                return Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                BookView(biblioNumber: book.biblioNumber),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FutureBuilder<Image?>(
+                              future: ImageService.fetchImageUrl(
+                                book.biblioNumber,
+                              ),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError ||
+                                    snapshot.data == null) {
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return SizedBox(child: snapshot.data!);
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    book.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  if (book.author.isNotEmpty)
+                                    Text(
+                                      '${AppLocalizations.of(context)!.byAuthor}: ${book.author}',
+                                    ),
+                                  if (book.publishingDetails.isNotEmpty)
+                                    Text(
+                                      '${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails}',
+                                    ),
+                                  Text(
+                                    '${AppLocalizations.of(context)!.availability}: 1 biblioteca',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Divider(color: Colors.grey),
+                  ],
+                );
+              },
+            ),
+
+          // Bottom pagination
+          if (!isPageLoading)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                child: buildPaginationRow(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildPaginationRow() {
+    return Align(
+      alignment: Alignment.center,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (
+              int i = setLowerLimit;
+              i <= setUpperLimit && i <= totalPages && totalPages > 1;
+              i++
+            )
+              OutlinedButton(
+                onPressed: () {
+                  paginationBehavior(i);
+                  // optional: scroll to top when bottom pagination is pressed
+                  _scrollController.animateTo(
+                    0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                style: i == currentPage
+                    ? OutlinedButton.styleFrom(
+                        backgroundColor: primaryUVColor,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(36, 36),
+                        padding: EdgeInsets.zero,
+                      )
+                    : OutlinedButton.styleFrom(
+                        foregroundColor: primaryUVColor,
+                        minimumSize: const Size(36, 36),
+                        padding: EdgeInsets.zero,
+                      ),
+                child: i == setUpperLimit
+                    ? const Icon(Icons.arrow_forward)
+                    : i == setLowerLimit && i > 8
+                    ? const Icon(Icons.arrow_back)
+                    : Text('$i'),
+              ),
+          ],
         ),
       ),
     );

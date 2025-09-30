@@ -48,6 +48,28 @@ abstract class SearchController extends State<SearchView> {
     _searchController = TextEditingController();
     _searchController.text = widget.queryParams.searchQuery;
     _scrollController = ScrollController();
+
+    if (widget.queryParams.searchQuery.isNotEmpty) {
+      isInitialRequestLoading = true;
+      isError = false;
+      SruService.searchBooks(widget.queryParams)
+          .then((result) {
+            if (!mounted) return;
+            setState(() {
+              books = result.books;
+              totalRecords = result.totalRecords;
+              totalPages = (totalRecords / 10).ceil();
+              isInitialRequestLoading = false;
+            });
+          })
+          .catchError((error) {
+            if (!mounted) return;
+            setState(() {
+              isInitialRequestLoading = false;
+              isError = true;
+            });
+          });
+    }
   }
 
   @override
@@ -62,24 +84,6 @@ abstract class SearchController extends State<SearchView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {
-      isInitialRequestLoading = true;
-      isError = false;
-    });
-    SruService.searchBooks(widget.queryParams).then((result) {
-      setState(() {
-        books = result.books;
-        totalRecords = result.totalRecords;
-        totalPages = (totalRecords / 10).ceil();
-        isInitialRequestLoading = false;
-        isError = false;
-      });
-    }).catchError((error) {
-      setState(() {
-        isInitialRequestLoading = false;
-        isError = true;
-      });
-    });
   }
 
   void onSubmitAction(String searchQuery) {
@@ -103,22 +107,24 @@ abstract class SearchController extends State<SearchView> {
     setState(() {
       isPageLoading = true;
     });
-    SruService.searchBooks(widget.queryParams).then((result) {
-      setState(() {
-        books = result.books;
-        totalRecords = result.totalRecords;
-        totalPages = (totalRecords / 10).ceil();
-        isInitialRequestLoading = false;
-        isError = false;
-        isPageLoading = false;
-      });
-    }).catchError((error) {
-      setState(() {
-        isInitialRequestLoading = false;
-        isError = true;
-        isPageLoading = false;
-      });
-    });
+    SruService.searchBooks(widget.queryParams)
+        .then((result) {
+          setState(() {
+            books = result.books;
+            totalRecords = result.totalRecords;
+            totalPages = (totalRecords / 10).ceil();
+            isInitialRequestLoading = false;
+            isError = false;
+            isPageLoading = false;
+          });
+        })
+        .catchError((error) {
+          setState(() {
+            isInitialRequestLoading = false;
+            isError = true;
+            isPageLoading = false;
+          });
+        });
   }
 
   void paginationBehavior(int selectedIndex) {
