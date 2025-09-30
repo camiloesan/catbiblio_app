@@ -39,7 +39,7 @@ class _SearchViewState extends SearchController {
             children: [
               DropdownMenu(
                 controller: _filterController,
-                label: Text(AppLocalizations.of(context)!.search),
+                label: Text(AppLocalizations.of(context)!.searchBy),
                 leadingIcon: const Icon(
                   Icons.filter_list,
                   color: primaryUVColor,
