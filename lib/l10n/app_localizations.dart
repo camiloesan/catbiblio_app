@@ -397,6 +397,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Author'**
   String get author;
+
+  /// Copies label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Copies'**
+  String get copies;
+
+  /// Message shown when no copies are found for a book
+  ///
+  /// In en, this message translates to:
+  /// **'No copies found'**
+  String get noCopiesFound;
+
+  /// Classification label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Classification'**
+  String get classification;
 }
 
 class _AppLocalizationsDelegate
