@@ -30,7 +30,7 @@ class ApiException extends SruException {
 class SruService {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://148.226.6.25',
+      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
@@ -65,7 +65,7 @@ class SruService {
 
     try {
       final response = await _dio.get(
-        '/cgi-bin/koha/svc/app_search',
+        '/app_search',
         queryParameters: queryParameters,
       );
 

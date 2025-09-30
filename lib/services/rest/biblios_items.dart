@@ -1,33 +1,49 @@
 import 'package:dio/dio.dart';
 import 'dart:convert';
-import 'package:catbiblio_app/models/library.dart';
+import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:flutter/material.dart';
 
-class LibrariesService {
+class BibliosItemsService {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
+      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc', // Move to .env
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/json;encoding=UTF-8'},
+      headers: {
+        'Accept': 'application/json;encoding=UTF-8',
+        'x-api-key': '12345', // Move to .env
+      },
     ),
   );
 
-  /// Fetches the list of libraries from a Koha-based service
-  /// Example: http://{{baseUrl}}/cgi-bin/koha/svc/libraries
-  static Future<List<Library>> getLibraries() async {
+  /// Fetches the list of items for a given title by its biblionumber from a Koha-based service
+  ///
+  /// Returns a [BiblioItem] list containing the items for the specified [biblioNumber].
+  ///
+  /// Returns an empty list if no items are found or in case of an error
+  static Future<List<BiblioItem>> getBiblioItems(int biblioNumber) async {
+    if (biblioNumber <= 0) {
+      debugPrint('Invalid biblionumber: $biblioNumber');
+      return [];
+    }
+
     try {
-      final response = await _dio.get('/libraries');
+      final response = await _dio.get(
+        '/biblios_items',
+        queryParameters: {'biblio_number': biblioNumber},
+      );
 
-      final List<dynamic> librariesJson = json.decode(response.data);
+      debugPrint('Request URL: ${response.realUri}');
 
-      return librariesJson
-          .map((json) => Library.fromJson(json as Map<String, dynamic>))
+      final List<dynamic> itemsJson = json.decode(response.data);
+
+      return itemsJson
+          .map((json) => BiblioItem.fromJson(json as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       // Log the error for debugging
-      debugPrint('DioException in getLibraries: ${e.message}');
+      debugPrint('DioException in getBiblioItems: ${e.message}');
       debugPrint('Response data: ${e.response?.data}');
       debugPrint('Status code: ${e.response?.statusCode}');
 
@@ -53,7 +69,7 @@ class LibrariesService {
       return [];
     } catch (e) {
       // Handle JSON parsing or other errors
-      debugPrint('Unexpected error in getLibraries: $e');
+      debugPrint('Unexpected error in getBiblioItems: $e');
       return [];
     }
   }
