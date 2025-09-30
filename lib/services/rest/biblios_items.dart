@@ -23,6 +23,11 @@ class BibliosItemsService {
   ///
   /// Returns an empty list if no items are found or in case of an error
   static Future<List<BiblioItem>> getBiblioItems(int biblioNumber) async {
+    if (biblioNumber <= 0) {
+      debugPrint('Invalid biblionumber: $biblioNumber');
+      return [];
+    }
+
     try {
       final response = await _dio.get(
         '/biblios_items',
