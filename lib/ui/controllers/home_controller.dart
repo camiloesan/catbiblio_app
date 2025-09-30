@@ -49,6 +49,9 @@ abstract class HomeController extends State<HomeView> {
 
   @override
   void dispose() {
+    _searchController.dispose();
+    _searchFilterController.dispose();
+    _libraryController.dispose();
     super.dispose();
   }
 
