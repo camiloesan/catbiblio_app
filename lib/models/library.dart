@@ -3,7 +3,7 @@ class Library {
   String name;
   String area;
   String address;
-  String zipCode;
+  String postalCode;
   String city;
   String state;
   String country;
@@ -15,7 +15,7 @@ class Library {
     required this.name,
     this.area = '',
     this.address = '',
-    this.zipCode = '',
+    this.postalCode = '',
     this.city = '',
     this.state = '',
     this.country = '',
@@ -27,9 +27,9 @@ class Library {
     return Library(
       libraryId: json['library_id'] as String,
       name: json['name'] as String,
-      area: json['area'] as String? ?? '',
-      address: json['address'] as String? ?? '',
-      zipCode: json['zip_code'] as String? ?? '',
+      area: json['address3'] as String? ?? '',
+      address: json['address1'] as String? ?? '',
+      postalCode: json['postal_code'] as String? ?? '',
       city: json['city'] as String? ?? '',
       state: json['state'] as String? ?? '',
       country: json['country'] as String? ?? '',
@@ -44,7 +44,7 @@ class Library {
       'name': name,
       'area': area,
       'address': address,
-      'zip_code': zipCode,
+      'postal_code': postalCode,
       'city': city,
       'state': state,
       'country': country,
@@ -55,6 +55,6 @@ class Library {
 
   @override
   String toString() {
-    return 'Library(libraryId: $libraryId, name: $name, area: $area, address: $address, zipCode: $zipCode, city: $city, state: $state, country: $country, email: $email, url: $url)';
+    return 'Library(libraryId: $libraryId, name: $name, area: $area, address: $address, postalCode: $postalCode, city: $city, state: $state, country: $country, email: $email, url: $url)';
   }
 }
