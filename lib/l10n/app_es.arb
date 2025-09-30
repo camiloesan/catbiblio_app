@@ -48,5 +48,8 @@
     "otherClassification": "Otras Clasificaciones",
     "lawClassification": "Clasificación de Derecho",
     "bibliographicDetails": "Detalles bibliográficos",
-    "author": "Autor"
+    "author": "Autor",
+    "copies": "Existencias",
+    "noCopiesFound": "No se encontraron existencias",
+    "classification": "Clasificación"
 }
