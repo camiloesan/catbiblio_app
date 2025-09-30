@@ -190,5 +190,13 @@
   "lawClassification": "Law Classification",
   "@lawClassification": {
     "description": "Law Classification label in book preview"
+  },
+  "bibliographicDetails": "Bibliographic Details",
+  "@bibliographicDetails": {
+    "description": "Bibliographic Details title in book view"
+  },
+  "author": "Author",
+  "@author": {
+    "description": "Author label in book preview"
   }
 }

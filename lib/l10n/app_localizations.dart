@@ -385,6 +385,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Law Classification'**
   String get lawClassification;
+
+  /// Bibliographic Details title in book view
+  ///
+  /// In en, this message translates to:
+  /// **'Bibliographic Details'**
+  String get bibliographicDetails;
+
+  /// Author label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get author;
 }
 
 class _AppLocalizationsDelegate

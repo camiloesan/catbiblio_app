@@ -148,8 +148,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get description => 'Descripción';
 
   @override
-  String get otherClassification => 'Other Classification';
+  String get otherClassification => 'Otras Clasificaciones';
 
   @override
   String get lawClassification => 'Clasificación de Derecho';
+
+  @override
+  String get bibliographicDetails => 'Detalles bibliográficos';
+
+  @override
+  String get author => 'Autor';
 }
