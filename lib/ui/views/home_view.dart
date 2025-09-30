@@ -30,9 +30,8 @@ class _HomeViewState extends HomeController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.home),
+        title: Image(image: const AssetImage('assets/images/head.png'), height: 40),
         backgroundColor: Colors.transparent,
-        actionsPadding: EdgeInsets.only(right: 16.0),
       ),
       drawer: NavigationDrawer(
         children: [
@@ -111,17 +110,17 @@ class _HomeViewState extends HomeController {
       drawerEnableOpenDragGesture: true,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: SizedBox(
-                  height: 56,
-                  child: Image.asset('assets/images/head.png'),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: 16.0),
+              //   child: SizedBox(
+              //     height: 64,
+              //     child: Image.asset('assets/images/head-text.png'),
+              //   ),
+              // ),
               DropdownMenu(
                 controller: _searchFilterController,
                 label: Text(AppLocalizations.of(context)!.searchBy),
