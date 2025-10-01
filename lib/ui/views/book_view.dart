@@ -7,6 +7,7 @@ import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/rest/biblios_details.dart';
 import 'package:readmore/readmore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part '../controllers/book_controller.dart';
 
@@ -90,7 +91,7 @@ class _BookViewState extends BookController {
                                 bibliosDetails.title,
                                 style: const TextStyle(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
                                   color: Colors.white,
                                 ),
                               ),
@@ -100,9 +101,19 @@ class _BookViewState extends BookController {
                       ),
                     ),
                   const Divider(),
-                  BibliographicDetails(
-                    bibliosDetails: bibliosDetails,
-                    languageMap: languageMap,
+                  Text(
+                    AppLocalizations.of(context)!.bibliographicDetails,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: BibliographicDetails(
+                      bibliosDetails: bibliosDetails,
+                      languageMap: languageMap,
+                    ),
                   ),
                   const Divider(),
                   Row(
@@ -114,9 +125,11 @@ class _BookViewState extends BookController {
                         label: const Text('MARC'),
                       ),
                       OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          showShareDialog(context, bibliosDetails.title, widget.biblioNumber);
+                        },
                         icon: const Icon(Icons.share),
-                        label: const Text('Compartir'),
+                        label: Text(AppLocalizations.of(context)!.share),
                       ),
                     ],
                   ),
@@ -160,41 +173,91 @@ class _BookViewState extends BookController {
                       '${AppLocalizations.of(context)!.copies}: ${biblioItems.length}',
                       style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
 
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: biblioItems.length,
+                    itemCount: holdingLibraries.length,
                     itemBuilder: (context, index) {
-                      final item = biblioItems[index];
+                      final item = holdingLibraries[index];
+
                       return Card(
-                        child: ListTile(
-                          leading: Icon(
-                            item.notForLoanStatus == 1
-                                ? Icons.remove_circle
-                                : Icons.check_circle,
-                            color: item.notForLoanStatus == 1
-                                ? Colors.red
-                                : Colors.green,
-                          ),
-                          title: Text(
-                                item.holdingLibrary,
+                        color: Colors.grey[100],
+                        child: Theme(
+                          data: Theme.of(
+                            context,
+                          ).copyWith(dividerColor: Colors.transparent),
+                          child: ExpansionTile(
+                            tilePadding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
+                            dense: true,
+                            childrenPadding: const EdgeInsets.only(bottom: 8.0),
+                            title: Text(
+                              '$item (${groupedItems[item]!.length})',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
                               ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${AppLocalizations.of(context)!.classification}:\n${item.callNumber}',
-                              ),
-                            ],
+                            ),
+                            children: groupedItems[item]!.map((biblioItem) {
+                              return Card(
+                                child: ListTile(
+                                  leading: Icon(
+                                    biblioItem.notForLoanStatus == 1
+                                        ? Icons.remove_circle
+                                        : Icons.check_circle,
+                                    color: biblioItem.notForLoanStatus == 1
+                                        ? Colors.red
+                                        : Colors.green,
+                                  ),
+                                  // title: Text(biblioItem.callNumber),
+                                  subtitle: Text(
+                                    '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
                       );
                     },
                   ),
+
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   itemCount: biblioItems.length,
+                  //   itemBuilder: (context, index) {
+                  //     final item = biblioItems[index];
+
+                  //     return Card(
+                  //       child: ListTile(
+                  //         leading: Icon(
+                  //           item.notForLoanStatus == 1
+                  //               ? Icons.remove_circle
+                  //               : Icons.check_circle,
+                  //           color: item.notForLoanStatus == 1
+                  //               ? Colors.red
+                  //               : Colors.green,
+                  //         ),
+                  //         title: Text(
+                  //               item.holdingLibrary,
+                  //             ),
+                  //         subtitle: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Text(
+                  //               '${AppLocalizations.of(context)!.classification}:\n${item.callNumber}',
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -220,10 +283,6 @@ class BibliographicDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppLocalizations.of(context)!.bibliographicDetails,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
         if (bibliosDetails.author.isNotEmpty)
           Wrap(
             children: [
@@ -386,4 +445,6 @@ class BibliographicDetails extends StatelessWidget {
       ],
     );
   }
+
+  
 }

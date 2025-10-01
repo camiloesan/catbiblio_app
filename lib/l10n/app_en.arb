@@ -211,5 +211,29 @@
   "classification": "Classification",
   "@classification": {
     "description": "Classification label in book preview"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share button label in book view"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email button label in book view"
+  },
+  "shareVia": "Share via...",
+  "@shareVia": {
+    "description": "Title for the share via dialog"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button label in share via dialog"
+  },
+  "couldNotLaunchWhatsApp": "WhatsApp is not installed.",
+  "@couldNotLaunchWhatsApp": {
+    "description": "Snackbar message shown when WhatsApp is not installed"
+  },
+  "couldNotFindEmailClient": "Could not find an email client.",
+  "@couldNotFindEmailClient": {
+    "description": "Snackbar message shown when no email client is found"
   }
 }
