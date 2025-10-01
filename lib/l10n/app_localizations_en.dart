@@ -167,4 +167,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get classification => 'Classification';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get shareVia => 'Share via...';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get couldNotLaunchWhatsApp => 'WhatsApp is not installed.';
+
+  @override
+  String get couldNotFindEmailClient => 'Could not find an email client.';
 }

@@ -415,6 +415,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Classification'**
   String get classification;
+
+  /// Share button label in book view
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// Email button label in book view
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// Title for the share via dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Share via...'**
+  String get shareVia;
+
+  /// Cancel button label in share via dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Snackbar message shown when WhatsApp is not installed
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp is not installed.'**
+  String get couldNotLaunchWhatsApp;
+
+  /// Snackbar message shown when no email client is found
+  ///
+  /// In en, this message translates to:
+  /// **'Could not find an email client.'**
+  String get couldNotFindEmailClient;
 }
 
 class _AppLocalizationsDelegate
