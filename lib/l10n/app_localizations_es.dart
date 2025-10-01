@@ -186,4 +186,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get couldNotFindEmailClient =>
       'No se pudo encontrar un cliente de correo electrónico';
+
+  @override
+  String get itemType => 'Tipo de ejemplar';
+
+  @override
+  String get holdingLibrary => 'Biblioteca';
+
+  @override
+  String get collection => 'Colección';
+
+  @override
+  String get copyNumber => 'Número de ejemplar';
 }

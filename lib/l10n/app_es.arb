@@ -58,5 +58,21 @@
     "shareVia": "Compartir por...",
     "cancel": "Cancelar",
     "couldNotLaunchWhatsApp": "No se pudo abrir WhatsApp",
-    "couldNotFindEmailClient": "No se pudo encontrar un cliente de correo electrónico"
+    "couldNotFindEmailClient": "No se pudo encontrar un cliente de correo electrónico",
+    "itemType": "Tipo de ejemplar",
+    "@itemType": {
+      "description": "Label for the type of item in book preview"
+    },
+    "holdingLibrary": "Biblioteca",
+    "@holdingLibrary": {
+      "description": "Label for the holding library in book preview"
+    },
+    "collection": "Colección",
+    "@collection": {
+      "description": "Label for the collection in book preview"
+    },
+    "copyNumber": "Número de ejemplar",
+    "@copyNumber": {
+      "description": "Label for the copy number in book preview"
+    }
 }

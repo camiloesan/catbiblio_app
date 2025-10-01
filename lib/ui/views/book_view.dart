@@ -23,15 +23,13 @@ class _BookViewState extends BookController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.detailsTitle),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.detailsTitle)),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(
-                top: 16.0,
+                top: 0.0,
                 left: 16.0,
                 right: 16.0,
                 bottom: 16.0,
@@ -129,7 +127,11 @@ class _BookViewState extends BookController {
                       ),
                       OutlinedButton.icon(
                         onPressed: () {
-                          showShareDialog(context, bibliosDetails.title, widget.biblioNumber);
+                          showShareDialog(
+                            context,
+                            bibliosDetails.title,
+                            widget.biblioNumber,
+                          );
                         },
                         icon: const Icon(Icons.share),
                         label: Text(AppLocalizations.of(context)!.share),
@@ -207,19 +209,110 @@ class _BookViewState extends BookController {
                             ),
                             children: groupedItems[item]!.map((biblioItem) {
                               return Card(
-                                child: ListTile(
+                                child: ExpansionTile(
+                                  title: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
+                                        ),
+                                      ),
+                                      biblioItem.holdingLibraryId == 'USBI-X' && biblioItem.notForLoanStatus == BiblioItem.STATUS_AVAILABLE
+                                          ? IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(Icons.map),
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ],
+                                  ),
                                   leading: Icon(
-                                    biblioItem.notForLoanStatus == 1
+                                    biblioItem.overAllStatus ==
+                                            BiblioItem.STATUS_BORROWED
                                         ? Icons.remove_circle
-                                        : Icons.check_circle,
-                                    color: biblioItem.notForLoanStatus == 1
-                                        ? Colors.red
-                                        : Colors.green,
+                                        : biblioItem.overAllStatus ==
+                                                BiblioItem.STATUS_NOT_FOR_LOAN
+                                            ? Icons.remove_circle
+                                            : Icons.check_circle,
+                                    color: biblioItem.overAllStatus ==
+                                            BiblioItem.STATUS_BORROWED
+                                        ? Colors.orange
+                                        : biblioItem.overAllStatus ==
+                                                BiblioItem.STATUS_NOT_FOR_LOAN
+                                            ? Colors.red
+                                            : Colors.green,
                                   ),
-                                  // title: Text(biblioItem.callNumber),
-                                  subtitle: Text(
-                                    '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
+                                  childrenPadding: const EdgeInsets.only(
+                                    left: 16.0,
+                                    right: 16.0,
+                                    bottom: 8.0,
                                   ),
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Wrap(
+                                        children: [
+                                          Text(
+                                            '${AppLocalizations.of(context)!.itemType}: ',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(biblioItem.itemType),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Wrap(
+                                        children: [
+                                          Text(
+                                            '${AppLocalizations.of(context)!.holdingLibrary}: ',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(biblioItem.holdingLibrary),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Wrap(
+                                        children: [
+                                          Text(
+                                            '${AppLocalizations.of(context)!.collection}: ',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(biblioItem.collection),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Wrap(
+                                        children: [
+                                          Text(
+                                            '${AppLocalizations.of(context)!.classification}: ',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(biblioItem.callNumber),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Wrap(
+                                        children: [
+                                          Text(
+                                            '${AppLocalizations.of(context)!.copyNumber}: ',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(biblioItem.copyNumber),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                             }).toList(),
@@ -228,39 +321,6 @@ class _BookViewState extends BookController {
                       );
                     },
                   ),
-
-                  // ListView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: const NeverScrollableScrollPhysics(),
-                  //   itemCount: biblioItems.length,
-                  //   itemBuilder: (context, index) {
-                  //     final item = biblioItems[index];
-
-                  //     return Card(
-                  //       child: ListTile(
-                  //         leading: Icon(
-                  //           item.notForLoanStatus == 1
-                  //               ? Icons.remove_circle
-                  //               : Icons.check_circle,
-                  //           color: item.notForLoanStatus == 1
-                  //               ? Colors.red
-                  //               : Colors.green,
-                  //         ),
-                  //         title: Text(
-                  //               item.holdingLibrary,
-                  //             ),
-                  //         subtitle: Column(
-                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                  //           children: [
-                  //             Text(
-                  //               '${AppLocalizations.of(context)!.classification}:\n${item.callNumber}',
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                 ],
               ),
             ),
@@ -448,6 +508,4 @@ class BibliographicDetails extends StatelessWidget {
       ],
     );
   }
-
-  
 }
