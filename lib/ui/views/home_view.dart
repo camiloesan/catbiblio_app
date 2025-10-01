@@ -30,7 +30,7 @@ class _HomeViewState extends HomeController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(|
+      appBar: AppBar(
         title: Image(
           image: const AssetImage('assets/images/head.png'),
           height: 40,
