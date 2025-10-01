@@ -8,7 +8,8 @@ abstract class SearchController extends State<SearchView> {
   late List<BookPreview> books = [];
   int currentPage = 1;
   int totalPages = 0;
-  int setUpperLimit = 10;
+  int setUpperLimit = 8;
+  int setMiddleSpace = 0;
   int setLowerLimit = 1;
   int totalRecords = 0;
   bool isInitialRequestLoading = false;
@@ -48,6 +49,7 @@ abstract class SearchController extends State<SearchView> {
     _searchController = TextEditingController();
     _searchController.text = widget.queryParams.searchQuery;
     _scrollController = ScrollController();
+    setMiddleSpace = setUpperLimit - 2;
 
     if (widget.queryParams.searchQuery.isNotEmpty) {
       isInitialRequestLoading = true;
@@ -131,8 +133,8 @@ abstract class SearchController extends State<SearchView> {
     /// This allows for pagination to continue forward.
     if (currentPage + 1 == setUpperLimit && selectedIndex == setUpperLimit) {
       setState(() {
-        setUpperLimit += 8;
-        setLowerLimit += 8;
+        setUpperLimit += setMiddleSpace;
+        setLowerLimit += setMiddleSpace;
         currentPage++;
         updatePageResults();
       });
@@ -142,10 +144,10 @@ abstract class SearchController extends State<SearchView> {
     /// This allows for pagination to continue backwards.
     if (currentPage - 1 == setLowerLimit &&
         selectedIndex == setLowerLimit &&
-        currentPage > 9) {
+        currentPage > (setUpperLimit - setLowerLimit)) {
       setState(() {
-        setUpperLimit -= 8;
-        setLowerLimit -= 8;
+        setUpperLimit -= setMiddleSpace;
+        setLowerLimit -= setMiddleSpace;
         currentPage--;
         updatePageResults();
       });
@@ -165,7 +167,7 @@ abstract class SearchController extends State<SearchView> {
     }
 
     /// This allows for pagination to continue backwards one page.
-    if (selectedIndex == setLowerLimit && currentPage > 9) {
+    if (selectedIndex == setLowerLimit && currentPage > (setUpperLimit - setLowerLimit)) {
       setState(() {
         currentPage--;
         updatePageResults();
