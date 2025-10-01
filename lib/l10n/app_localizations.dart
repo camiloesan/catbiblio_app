@@ -475,6 +475,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy number'**
   String get copyNumber;
+
+  /// Label for the region in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get region;
+
+  /// Label for the address in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// Label for the postal code in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Postal code'**
+  String get postalCode;
+
+  /// Label for the city in library details
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get city;
+
+  /// Label for the state in library details
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get state;
+
+  /// Label for the country in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// Label for the library name in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Library name'**
+  String get libraryName;
+
+  /// Label for the area in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get area;
+
+  /// Label for the homepage in library details
+  ///
+  /// In en, this message translates to:
+  /// **'Homepage'**
+  String get homepage;
+
+  /// Close button label in library details dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
 }
 
 class _AppLocalizationsDelegate

@@ -251,5 +251,45 @@
   "copyNumber": "Copy number",
   "@copyNumber": {
     "description": "Label for the copy number in book preview"
+  },
+  "region": "Region",
+  "@region": {
+    "description": "Label for the region in library details"
+  },
+  "address": "Address",
+  "@address": {
+    "description": "Label for the address in library details"
+  },
+  "postalCode": "Postal code",
+  "@postalCode": {
+    "description": "Label for the postal code in library details"
+  },
+  "city": "City",
+  "@city": {
+    "description": "Label for the city in library details"
+  },
+  "state": "State",
+  "@state": {
+    "description": "Label for the state in library details"
+  },
+  "country": "Country",
+  "@country": {
+    "description": "Label for the country in library details"
+  },
+  "libraryName": "Library name",
+  "@libraryName": {
+    "description": "Label for the library name in library details"
+  },
+  "area": "Area",
+  "@area": {
+    "description": "Label for the area in library details"
+  },
+  "homepage": "Homepage",
+  "@homepage": {
+    "description": "Label for the homepage in library details"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button label in library details dialog" 
   }
 }

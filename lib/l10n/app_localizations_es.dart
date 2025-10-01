@@ -198,4 +198,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get copyNumber => 'Número de ejemplar';
+
+  @override
+  String get region => 'Región';
+
+  @override
+  String get address => 'Dirección';
+
+  @override
+  String get postalCode => 'Código postal';
+
+  @override
+  String get city => 'Ciudad';
+
+  @override
+  String get state => 'Estado';
+
+  @override
+  String get country => 'País';
+
+  @override
+  String get libraryName => 'Nombre de la biblioteca';
+
+  @override
+  String get area => 'Área';
+
+  @override
+  String get homepage => 'Página web';
+
+  @override
+  String get close => 'Cerrar';
 }

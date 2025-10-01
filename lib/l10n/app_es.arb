@@ -74,5 +74,45 @@
     "copyNumber": "Número de ejemplar",
     "@copyNumber": {
       "description": "Label for the copy number in book preview"
+    },
+    "region": "Región",
+    "@region": {
+      "description": "Label for the region in library details"
+    },
+    "address": "Dirección",
+    "@address": {
+      "description": "Label for the address in library details"
+    },
+    "postalCode": "Código postal",
+    "@postalCode": {
+      "description": "Label for the postal code in library details"
+    },
+    "city": "Ciudad",
+    "@city": {
+      "description": "Label for the city in library details"
+    },
+    "state": "Estado",
+    "@state": {
+      "description": "Label for the state in library details"
+    },
+    "country": "País",
+    "@country": {
+      "description": "Label for the country in library details"
+    },
+    "libraryName": "Nombre de la biblioteca",
+    "@libraryName": {
+      "description": "Label for the library name in library details"
+    },
+    "area": "Área",
+    "@area": {
+      "description": "Label for the area in library details"
+    },
+    "homepage": "Página web",
+    "@homepage": {
+      "description": "Label for the homepage in library details"
+    },
+    "close": "Cerrar",
+    "@close": {
+      "description": "Close button label in library details dialog"
     }
 }
