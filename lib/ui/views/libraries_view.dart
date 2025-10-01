@@ -20,6 +20,9 @@ class _LibrariesViewState extends LibrariesController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.libraryDirectory),
+      ),
       body: FutureBuilder<List<Library>>(
         future: widget.libraries,
         builder: (context, snapshot) {

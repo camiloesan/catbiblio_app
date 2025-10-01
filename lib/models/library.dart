@@ -1,3 +1,5 @@
+import 'package:catbiblio_app/models/region.dart';
+
 class Library {
   String libraryId;
   String name;
@@ -9,6 +11,8 @@ class Library {
   String country;
   String email;
   String url;
+  String notes;
+  String region;
 
   Library({
     required this.libraryId,
@@ -21,7 +25,11 @@ class Library {
     this.country = '',
     this.email = '',
     this.url = '',
-  });
+    required this.notes,
+  }) : region = regions.containsKey(int.tryParse(notes) ?? 0)
+           ? regions[int.tryParse(notes) ?? 0]!
+           : regions.values.first;
+  // Set UV region based on notes field (custom authorised value)
 
   factory Library.fromJson(Map<String, dynamic> json) {
     return Library(
@@ -35,6 +43,7 @@ class Library {
       country: json['country'] as String? ?? '',
       email: json['email'] as String? ?? '',
       url: json['url'] as String? ?? '',
+      notes: json['notes'] as String? ?? '0',
     );
   }
 
@@ -50,11 +59,12 @@ class Library {
       'country': country,
       'email': email,
       'url': url,
+      'notes': notes,
     };
   }
 
   @override
   String toString() {
-    return 'Library(libraryId: $libraryId, name: $name, area: $area, address: $address, postalCode: $postalCode, city: $city, state: $state, country: $country, email: $email, url: $url)';
+    return 'Library(libraryId: $libraryId, name: $name, area: $area, address: $address, postalCode: $postalCode, city: $city, state: $state, country: $country, email: $email, url: $url, region: $region)';
   }
 }
