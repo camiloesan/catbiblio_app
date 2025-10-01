@@ -197,4 +197,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copyNumber => 'Copy number';
+
+  @override
+  String get region => 'Region';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get postalCode => 'Postal code';
+
+  @override
+  String get city => 'City';
+
+  @override
+  String get state => 'State';
+
+  @override
+  String get country => 'Country';
+
+  @override
+  String get libraryName => 'Library name';
+
+  @override
+  String get area => 'Area';
+
+  @override
+  String get homepage => 'Homepage';
+
+  @override
+  String get close => 'Close';
 }

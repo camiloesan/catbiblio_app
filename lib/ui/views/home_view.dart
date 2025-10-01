@@ -4,6 +4,7 @@ import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/rest/libraries.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
+import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -29,8 +30,11 @@ class _HomeViewState extends HomeController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image(image: const AssetImage('assets/images/head.png'), height: 40),
+      appBar: AppBar(|
+        title: Image(
+          image: const AssetImage('assets/images/head.png'),
+          height: 40,
+        ),
       ),
       drawer: NavigationDrawer(
         children: [
@@ -68,11 +72,12 @@ class _HomeViewState extends HomeController {
           ListTile(
             leading: const Icon(Icons.map, color: primaryColor),
             title: Text(AppLocalizations.of(context)!.libraryDirectory),
-            trailing: Transform.scale(
-              scale: 0.8,
-              child: const Icon(Icons.open_in_new),
-            ),
-            onTap: () => openLink('https://www.uv.mx/dgbuv/#mapa'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => LibrariesView(libraries: _librariesFuture),
+              ),
+            ), // navigate to LibrariesView()
           ),
           ListTile(
             leading: const Icon(Icons.computer, color: primaryColor),
@@ -135,7 +140,8 @@ class _HomeViewState extends HomeController {
               FutureBuilder(
                 future: _librariesFuture,
                 builder: (context, asyncSnapshot) {
-                  if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                  if (asyncSnapshot.connectionState ==
+                      ConnectionState.waiting) {
                     return const SizedBox(
                       height: 56,
                       child: Center(child: CircularProgressIndicator()),
@@ -143,7 +149,9 @@ class _HomeViewState extends HomeController {
                   }
                   if (asyncSnapshot.hasError) {
                     return Center(
-                      child: Text('${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}'),
+                      child: Text(
+                        '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
+                      ),
                     );
                   }
                   final libraries = asyncSnapshot.data!;
@@ -164,7 +172,10 @@ class _HomeViewState extends HomeController {
                     ),
                     initialSelection: _queryParams.library,
                     dropdownMenuEntries: [
-                      DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allLibraries),
+                      DropdownMenuEntry(
+                        value: 'all',
+                        label: AppLocalizations.of(context)!.allLibraries,
+                      ),
                       ..._libraryEntries,
                     ],
                     onSelected: (value) {
@@ -174,7 +185,7 @@ class _HomeViewState extends HomeController {
                     },
                     width: double.infinity,
                   );
-                }
+                },
               ),
               const SizedBox(height: 12),
               TextField(
