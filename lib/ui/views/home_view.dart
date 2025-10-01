@@ -73,10 +73,6 @@ class _HomeViewState extends HomeController {
           ListTile(
             leading: const Icon(Icons.map, color: primaryColor),
             title: Text(AppLocalizations.of(context)!.libraryDirectory),
-            trailing: Transform.scale(
-              scale: 0.8,
-              child: const Icon(Icons.open_in_new),
-            ),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
