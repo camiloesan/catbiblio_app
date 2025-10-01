@@ -4,19 +4,26 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class BibliosDetailsService {
+  static const String marcInJson = 'json';
+  static const String marcInXml = 'xml';
+  static const String plainText = 'text';
+
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://148.226.6.25',
+      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc', // Move to .env
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/marc-in-json'},
+      headers: {'Accept': '*/*', 'x-api-key': '12345'}, // Move to .env
     ),
   );
 
   static Future<BibliosDetails> getBibliosDetails(String biblioNumber) async {
     try {
-      final response = await _dio.get('/api/v1/public/biblios/$biblioNumber');
+      final response = await _dio.get(
+        '/biblios_details',
+        queryParameters: {'biblionumber': biblioNumber, 'format': marcInJson},
+      );
 
       final Map<String, dynamic> bibliosJson = json.decode(response.data);
       final List<dynamic> titleFields = bibliosJson['fields'];
@@ -46,8 +53,9 @@ class BibliosDetailsService {
             '${getSubfieldData(titleFields, '300', 'a') ?? ''} ${getSubfieldData(titleFields, '300', 'b') ?? ''} ${getSubfieldData(titleFields, '300', 'c') ?? ''}'
                 .trim(),
         otherClassification: getSubfieldData(titleFields, '084', 'a') ?? '',
-        lawClassification: '${getSubfieldData(titleFields, '099', 'a') ?? ''} ${getSubfieldData(titleFields, '099', 'b') ?? ''} ${getSubfieldData(titleFields, '099', 'c') ?? ''}'
-            .trim(),
+        lawClassification:
+            '${getSubfieldData(titleFields, '099', 'a') ?? ''} ${getSubfieldData(titleFields, '099', 'b') ?? ''} ${getSubfieldData(titleFields, '099', 'c') ?? ''}'
+                .trim(),
       );
     } on DioException catch (e) {
       // Log the error for debugging

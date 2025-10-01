@@ -32,4 +32,9 @@ class BibliosDetails {
     this.otherClassification = '',
     this.lawClassification = '',
   });
+
+  @override
+  String toString() {
+    return 'BibliosDetails(title: $title, author: $author, isbn: $isbn, language: $language, originalLanguage: $originalLanguage, subject: $subject, collaborators: $collaborators, summary: $summary, cdd: $cdd, loc: $loc, editor: $editor, edition: $edition, description: $description, otherClassification: $otherClassification, lawClassification: $lawClassification)';
+  }
 }
