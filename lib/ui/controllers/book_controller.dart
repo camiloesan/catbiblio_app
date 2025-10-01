@@ -7,6 +7,8 @@ abstract class BookController extends State<BookView> {
   bool isErrorLoadingDetails = false;
   bool isLoadingBiblioItems = true;
   bool isErrorLoadingBiblioItems = false;
+  final Map<String, List<BiblioItem>> groupedItems = {};
+  final List<String> holdingLibraries = [];
 
   Map<String, String> get languageMap => {
     'eng': AppLocalizations.of(context)!.english,
@@ -45,6 +47,11 @@ abstract class BookController extends State<BookView> {
             biblioItems = items;
             isLoadingBiblioItems = false;
           });
+
+          for (var book in biblioItems) {
+            (groupedItems[book.holdingLibrary] ??= []).add(book);
+          }
+          holdingLibraries.addAll(groupedItems.keys);
         })
         .catchError((error) {
           if (!mounted) return;
@@ -53,6 +60,82 @@ abstract class BookController extends State<BookView> {
             isLoadingBiblioItems = false;
           });
         });
+  }
 
+  void showShareDialog(BuildContext context, String title, String biblioNumber) {
+    final String message =
+        'Catálogo Bibliotecario de la Universidad Veracruzana:\n"$title":\nhttps://catbiblio.uv.mx/cgi-bin/koha/opac-detail.pl?biblionumber=$biblioNumber';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.shareVia),
+          content: Column(
+            mainAxisSize:
+                MainAxisSize.min, // Important to keep the dialog compact
+            children: <Widget>[
+              // WhatsApp Share Tile
+              ListTile(
+                leading: const Icon(Icons.message),
+                title: const Text('WhatsApp'),
+                onTap: () {
+                  Navigator.pop(context); // Close the dialog
+                  _shareOnWhatsApp(context, message);
+                },
+              ),
+              // Email Share Tile
+              ListTile(
+                leading: const Icon(Icons.email),
+                title: Text(AppLocalizations.of(context)!.email),
+                onTap: () {
+                  Navigator.pop(context); // Close the dialog
+                  _shareViaEmail(context, message);
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            // A 'Cancel' button to close the dialog
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _shareOnWhatsApp(BuildContext context, String message) async {
+    final Uri whatsappUrl = Uri.parse(
+      "https://wa.me/?text=${Uri.encodeComponent(message)}",
+    );
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    } else {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.couldNotLaunchWhatsApp)),
+      );
+    }
+  }
+
+  _shareViaEmail(BuildContext context, String message) async {
+    final Uri emailUri = Uri.parse(
+      'mailto:?subject=&body=${Uri.encodeComponent(message)}',
+    );
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.couldNotFindEmailClient)),
+      );
+    }
   }
 }

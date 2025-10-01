@@ -52,5 +52,11 @@
     "author": "Autor",
     "copies": "Existencias",
     "noCopiesFound": "No se encontraron existencias",
-    "classification": "Clasificación"
+    "classification": "Clasificación",
+    "share": "Compartir",
+    "email": "Correo electrónico",
+    "shareVia": "Compartir por...",
+    "cancel": "Cancelar",
+    "couldNotLaunchWhatsApp": "No se pudo abrir WhatsApp",
+    "couldNotFindEmailClient": "No se pudo encontrar un cliente de correo electrónico"
 }
