@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "home": "Home",
   "@home": {
     "description": "home view top bar title"
