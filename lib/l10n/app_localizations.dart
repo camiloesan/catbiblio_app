@@ -451,6 +451,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not find an email client.'**
   String get couldNotFindEmailClient;
+
+  /// Label for the type of item in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Item type'**
+  String get itemType;
+
+  /// Label for the holding library in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get holdingLibrary;
+
+  /// Label for the collection in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get collection;
+
+  /// Label for the copy number in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Copy number'**
+  String get copyNumber;
 }
 
 class _AppLocalizationsDelegate

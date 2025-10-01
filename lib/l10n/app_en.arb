@@ -235,5 +235,21 @@
   "couldNotFindEmailClient": "Could not find an email client.",
   "@couldNotFindEmailClient": {
     "description": "Snackbar message shown when no email client is found"
+  },
+  "itemType": "Item type",
+  "@itemType": {
+    "description": "Label for the type of item in book preview"
+  },
+  "holdingLibrary": "Library",
+  "@holdingLibrary": {
+    "description": "Label for the holding library in book preview"
+  },
+  "collection": "Collection",
+  "@collection": {
+    "description": "Label for the collection in book preview"
+  },
+  "copyNumber": "Copy number",
+  "@copyNumber": {
+    "description": "Label for the copy number in book preview"
   }
 }
