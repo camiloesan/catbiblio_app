@@ -29,6 +29,9 @@ class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.search),
+      ),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -214,6 +217,7 @@ class _SearchViewState extends SearchController {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
+          spacing: 2.0,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             for (
@@ -245,7 +249,7 @@ class _SearchViewState extends SearchController {
                       ),
                 child: i == setUpperLimit
                     ? const Icon(Icons.arrow_forward)
-                    : i == setLowerLimit && i > 8
+                    : i == setLowerLimit && i > setMiddleSpace
                     ? const Icon(Icons.arrow_back)
                     : Text('$i'),
               ),

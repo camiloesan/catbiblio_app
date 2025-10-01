@@ -31,7 +31,6 @@ class _HomeViewState extends HomeController {
     return Scaffold(
       appBar: AppBar(
         title: Image(image: const AssetImage('assets/images/head.png'), height: 40),
-        backgroundColor: Colors.transparent,
       ),
       drawer: NavigationDrawer(
         children: [
