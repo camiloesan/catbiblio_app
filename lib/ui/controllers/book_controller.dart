@@ -25,44 +25,62 @@ abstract class BookController extends State<BookView> {
   @override
   void initState() {
     super.initState();
-    BibliosDetailsService.getBibliosDetails(widget.biblioNumber)
-        .then((details) {
-          if (!mounted) return;
-          setState(() {
-            bibliosDetails = details;
-            isLoadingDetails = false;
-          });
-        })
-        .catchError((error) {
-          if (!mounted) return;
-          setState(() {
-            isErrorLoadingDetails = true;
-            isLoadingDetails = false;
-          });
-        });
-    BibliosItemsService.getBiblioItems(int.parse(widget.biblioNumber))
-        .then((items) {
-          if (!mounted) return;
-          setState(() {
-            biblioItems = items;
-            isLoadingBiblioItems = false;
-          });
-
-          for (var book in biblioItems) {
-            (groupedItems[book.holdingLibrary] ??= []).add(book);
-          }
-          holdingLibraries.addAll(groupedItems.keys);
-        })
-        .catchError((error) {
-          if (!mounted) return;
-          setState(() {
-            isErrorLoadingBiblioItems = true;
-            isLoadingBiblioItems = false;
-          });
-        });
+    _loadData();
   }
 
-  void showShareDialog(BuildContext context, String title, String biblioNumber) {
+  Future<void> _loadData() async {
+    final biblioNumber = int.parse(widget.biblioNumber);
+
+    // Load details first
+    try {
+      final details = await BibliosDetailsService.getBibliosDetails(
+        biblioNumber,
+      );
+      if (!mounted) return;
+      setState(() {
+        bibliosDetails = details;
+        isLoadingDetails = false;
+      });
+    } catch (error) {
+      debugPrint('Error loading details: $error');
+      if (!mounted) return;
+      setState(() {
+        isErrorLoadingDetails = true;
+        isLoadingDetails = false;
+      });
+    }
+
+    // Wait before next request
+    // await Future.delayed(const Duration(milliseconds: 150));
+
+    // Then load items
+    try {
+      final items = await BibliosItemsService.getBiblioItems(biblioNumber);
+      if (!mounted) return;
+      setState(() {
+        biblioItems = items;
+        isLoadingBiblioItems = false;
+      });
+
+      for (var book in biblioItems) {
+        (groupedItems[book.holdingLibrary] ??= []).add(book);
+      }
+      holdingLibraries.addAll(groupedItems.keys);
+    } catch (error) {
+      debugPrint('Error loading items: $error');
+      if (!mounted) return;
+      setState(() {
+        isErrorLoadingBiblioItems = true;
+        isLoadingBiblioItems = false;
+      });
+    }
+  }
+
+  void showShareDialog(
+    BuildContext context,
+    String title,
+    String biblioNumber,
+  ) {
     final String message =
         'Catálogo Bibliotecario de la Universidad Veracruzana:\n"$title":\nhttps://catbiblio.uv.mx/cgi-bin/koha/opac-detail.pl?biblionumber=$biblioNumber';
 
@@ -119,7 +137,9 @@ abstract class BookController extends State<BookView> {
       if (!context.mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.couldNotLaunchWhatsApp)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.couldNotLaunchWhatsApp),
+        ),
       );
     }
   }
@@ -134,7 +154,9 @@ abstract class BookController extends State<BookView> {
       if (!context.mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.couldNotFindEmailClient)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.couldNotFindEmailClient),
+        ),
       );
     }
   }

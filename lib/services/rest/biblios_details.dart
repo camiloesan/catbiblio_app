@@ -8,24 +8,39 @@ class BibliosDetailsService {
   static const String marcInXml = 'xml';
   static const String plainText = 'text';
 
-  static final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc', // Move to .env
-      responseType: ResponseType.plain,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': '*/*', 'x-api-key': '12345'}, // Move to .env
-    ),
-  );
+  static Dio _createDio({ResponseType responseType = ResponseType.json}) {
+    return Dio(
+      BaseOptions(
+        baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
+        responseType: responseType, // Changed from plain
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {'x-api-key': '12345'},
+      ),
+    );
+  }
 
-  static Future<BibliosDetails> getBibliosDetails(String biblioNumber) async {
+  static Future<BibliosDetails> getBibliosDetails(int biblioNumber) async {
+    final dio = _createDio();
+
     try {
-      final response = await _dio.get(
-        '/biblios_details',
+      //debugPrint('Requesting biblio $biblioNumber from ${dio.options.baseUrl}');
+
+      final response = await dio.get(
+        '/biblios_details2',
         queryParameters: {'biblionumber': biblioNumber, 'format': marcInJson},
       );
 
-      final Map<String, dynamic> bibliosJson = json.decode(response.data);
+      //debugPrint('Request url: ${response.realUri}');
+      //debugPrint('Response status: ${response.statusCode}');
+      //debugPrint('Response headers: ${response.headers}');
+      //debugPrint('Response data type: ${response.data.runtimeType}');
+      //debugPrint('Response data: ${response.data}');
+
+      //final Map<String, dynamic> bibliosJson = json.decode(response.data);
+      final Map<String, dynamic> bibliosJson = response.data is String
+          ? json.decode(response.data)
+          : response.data;
       final List<dynamic> titleFields = bibliosJson['fields'];
 
       return BibliosDetails(
@@ -59,9 +74,11 @@ class BibliosDetailsService {
       );
     } on DioException catch (e) {
       // Log the error for debugging
-      debugPrint('DioException in getBibliosDetails: ${e.message}');
-      debugPrint('Response data: ${e.response?.data}');
-      debugPrint('Status code: ${e.response?.statusCode}');
+      // debugPrint('DioException in getBibliosDetails: ${e.message}');
+      // debugPrint('Response data: ${e.response?.data}');
+      // debugPrint('Response headers: ${e.response?.headers}');
+      // debugPrint('Status code: ${e.response?.statusCode}');
+      // debugPrint('Request: ${e.requestOptions.uri}');
 
       // Handle specific error types
       switch (e.type) {
@@ -82,11 +99,14 @@ class BibliosDetailsService {
           debugPrint('Dio error: $e');
       }
 
-      return BibliosDetails(title: 'Error', author: 'Error');
+      rethrow;
+      //return BibliosDetails(title: 'Error', author: 'Error');
     } catch (e) {
       // Handle JSON parsing or other errors
       debugPrint('Unexpected error in getBibliosDetails: $e');
       return BibliosDetails(title: '', author: '');
+    } finally {
+      dio.close();
     }
   }
 
