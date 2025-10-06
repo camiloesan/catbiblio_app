@@ -217,7 +217,9 @@ class _BookViewState extends BookController {
                                           '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
                                         ),
                                       ),
-                                      biblioItem.holdingLibraryId == 'USBI-X' && biblioItem.notForLoanStatus == BiblioItem.STATUS_AVAILABLE
+                                      biblioItem.holdingLibraryId == 'USBI-X' &&
+                                              biblioItem.notForLoanStatus ==
+                                                  BiblioItem.STATUS_AVAILABLE
                                           ? IconButton(
                                               onPressed: () {},
                                               icon: const Icon(Icons.map),
@@ -230,16 +232,17 @@ class _BookViewState extends BookController {
                                             BiblioItem.STATUS_BORROWED
                                         ? Icons.remove_circle
                                         : biblioItem.overAllStatus ==
-                                                BiblioItem.STATUS_NOT_FOR_LOAN
-                                            ? Icons.remove_circle
-                                            : Icons.check_circle,
-                                    color: biblioItem.overAllStatus ==
+                                              BiblioItem.STATUS_NOT_FOR_LOAN
+                                        ? Icons.remove_circle
+                                        : Icons.check_circle,
+                                    color:
+                                        biblioItem.overAllStatus ==
                                             BiblioItem.STATUS_BORROWED
                                         ? Colors.orange
                                         : biblioItem.overAllStatus ==
-                                                BiblioItem.STATUS_NOT_FOR_LOAN
-                                            ? Colors.red
-                                            : Colors.green,
+                                              BiblioItem.STATUS_NOT_FOR_LOAN
+                                        ? Colors.red
+                                        : Colors.green,
                                   ),
                                   childrenPadding: const EdgeInsets.only(
                                     left: 16.0,
@@ -254,7 +257,8 @@ class _BookViewState extends BookController {
                                           Text(
                                             '${AppLocalizations.of(context)!.itemType}: ',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(biblioItem.itemType),
                                         ],
@@ -267,7 +271,8 @@ class _BookViewState extends BookController {
                                           Text(
                                             '${AppLocalizations.of(context)!.holdingLibrary}: ',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(biblioItem.holdingLibrary),
                                         ],
@@ -280,7 +285,8 @@ class _BookViewState extends BookController {
                                           Text(
                                             '${AppLocalizations.of(context)!.collection}: ',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(biblioItem.collection),
                                         ],
@@ -293,7 +299,8 @@ class _BookViewState extends BookController {
                                           Text(
                                             '${AppLocalizations.of(context)!.classification}: ',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(biblioItem.callNumber),
                                         ],
@@ -306,7 +313,8 @@ class _BookViewState extends BookController {
                                           Text(
                                             '${AppLocalizations.of(context)!.copyNumber}: ',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(biblioItem.copyNumber),
                                         ],

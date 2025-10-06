@@ -4,21 +4,25 @@ import 'package:catbiblio_app/models/library.dart';
 import 'package:flutter/material.dart';
 
 class LibrariesService {
-  static final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
-      responseType: ResponseType.plain,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/json;encoding=UTF-8'},
-    ),
-  );
+  static Dio _createDio() {
+    return Dio(
+      BaseOptions(
+        baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
+        responseType: ResponseType.plain,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {'Accept': 'application/json;encoding=UTF-8'},
+      ),
+    );
+  }
 
   /// Fetches the list of libraries from a Koha-based service
   /// Example: http://{{baseUrl}}/cgi-bin/koha/svc/libraries
   static Future<List<Library>> getLibraries() async {
+    final dio = _createDio();
+
     try {
-      final response = await _dio.get('/libraries');
+      final response = await dio.get('/libraries');
 
       final List<dynamic> librariesJson = json.decode(response.data);
 
@@ -55,6 +59,8 @@ class LibrariesService {
       // Handle JSON parsing or other errors
       debugPrint('Unexpected error in getLibraries: $e');
       return [];
+    } finally {
+      dio.close();
     }
   }
 }

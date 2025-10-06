@@ -4,18 +4,20 @@ import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:flutter/material.dart';
 
 class BibliosItemsService {
-  static final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc', // Move to .env
-      responseType: ResponseType.plain,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {
-        'Accept': 'application/json;encoding=UTF-8',
-        'x-api-key': '12345', // Move to .env
-      },
-    ),
-  );
+  static Dio _createDio() {
+    return Dio(
+      BaseOptions(
+        baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc', // Move to .env
+        responseType: ResponseType.plain,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {
+          'Accept': 'application/json;encoding=UTF-8',
+          'x-api-key': '12345', // Move to .env
+        },
+      ),
+    );
+  }
 
   /// Fetches the list of items for a given title by its biblionumber from a Koha-based service
   ///
@@ -23,13 +25,15 @@ class BibliosItemsService {
   ///
   /// Returns an empty list if no items are found or in case of an error
   static Future<List<BiblioItem>> getBiblioItems(int biblioNumber) async {
+    final dio = _createDio();
+
     if (biblioNumber <= 0) {
       debugPrint('Invalid biblionumber: $biblioNumber');
       return [];
     }
 
     try {
-      final response = await _dio.get(
+      final response = await dio.get(
         '/biblios_items',
         queryParameters: {'biblio_number': biblioNumber},
       );
@@ -71,6 +75,8 @@ class BibliosItemsService {
       // Handle JSON parsing or other errors
       debugPrint('Unexpected error in getBiblioItems: $e');
       return [];
+    } finally {
+      dio.close();
     }
   }
 }
