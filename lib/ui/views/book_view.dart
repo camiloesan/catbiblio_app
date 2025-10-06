@@ -2,7 +2,7 @@ import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/services/rest/biblios_items.dart';
-import 'package:catbiblio_app/services/svc/images.dart';
+import 'package:catbiblio_app/services/rest/images.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/rest/biblios_details.dart';
