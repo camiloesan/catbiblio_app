@@ -231,4 +231,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get marcView => 'Vista MARC';
+
+  @override
+  String get errorLoadingMarc => 'Error al cargar la vista MARC';
+
+  @override
+  String get noMarcDataAvailable => 'No hay datos MARC disponibles';
 }

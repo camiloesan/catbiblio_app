@@ -295,5 +295,13 @@
   "marcView": "MARC View",
   "@marcView": {
     "description": "MARC view title in book view"
+  },
+  "errorLoadingMarc": "Error loading MARC data",
+  "@errorLoadingMarc": {
+    "description": "Message shown when there is an error loading the MARC data"
+  },
+  "noMarcDataAvailable": "No MARC data available",
+  "@noMarcDataAvailable": {
+    "description": "Message shown when no MARC data is available for a book"
   }
 }

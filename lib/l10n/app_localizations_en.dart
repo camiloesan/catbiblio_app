@@ -230,4 +230,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get marcView => 'MARC View';
+
+  @override
+  String get errorLoadingMarc => 'Error loading MARC data';
+
+  @override
+  String get noMarcDataAvailable => 'No MARC data available';
 }

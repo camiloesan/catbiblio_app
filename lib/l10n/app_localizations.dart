@@ -541,6 +541,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'MARC View'**
   String get marcView;
+
+  /// Message shown when there is an error loading the MARC data
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading MARC data'**
+  String get errorLoadingMarc;
+
+  /// Message shown when no MARC data is available for a book
+  ///
+  /// In en, this message translates to:
+  /// **'No MARC data available'**
+  String get noMarcDataAvailable;
 }
 
 class _AppLocalizationsDelegate
