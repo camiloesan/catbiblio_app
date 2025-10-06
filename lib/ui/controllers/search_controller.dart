@@ -6,9 +6,10 @@ abstract class SearchController extends State<SearchView> {
   late TextEditingController _searchController;
   late ScrollController _scrollController;
   late List<BookPreview> books = [];
+  static const int initialUpperLimit = 8;
   int currentPage = 1;
   int totalPages = 0;
-  int setUpperLimit = 8;
+  int setUpperLimit = initialUpperLimit;
   int setMiddleSpace = 0;
   int setLowerLimit = 1;
   int totalRecords = 0;
@@ -95,7 +96,7 @@ abstract class SearchController extends State<SearchView> {
         books.clear();
         totalRecords = 0;
         currentPage = 1;
-        setUpperLimit = 10;
+        setUpperLimit = initialUpperLimit;
         setLowerLimit = 1;
         totalPages = 0;
         updatePageResults();

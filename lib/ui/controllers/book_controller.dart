@@ -31,49 +31,47 @@ abstract class BookController extends State<BookView> {
   Future<void> _loadData() async {
     final biblioNumber = int.parse(widget.biblioNumber);
 
-    // Load details first
+    BibliosDetails? details;
+    List<BiblioItem> items = [];
+
+    bool detailsError = false;
+    bool itemsError = false;
+
     try {
-      final details = await BibliosDetailsService.getBibliosDetails(
-        biblioNumber,
-      );
-      if (!mounted) return;
-      setState(() {
-        bibliosDetails = details;
-        isLoadingDetails = false;
-      });
+      details = await BibliosDetailsService.getBibliosDetails(biblioNumber);
     } catch (error) {
       debugPrint('Error loading details: $error');
-      if (!mounted) return;
-      setState(() {
-        isErrorLoadingDetails = true;
-        isLoadingDetails = false;
-      });
+      detailsError = true;
     }
 
-    // Wait before next request
-    // await Future.delayed(const Duration(milliseconds: 150));
-
-    // Then load items
     try {
-      final items = await BibliosItemsService.getBiblioItems(biblioNumber);
-      if (!mounted) return;
-      setState(() {
-        biblioItems = items;
-        isLoadingBiblioItems = false;
-      });
-
-      for (var book in biblioItems) {
-        (groupedItems[book.holdingLibrary] ??= []).add(book);
-      }
-      holdingLibraries.addAll(groupedItems.keys);
+      items = await BibliosItemsService.getBiblioItems(biblioNumber);
     } catch (error) {
       debugPrint('Error loading items: $error');
-      if (!mounted) return;
-      setState(() {
-        isErrorLoadingBiblioItems = true;
-        isLoadingBiblioItems = false;
-      });
+      itemsError = true;
     }
+
+    if (!mounted) return;
+
+    final grouped = <String, List<BiblioItem>>{};
+    for (var book in items) {
+      (grouped[book.holdingLibrary] ??= []).add(book);
+    }
+
+    setState(() {
+      bibliosDetails = details ?? bibliosDetails;
+      biblioItems = items;
+      groupedItems.clear();
+      groupedItems.addAll(grouped);
+      holdingLibraries
+        ..clear()
+        ..addAll(grouped.keys);
+
+      isLoadingDetails = false;
+      isLoadingBiblioItems = false;
+      isErrorLoadingDetails = detailsError;
+      isErrorLoadingBiblioItems = itemsError;
+    });
   }
 
   void showShareDialog(

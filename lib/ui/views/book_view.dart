@@ -126,9 +126,8 @@ class _BookViewState extends BookController {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MarcView(
-                                biblioNumber: widget.biblioNumber,
-                              ),
+                              builder: (context) =>
+                                  MarcView(biblioNumber: widget.biblioNumber),
                             ),
                           );
                         },
@@ -150,16 +149,7 @@ class _BookViewState extends BookController {
                   ),
                   const Divider(),
 
-                  if (isLoadingBiblioItems)
-                    Center(
-                      child: Column(
-                        children: [
-                          const CircularProgressIndicator(),
-                          const SizedBox(height: 8.0),
-                        ],
-                      ),
-                    )
-                  else if (isErrorLoadingBiblioItems)
+                  if (isErrorLoadingBiblioItems)
                     Center(
                       child: Column(
                         children: [
@@ -169,7 +159,7 @@ class _BookViewState extends BookController {
                         ],
                       ),
                     )
-                  else if (biblioItems.isEmpty && !isLoadingBiblioItems)
+                  else if (biblioItems.isEmpty && !isLoadingDetails)
                     Center(
                       child: Column(
                         children: [
