@@ -22,6 +22,90 @@ void main() {
       },
     );
 
-    // TODO: test handling not found biblionumber
+    test('getBibliosDetails handles invalid biblionumber gracefully', () async {
+      const invalidBiblionumber = -1; // Assuming negative numbers are invalid
+      BibliosDetails details = await BibliosDetailsService.getBibliosDetails(
+        invalidBiblionumber,
+      );
+
+      debugPrint('Fetched biblios details for invalid biblionumber: $details');
+
+      expect(details, isA<BibliosDetails>());
+      expect(details.title.isEmpty, isTrue);
+      expect(details.author.isEmpty, isTrue);
+    });
+
+    //TODO: make service handle 404 gracefully
+    test(
+      'getBibliosDetails handles not found biblionumber gracefully',
+      () async {
+        const invalidBiblionumber =
+            99999999; // Assuming negative numbers are invalid
+        BibliosDetails details = await BibliosDetailsService.getBibliosDetails(
+          invalidBiblionumber,
+        );
+
+        debugPrint(
+          'Fetched biblios details for invalid biblionumber: $details',
+        );
+
+        expect(details, isA<BibliosDetails>());
+        expect(details.title.isEmpty, isTrue);
+        expect(details.author.isEmpty, isTrue);
+      },
+    );
+
+    test(
+      'getBibliosMarcPlainText returns MARC plain text for a valid biblionumber',
+      () async {
+        const testBiblionumber = 383061;
+        String? marcPlainText =
+            await BibliosDetailsService.getBibliosMarcPlainText(
+              testBiblionumber,
+            );
+
+        debugPrint('Fetched MARC plain text: $marcPlainText');
+
+        expect(marcPlainText, isA<String>());
+        expect(marcPlainText!.isNotEmpty, isTrue);
+        expect(marcPlainText.contains('LDR'), isTrue); // MARC Leader
+        expect(marcPlainText.contains('999'), isTrue); // Control Number
+      },
+    );
+
+    test(
+      'getBibliosMarcPlainText handles invalid biblionumber gracefully',
+      () async {
+        const invalidBiblionumber = -1; // Assuming negative numbers are invalid
+        String? marcPlainText =
+            await BibliosDetailsService.getBibliosMarcPlainText(
+              invalidBiblionumber,
+            );
+
+        debugPrint(
+          'Fetched MARC plain text for invalid biblionumber: $marcPlainText',
+        );
+
+        expect(marcPlainText, isNull);
+      },
+    );
+
+    //TODO: make service handle 404 gracefully
+    test(
+      'getBibliosMarcPlainText handles not found biblionumber gracefully',
+      () async {
+        const invalidBiblionumber = 99999999; // Assuming this number is not
+        String? marcPlainText =
+            await BibliosDetailsService.getBibliosMarcPlainText(
+              invalidBiblionumber,
+            );
+
+        debugPrint(
+          'Fetched MARC plain text for not found biblionumber: $marcPlainText',
+        );
+
+        expect(marcPlainText, isNull);
+      },
+    );
   });
 }
