@@ -198,7 +198,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get copyNumber => 'Número de ejemplar';
-  
+
   @override
   String get region => 'Región';
 
