@@ -21,6 +21,10 @@ class BibliosDetailsService {
   }
 
   static Future<BibliosDetails> getBibliosDetails(int biblioNumber) async {
+    if (biblioNumber <= 0) {
+      return BibliosDetails(title: '', author: '');
+    }
+
     final dio = _createDio();
 
     try {
@@ -105,6 +109,58 @@ class BibliosDetailsService {
       // Handle JSON parsing or other errors
       debugPrint('Unexpected error in getBibliosDetails: $e');
       return BibliosDetails(title: '', author: '');
+    } finally {
+      dio.close();
+    }
+  }
+
+  static Future<String?> getBibliosMarcPlainText(int biblioNumber) async {
+    if (biblioNumber <= 0) {
+      return null;
+    }
+
+    final dio = _createDio(responseType: ResponseType.plain);
+
+    try {
+      // Example of how to make the request
+      final response = await dio.get(
+        '/biblios_details2',
+        queryParameters: {'biblionumber': biblioNumber, 'format': plainText},
+      );
+
+      debugPrint('Request url: ${response.realUri}');
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response headers: ${response.headers}');
+      debugPrint('Response data type: ${response.data.runtimeType}');
+      debugPrint('Response data: ${response.data}');
+
+      // Return the plain text MARC record
+      return response.data as String;
+    } on DioException catch (e) {
+      debugPrint('DioException in getBibliosMarcPlainText: ${e.message}');
+
+      switch (e.type) {
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.receiveTimeout:
+          debugPrint('Timeout error: Check network connection');
+          break;
+        case DioExceptionType.badResponse:
+          debugPrint('Server error: ${e.response?.statusCode}');
+          break;
+        case DioExceptionType.cancel:
+          debugPrint('Request cancelled');
+          break;
+        case DioExceptionType.unknown:
+          debugPrint('Unknown error: ${e.message}');
+          break;
+        default:
+          debugPrint('Dio error: $e');
+      }
+
+      rethrow;
+    } catch (e) {
+      debugPrint('Unexpected error in getBibliosMarcPlainText: $e');
+      return null;
     } finally {
       dio.close();
     }
