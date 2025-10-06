@@ -130,6 +130,8 @@ abstract class SearchController extends State<SearchView> {
   }
 
   void paginationBehavior(int selectedIndex) {
+    if (isPageLoading) return;    
+    
     /// This allows for pagination to continue forward.
     if (currentPage + 1 == setUpperLimit && selectedIndex == setUpperLimit) {
       setState(() {

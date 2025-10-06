@@ -228,4 +228,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get close => 'Cerrar';
+
+  @override
+  String get marcView => 'Vista MARC';
 }

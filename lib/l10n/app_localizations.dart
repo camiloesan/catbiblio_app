@@ -535,6 +535,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// MARC view title in book view
+  ///
+  /// In en, this message translates to:
+  /// **'MARC View'**
+  String get marcView;
 }
 
 class _AppLocalizationsDelegate

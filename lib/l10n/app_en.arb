@@ -291,5 +291,9 @@
   "close": "Close",
   "@close": {
     "description": "Close button label in library details dialog" 
+  },
+  "marcView": "MARC View",
+  "@marcView": {
+    "description": "MARC view title in book view"
   }
 }

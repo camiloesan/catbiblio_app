@@ -114,5 +114,6 @@
     "close": "Cerrar",
     "@close": {
       "description": "Close button label in library details dialog"
-    }
+    },
+    "marcView": "Vista MARC"
 }
