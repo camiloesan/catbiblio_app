@@ -24,15 +24,15 @@ class _MarcViewState extends MarcController {
           ? const Center(child: CircularProgressIndicator())
           : isError
               ? Center(child: Text(AppLocalizations.of(context)!.errorLoadingMarc))
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      marcData ?? AppLocalizations.of(context)!.noMarcDataAvailable,
-                      style: const TextStyle(fontFamily: 'monospace'),
-                    ),
+              : Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    marcData ?? AppLocalizations.of(context)!.noMarcDataAvailable,
+                    style: const TextStyle(fontFamily: 'monospace'),
                   ),
                 ),
+              ),
     );
   }
 }
