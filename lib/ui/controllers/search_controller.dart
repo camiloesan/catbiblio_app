@@ -52,27 +52,26 @@ abstract class SearchController extends State<SearchView> {
     _scrollController = ScrollController();
     setMiddleSpace = setUpperLimit - 2;
 
-    if (widget.queryParams.searchQuery.isNotEmpty) {
-      isInitialRequestLoading = true;
-      isError = false;
-      SruService.searchBooks(widget.queryParams)
-          .then((result) {
-            if (!mounted) return;
-            setState(() {
-              books = result.books;
-              totalRecords = result.totalRecords;
-              totalPages = (totalRecords / 10).ceil();
-              isInitialRequestLoading = false;
-            });
-          })
-          .catchError((error) {
-            if (!mounted) return;
-            setState(() {
-              isInitialRequestLoading = false;
-              isError = true;
-            });
+    if (widget.queryParams.searchQuery.isEmpty) return;
+    isInitialRequestLoading = true;
+    isError = false;
+    SruService.searchBooks(widget.queryParams)
+        .then((result) {
+          if (!mounted) return;
+          setState(() {
+            books = result.books;
+            totalRecords = result.totalRecords;
+            totalPages = (totalRecords / 10).ceil();
+            isInitialRequestLoading = false;
           });
-    }
+        })
+        .catchError((error) {
+          if (!mounted) return;
+          setState(() {
+            isInitialRequestLoading = false;
+            isError = true;
+          });
+        });
   }
 
   @override
@@ -90,18 +89,17 @@ abstract class SearchController extends State<SearchView> {
   }
 
   void onSubmitAction(String searchQuery) {
-    if (searchQuery.isNotEmpty) {
-      setState(() {
-        widget.queryParams.searchQuery = searchQuery;
-        books.clear();
-        totalRecords = 0;
-        currentPage = 1;
-        setUpperLimit = initialUpperLimit;
-        setLowerLimit = 1;
-        totalPages = 0;
-        updatePageResults();
-      });
-    }
+    if (searchQuery.isEmpty) return;
+    setState(() {
+      widget.queryParams.searchQuery = searchQuery;
+      books.clear();
+      totalRecords = 0;
+      currentPage = 1;
+      setUpperLimit = initialUpperLimit;
+      setLowerLimit = 1;
+      totalPages = 0;
+      updatePageResults();
+    });
   }
 
   void updatePageResults() {
@@ -131,8 +129,8 @@ abstract class SearchController extends State<SearchView> {
   }
 
   void paginationBehavior(int selectedIndex) {
-    if (isPageLoading) return;    
-    
+    if (isPageLoading || currentPage == selectedIndex) return;
+
     /// This allows for pagination to continue forward.
     if (currentPage + 1 == setUpperLimit && selectedIndex == setUpperLimit) {
       setState(() {
@@ -157,9 +155,6 @@ abstract class SearchController extends State<SearchView> {
       return;
     }
 
-    /// This prevents reloading the same page.
-    if (selectedIndex == currentPage) return;
-
     /// This allows for pagination to continue forward one page.
     if (selectedIndex == setUpperLimit) {
       setState(() {
@@ -170,7 +165,8 @@ abstract class SearchController extends State<SearchView> {
     }
 
     /// This allows for pagination to continue backwards one page.
-    if (selectedIndex == setLowerLimit && currentPage > (setUpperLimit - setLowerLimit)) {
+    if (selectedIndex == setLowerLimit &&
+        currentPage > (setUpperLimit - setLowerLimit)) {
       setState(() {
         currentPage--;
         updatePageResults();
