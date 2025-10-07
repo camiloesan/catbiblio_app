@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/region.dart';
-import 'package:catbiblio_app/services/rest/libraries.dart';
+import 'package:catbiblio_app/services/libraries.dart';
 
 void main() {
   group('LibrariesService requests', () {

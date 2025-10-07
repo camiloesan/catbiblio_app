@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
-import 'package:catbiblio_app/services/svc/search.dart';
+import 'package:catbiblio_app/services/search.dart';
 import 'package:catbiblio_app/models/search_result.dart';
 
 void main() {

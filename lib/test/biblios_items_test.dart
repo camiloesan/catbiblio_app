@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:catbiblio_app/models/biblio_item.dart';
-import 'package:catbiblio_app/services/rest/biblios_items.dart';
+import 'package:catbiblio_app/services/biblios_items.dart';
 
 void main() {
   group('BibliosItemsService requests', () {

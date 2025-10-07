@@ -1,5 +1,5 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
-import 'package:catbiblio_app/services/rest/biblios_details.dart';
+import 'package:catbiblio_app/services/biblios_details.dart';
 import 'package:flutter/material.dart';
 
 part '../controllers/marc_controller.dart';
