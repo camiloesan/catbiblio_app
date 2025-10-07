@@ -177,7 +177,7 @@ class SruService {
       helper.getSubfield(_publishingDetailsTag, 'c'), // Date of publication
     ].where((part) => part != null && part.isNotEmpty).toList();
 
-    return publishingParts.join(', ');
+    return publishingParts.join(' ');
   }
 
   static Map<String, dynamic> buildQueryParameters(QueryParams params) {
