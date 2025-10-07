@@ -7,10 +7,7 @@ import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:catbiblio_app/classes/aviso.dart';
 
 part '../controllers/home_controller.dart';
