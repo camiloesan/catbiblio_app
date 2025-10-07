@@ -36,81 +36,7 @@ class _HomeViewState extends HomeController {
           height: 40,
         ),
       ),
-      drawer: NavigationDrawer(
-        children: [
-          DrawerHeader(child: Image.asset('assets/images/head.png')),
-          ListTile(
-            leading: const Icon(Icons.home, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.home),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.history, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.searchHistory),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.language, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.language),
-            onTap: () {
-              widget.onLocaleChange(
-                AppLocalizations.of(context)!.localeName == 'es'
-                    ? const Locale('en')
-                    : const Locale('es'),
-              );
-              Navigator.pop(context);
-              SnackBar snackBar = SnackBar(
-                content: Text(AppLocalizations.of(context)!.languageChanged),
-                duration: const Duration(seconds: 2),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.map, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.libraryDirectory),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => LibrariesView(libraries: _librariesFuture),
-              ),
-            ), // navigate to LibrariesView()
-          ),
-          ListTile(
-            leading: const Icon(Icons.computer, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.electronicResources),
-            trailing: Transform.scale(
-              scale: 0.8,
-              child: const Icon(Icons.open_in_new),
-            ),
-            onTap: () => openLink('https://www.uv.mx/dgbuv/#descubridor'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.help, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.faq),
-            trailing: Transform.scale(
-              scale: 0.8,
-              child: const Icon(Icons.open_in_new),
-            ),
-            onTap: () =>
-                openLink('https://www.uv.mx/dgbuv/preguntas-frecuentes/'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip, color: primaryColor),
-            title: Text(AppLocalizations.of(context)!.privacyNotice),
-            trailing: Transform.scale(
-              scale: 0.8,
-              child: const Icon(Icons.open_in_new),
-            ),
-            onTap: () => openLink(
-              'https://catbiblio.uv.mx/avisos/aviso-privacidad-integral-sib.pdf',
-            ),
-          ),
-        ],
-      ),
+      drawer: navigationDrawer(context),
       drawerEnableOpenDragGesture: true,
       body: SingleChildScrollView(
         child: Padding(
@@ -118,134 +44,190 @@ class _HomeViewState extends HomeController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.only(bottom: 16.0),
-              //   child: SizedBox(
-              //     height: 64,
-              //     child: Image.asset('assets/images/head-text.png'),
-              //   ),
-              // ),
-              DropdownMenu(
-                controller: _searchFilterController,
-                label: Text(AppLocalizations.of(context)!.searchBy),
-                leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-                dropdownMenuEntries: _filterEntries,
-                initialSelection: _queryParams.searchBy,
-                onSelected: (value) => _queryParams.searchBy = value!,
-                width: double.infinity,
-                enableFilter: false,
-                requestFocusOnTap: false,
-              ),
+              DropdownFilters(searchFilterController: _searchFilterController, filterEntries: _filterEntries, queryParams: _queryParams),
               const SizedBox(height: 12),
-              FutureBuilder(
-                future: _librariesFuture,
-                builder: (context, asyncSnapshot) {
-                  if (asyncSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 56,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-                  if (asyncSnapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
-                      ),
-                    );
-                  }
-                  final libraries = asyncSnapshot.data!;
-                  _libraryEntries = libraries.map((library) {
-                    return DropdownMenuEntry(
-                      value: library.libraryId,
-                      label: library.name,
-                    );
-                  }).toList();
-                  return DropdownMenu(
-                    controller: _libraryController,
-                    label: Text(AppLocalizations.of(context)!.library),
-                    enableSearch: true,
-                    menuHeight: 300,
-                    leadingIcon: const Icon(
-                      Icons.location_city,
-                      color: primaryColor,
-                    ),
-                    initialSelection: _queryParams.library,
-                    dropdownMenuEntries: [
-                      DropdownMenuEntry(
-                        value: 'all',
-                        label: AppLocalizations.of(context)!.allLibraries,
-                      ),
-                      ..._libraryEntries,
-                    ],
-                    onSelected: (value) {
-                      setState(() {
-                        _queryParams.library = value!;
-                      });
-                    },
-                    width: double.infinity,
-                  );
-                },
-              ),
+              dropdownLibraries(),
               const SizedBox(height: 12),
-              TextField(
-                controller: _searchController,
-                onSubmitted: (value) => onSubmitAction(),
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: primaryColor),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      _searchController.clear();
-                    },
-                  ),
-                  labelText: AppLocalizations.of(context)!.search,
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.ourSelections,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.news,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-              const SizedBox(height: 12),
-              FutureBuilder<List<Aviso>>(
-                future: futureNews,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 202, // Altura del carrusel + indicadores
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error al cargar avisos: ${snapshot.error}'),
-                    );
-                  }
-                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    return buildCarousel(snapshot.data!);
-                  }
-                  return const Center(
-                    child: Text('No hay avisos disponibles.'),
-                  );
-                },
-              ),
+              searchBox(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  TextField searchBox(BuildContext context) {
+    return TextField(
+              controller: _searchController,
+              onSubmitted: (value) => onSubmitAction(),
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search, color: primaryColor),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () => clearSearchController(),
+                ),
+                labelText: AppLocalizations.of(context)!.search,
+                border: OutlineInputBorder(),
+              ),
+            );
+  }
+
+  FutureBuilder<List<Library>> dropdownLibraries() {
+    return FutureBuilder(
+              future: _librariesFuture,
+              builder: (context, asyncSnapshot) {
+                if (asyncSnapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const SizedBox(
+                    height: 56,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (asyncSnapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
+                    ),
+                  );
+                }
+                final libraries = asyncSnapshot.data!;
+                _libraryEntries = libraries.map((library) {
+                  return DropdownMenuEntry(
+                    value: library.libraryId,
+                    label: library.name,
+                  );
+                }).toList();
+                return DropdownMenu(
+                  controller: _libraryController,
+                  label: Text(AppLocalizations.of(context)!.library),
+                  enableSearch: true,
+                  menuHeight: 300,
+                  leadingIcon: const Icon(
+                    Icons.location_city,
+                    color: primaryColor,
+                  ),
+                  initialSelection: _queryParams.library,
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry(
+                      value: 'all',
+                      label: AppLocalizations.of(context)!.allLibraries,
+                    ),
+                    ..._libraryEntries,
+                  ],
+                  onSelected: (value) {
+                    setState(() {
+                      _queryParams.library = value!;
+                    });
+                  },
+                  width: double.infinity,
+                );
+              },
+            );
+  }
+
+  NavigationDrawer navigationDrawer(BuildContext context) {
+    return NavigationDrawer(
+      children: [
+        DrawerHeader(child: Image.asset('assets/images/head.png')),
+        ListTile(
+          leading: const Icon(Icons.home, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.home),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.history, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.searchHistory),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.language, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.language),
+          onTap: () {
+            widget.onLocaleChange(
+              AppLocalizations.of(context)!.localeName == 'es'
+                  ? const Locale('en')
+                  : const Locale('es'),
+            );
+            Navigator.pop(context);
+            SnackBar snackBar = SnackBar(
+              content: Text(AppLocalizations.of(context)!.languageChanged),
+              duration: const Duration(seconds: 2),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+        ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.map, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.libraryDirectory),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LibrariesView(libraries: _librariesFuture),
+            ),
+          ), // navigate to LibrariesView()
+        ),
+        ListTile(
+          leading: const Icon(Icons.computer, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.electronicResources),
+          trailing: Transform.scale(
+            scale: 0.8,
+            child: const Icon(Icons.open_in_new),
+          ),
+          onTap: () => openLink('https://www.uv.mx/dgbuv/#descubridor'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.help, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.faq),
+          trailing: Transform.scale(
+            scale: 0.8,
+            child: const Icon(Icons.open_in_new),
+          ),
+          onTap: () =>
+              openLink('https://www.uv.mx/dgbuv/preguntas-frecuentes/'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.privacy_tip, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.privacyNotice),
+          trailing: Transform.scale(
+            scale: 0.8,
+            child: const Icon(Icons.open_in_new),
+          ),
+          onTap: () => openLink(
+            'https://catbiblio.uv.mx/avisos/aviso-privacidad-integral-sib.pdf',
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DropdownFilters extends StatelessWidget {
+  const DropdownFilters({
+    super.key,
+    required TextEditingController searchFilterController,
+    required List<DropdownMenuEntry<String>> filterEntries,
+    required QueryParams queryParams,
+  }) : _searchFilterController = searchFilterController, _filterEntries = filterEntries, _queryParams = queryParams;
+
+  final TextEditingController _searchFilterController;
+  final List<DropdownMenuEntry<String>> _filterEntries;
+  final QueryParams _queryParams;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      controller: _searchFilterController,
+      label: Text(AppLocalizations.of(context)!.searchBy),
+      leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
+      dropdownMenuEntries: _filterEntries,
+      initialSelection: _queryParams.searchBy,
+      onSelected: (value) => _queryParams.searchBy = value!,
+      width: double.infinity,
+      enableFilter: false,
+      requestFocusOnTap: false,
     );
   }
 }

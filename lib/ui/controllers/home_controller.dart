@@ -77,6 +77,10 @@ abstract class HomeController extends State<HomeView> {
     }
   }
 
+  void clearSearchController() {
+    _searchController.clear();
+  }
+
   Future<List<Aviso>> _getNews() async {
     /// https://www.example.com/avisos.json
     final String response = await rootBundle.loadString('assets/avisos.json');
