@@ -45,7 +45,7 @@ class _HomeViewState extends HomeController {
               const SizedBox(height: 12),
               dropdownLibraries(),
               const SizedBox(height: 12),
-              searchBox(context),
+              textFieldSearchBox(context),
             ],
           ),
         ),
@@ -53,7 +53,7 @@ class _HomeViewState extends HomeController {
     );
   }
 
-  TextField searchBox(BuildContext context) {
+  TextField textFieldSearchBox(BuildContext context) {
     return TextField(
               controller: _searchController,
               onSubmitted: (value) => onSubmitAction(),
