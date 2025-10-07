@@ -58,21 +58,24 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void onSubmitAction() {
-    if (_searchController.text.isNotEmpty) {
-      ControllersData controllersData = ControllersData(
-        filterController: _searchFilterController,
-        libraryController: _libraryController,
-        libraryEntries: _libraryEntries,
-      );
-      _queryParams.startRecord = 1;
-      _queryParams.searchQuery = _searchController.text;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SearchView(controllersData: controllersData, queryParams: _queryParams),
+    if (_searchController.text.isEmpty) return;
+
+    ControllersData controllersData = ControllersData(
+      filterController: _searchFilterController,
+      libraryController: _libraryController,
+      libraryEntries: _libraryEntries,
+    );
+    _queryParams.startRecord = 1;
+    _queryParams.searchQuery = _searchController.text;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchView(
+          controllersData: controllersData,
+          queryParams: _queryParams,
         ),
-      );
-    }
+      ),
+    );
   }
 
   void clearSearchController() {
