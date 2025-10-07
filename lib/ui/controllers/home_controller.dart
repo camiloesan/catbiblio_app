@@ -40,7 +40,7 @@ abstract class HomeController extends State<HomeView> {
     _searchFilterController = TextEditingController();
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
-    if (_libraryEntries.isEmpty) {
+    if (_libraryEntries.length <= 1) {
       _librariesFuture = LibrariesService.getLibraries();
     }
   }
@@ -67,6 +67,11 @@ abstract class HomeController extends State<HomeView> {
     );
     _queryParams.startRecord = 1;
     _queryParams.searchQuery = _searchController.text;
+
+    navigateToSearchView(controllersData);
+  }
+
+  void navigateToSearchView(ControllersData controllersData) {
     Navigator.push(
       context,
       MaterialPageRoute(
