@@ -2,9 +2,9 @@ part of '../views/home_view.dart';
 
 abstract class HomeController extends State<HomeView> {
   late TextEditingController _searchController;
-  late Future<List<Aviso>> futureNews;
   late TextEditingController _searchFilterController;
   late TextEditingController _libraryController;
+  late TextEditingController _itemTypeController;
   late Future<List<Library>> _librariesFuture;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   final QueryParams _queryParams = QueryParams();
@@ -34,12 +34,22 @@ abstract class HomeController extends State<HomeView> {
     ];
   }
 
+  List<DropdownMenuEntry<String>> get _itemTypeEntries {
+    return [
+      DropdownMenuEntry(
+        value: 'all',
+        label: AppLocalizations.of(context)!.allLibraries,
+      ),
+    ];
+  }
+
   @override
   initState() {
     super.initState();
     _searchFilterController = TextEditingController();
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
+    _itemTypeController = TextEditingController();
     if (_libraryEntries.length <= 1) {
       _librariesFuture = LibrariesService.getLibraries();
     }
@@ -50,6 +60,7 @@ abstract class HomeController extends State<HomeView> {
     _searchController.dispose();
     _searchFilterController.dispose();
     _libraryController.dispose();
+    _itemTypeController.dispose();
     super.dispose();
   }
 
@@ -64,6 +75,7 @@ abstract class HomeController extends State<HomeView> {
       filterController: _searchFilterController,
       libraryController: _libraryController,
       libraryEntries: _libraryEntries,
+      itemTypeController: _itemTypeController,
     );
     _queryParams.startRecord = 1;
     _queryParams.searchQuery = _searchController.text;

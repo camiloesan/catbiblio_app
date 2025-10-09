@@ -4,6 +4,7 @@ abstract class SearchController extends State<SearchView> {
   late TextEditingController _libraryController;
   late TextEditingController _filterController;
   late TextEditingController _searchController;
+  late TextEditingController _itemTypeController;
   late ScrollController _scrollController;
   late List<BookPreview> books = [];
   static const int initialUpperLimit = 8;
@@ -42,6 +43,15 @@ abstract class SearchController extends State<SearchView> {
     ];
   }
 
+  List<DropdownMenuEntry<String>> get _itemTypeEntries {
+    return [
+      DropdownMenuEntry(
+        value: 'all',
+        label: AppLocalizations.of(context)!.allLibraries,
+      ),
+    ];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +60,7 @@ abstract class SearchController extends State<SearchView> {
     _searchController = TextEditingController();
     _searchController.text = widget.queryParams.searchQuery;
     _scrollController = ScrollController();
+    _itemTypeController = widget.controllersData.itemTypeController;
     setMiddleSpace = setUpperLimit - 2;
 
     if (widget.queryParams.searchQuery.isEmpty) return;

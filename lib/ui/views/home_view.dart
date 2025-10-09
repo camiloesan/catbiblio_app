@@ -8,7 +8,6 @@ import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:url_launcher/url_launcher.dart';
-import 'package:catbiblio_app/classes/aviso.dart';
 
 part '../controllers/home_controller.dart';
 
@@ -41,6 +40,8 @@ class _HomeViewState extends HomeController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              DropdownItemType(itemTypeController: _itemTypeController, itemTypeEntries: _itemTypeEntries, queryParams: _queryParams),
+              const SizedBox(height: 12),
               DropdownFilters(searchFilterController: _searchFilterController, filterEntries: _filterEntries, queryParams: _queryParams),
               const SizedBox(height: 12),
               dropdownLibraries(),
@@ -222,6 +223,34 @@ class DropdownFilters extends StatelessWidget {
       dropdownMenuEntries: _filterEntries,
       initialSelection: _queryParams.searchBy,
       onSelected: (value) => _queryParams.searchBy = value!,
+      width: double.infinity,
+      enableFilter: false,
+      requestFocusOnTap: false,
+    );
+  }
+}
+
+class DropdownItemType extends StatelessWidget {
+  const DropdownItemType({
+    super.key,
+    required TextEditingController itemTypeController,
+    required List<DropdownMenuEntry<String>> itemTypeEntries,
+    required QueryParams queryParams,
+  }) : _itemTypeController = itemTypeController, _itemTypeEntries = itemTypeEntries, _queryParams = queryParams;
+
+  final TextEditingController _itemTypeController;
+  final List<DropdownMenuEntry<String>> _itemTypeEntries;
+  final QueryParams _queryParams;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      controller: _itemTypeController,
+      label: Text(AppLocalizations.of(context)!.itemType),
+      leadingIcon: const Icon(Icons.book, color: primaryColor),
+      dropdownMenuEntries: _itemTypeEntries,
+      initialSelection: _queryParams.itemType,
+      onSelected: (value) => _queryParams.itemType = value!,
       width: double.infinity,
       enableFilter: false,
       requestFocusOnTap: false,

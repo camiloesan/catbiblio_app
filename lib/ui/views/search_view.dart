@@ -40,6 +40,12 @@ class _SearchViewState extends SearchController {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  DropdownItemType(
+                    itemTypeController: _itemTypeController,
+                    itemTypeEntries: _itemTypeEntries,
+                    queryParams: widget.queryParams,
+                  ),
+                  const SizedBox(height: 12),
                   DropdownFilter(
                     filterController: _filterController,
                     filterEntries: _filterEntries,
@@ -317,6 +323,34 @@ class DropdownFilter extends StatelessWidget {
       enableFilter: false,
       requestFocusOnTap: false,
       width: double.infinity,
+    );
+  }
+}
+
+class DropdownItemType extends StatelessWidget {
+  const DropdownItemType({
+    super.key,
+    required TextEditingController itemTypeController,
+    required List<DropdownMenuEntry<String>> itemTypeEntries,
+    required QueryParams queryParams,
+  }) : _itemTypeController = itemTypeController, _itemTypeEntries = itemTypeEntries, _queryParams = queryParams;
+
+  final TextEditingController _itemTypeController;
+  final List<DropdownMenuEntry<String>> _itemTypeEntries;
+  final QueryParams _queryParams;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      controller: _itemTypeController,
+      label: Text(AppLocalizations.of(context)!.itemType),
+      leadingIcon: const Icon(Icons.book, color: primaryUVColor),
+      dropdownMenuEntries: _itemTypeEntries,
+      initialSelection: _queryParams.itemType,
+      onSelected: (value) => _queryParams.itemType = value!,
+      width: double.infinity,
+      enableFilter: false,
+      requestFocusOnTap: false,
     );
   }
 }
