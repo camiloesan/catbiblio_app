@@ -1,8 +1,11 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   runApp(const MainApp());
 }
 
@@ -33,7 +36,10 @@ class _MainAppState extends State<MainApp> {
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Inter',
-        drawerTheme: DrawerThemeData(backgroundColor: Colors.white, surfaceTintColor: primaryColor),
+        drawerTheme: DrawerThemeData(
+          backgroundColor: Colors.white,
+          surfaceTintColor: primaryColor,
+        ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
           surfaceTintColor: primaryColor,
