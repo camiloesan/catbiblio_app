@@ -2,6 +2,11 @@ import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final String _baseUrl =
+    dotenv.env['KOHA_SVC_URL'] ?? 'https://catbiblio.uv.mx/api/v1';
+final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class BibliosDetailsService {
   static const String marcInJson = 'json';
@@ -11,15 +16,24 @@ class BibliosDetailsService {
   static Dio _createDio({ResponseType responseType = ResponseType.json}) {
     return Dio(
       BaseOptions(
-        baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
+        baseUrl: _baseUrl,
         responseType: responseType, // Changed from plain
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 30),
-        headers: {'x-api-key': '12345'},
+        headers: {'x-api-key': _apiKey},
       ),
     );
   }
 
+  /// Fetches detailed bibliographic information for a given biblionumber
+  /// from a Koha-based service.
+  ///
+  /// Returns a [BibliosDetails] object containing various bibliographic fields.
+  ///
+  /// If the biblionumber is invalid (<= 0), returns an empty [BibliosDetails] object.
+  /// In case of an error during the request or parsing, returns a [BibliosDetails] object with empty fields.
+  ///
+  /// Example: http://{{baseUrl}}/cgi-bin/koha/svc/biblios_details2?biblionumber=123&format=json
   static Future<BibliosDetails> getBibliosDetails(int biblioNumber) async {
     if (biblioNumber <= 0) {
       return BibliosDetails(title: '', author: '');
@@ -114,6 +128,14 @@ class BibliosDetailsService {
     }
   }
 
+  /// Fetches the MARC record in plain text format for a given biblionumber
+  /// from a Koha-based service.
+  ///
+  /// Returns the MARC record as a plain text [String].
+  ///
+  /// If the biblionumber is invalid (<= 0), returns null.
+  ///
+  /// In case of an error during the request, returns null.
   static Future<String?> getBibliosMarcPlainText(int biblioNumber) async {
     if (biblioNumber <= 0) {
       return null;

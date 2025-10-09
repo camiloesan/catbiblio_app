@@ -5,6 +5,10 @@ import 'package:collection/collection.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/search_result.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
+final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 sealed class SruException implements Exception {
   final String message;
@@ -30,11 +34,11 @@ class ApiException extends SruException {
 class SruService {
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
+      baseUrl: _baseUrl,
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/xml', 'x-api-key': '12345'},
+      headers: {'Accept': 'application/xml', 'x-api-key': _apiKey},
     ),
   );
 
@@ -50,7 +54,7 @@ class SruService {
 
   /// Searches for books based on the provided [QueryParams].
   ///
-  /// Returns a [SearchResult] containing a list of [BookPreview] and the total [int] of records found,
+  /// Returns a [SearchResult] containing a List\<[BookPreview]\> and the total [int] of records found,
   /// or throws a [SruException] if the request fails.
   ///
   /// Examples:

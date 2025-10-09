@@ -2,22 +2,33 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final String _baseUrl =
+    dotenv.env['KOHA_SVC_URL'] ?? 'https://catbiblio.uv.mx/api/v1';
+final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class LibrariesService {
   static Dio _createDio() {
     return Dio(
       BaseOptions(
-        baseUrl: 'http://148.226.6.25/cgi-bin/koha/svc',
+        baseUrl: _baseUrl,
         responseType: ResponseType.plain,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 30),
-        headers: {'Accept': 'application/json;encoding=UTF-8'},
+        headers: {
+          'Accept': 'application/json;encoding=UTF-8',
+          'x-api-key': _apiKey,
+        },
       ),
     );
   }
 
   /// Fetches the list of libraries from a Koha-based service
-  /// Example: http://{{baseUrl}}/cgi-bin/koha/svc/libraries
+  ///
+  /// Returns a List\<Library\> containing all available libraries.
+  ///
+  /// Returns an empty list if no libraries are found or in case of an error
   static Future<List<Library>> getLibraries() async {
     final dio = _createDio();
 
