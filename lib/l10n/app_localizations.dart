@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// Availability label in book preview
   ///
   /// In en, this message translates to:
-  /// **'Availability'**
+  /// **'In'**
   String get availability;
 
   /// All libraries entry in library selection dropdown
@@ -553,6 +553,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No MARC data available'**
   String get noMarcDataAvailable;
+
+  /// Libraries label in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Libraries'**
+  String get libraries;
 }
 
 class _AppLocalizationsDelegate

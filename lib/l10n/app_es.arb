@@ -20,7 +20,7 @@
     "issnEntry": "ISSN",
     "byAuthor": "Por",
     "publishingDetails": "Detalles de publicación",
-    "availability": "Disponibilidad",
+    "availability": "En",
     "allLibraries": "Todas",
     "detailsTitle": "Detalles",
     "languageChanged": "Idioma cambiado a Inglés",
@@ -75,5 +75,6 @@
     "close": "Cerrar",
     "marcView": "Vista MARC",
     "errorLoadingMarc": "Error al cargar la vista MARC",
-    "noMarcDataAvailable": "No hay datos MARC disponibles"
+    "noMarcDataAvailable": "No hay datos MARC disponibles",
+    "libraries": "Bibliotecas"
 }

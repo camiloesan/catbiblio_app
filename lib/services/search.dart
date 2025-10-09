@@ -132,6 +132,7 @@ class SruService {
       final author = _extractAuthor(dataFieldHelper);
       final biblioNumber = _extractBiblioNumber(dataFieldHelper);
       final publishingDetails = _extractPublishingDetails(dataFieldHelper);
+      final locatedInLibraries = _952Coincidences(dataFieldHelper);
 
       //if (title.trim().isEmpty) return null;
 
@@ -141,6 +142,7 @@ class SruService {
         coverUrl: '',
         biblioNumber: biblioNumber,
         publishingDetails: publishingDetails,
+        locatedInLibraries: locatedInLibraries,
       );
     } catch (e) {
       debugPrint("Error parsing book record: ${e.toString()}");
@@ -167,6 +169,10 @@ class SruService {
   /// Extracts the bibliographic number from MARC field 999 (local use)
   static String _extractBiblioNumber(_DataFieldHelper helper) {
     return helper.getSubfield(_biblioNumberTag, 'c')?.trim() ?? '';
+  }
+
+  static int _952Coincidences(_DataFieldHelper helper) {
+    return helper._datafieldTagCoincidences('952');
   }
 
   /// Extracts publishing details from MARC field 260
@@ -299,6 +305,7 @@ class SruService {
           coverUrl: '',
           biblioNumber: '',
           publishingDetails: '',
+          locatedInLibraries: 0,
         );
 
         book.author = getSubfield(datafield100, "a") ?? "";
@@ -352,5 +359,27 @@ class _DataFieldHelper {
         .firstWhereOrNull((sf) => sf.getAttribute("code") == subfieldCode)
         ?.innerText
         .trim();
+  }
+
+  int _datafieldTagCoincidences(String tag) {
+    Set libraries = {};
+
+    final datafields952 = record
+        .findElements("datafield", namespace: SruService._marcNamespace)
+        .where((element) => element.getAttribute("tag") == tag);
+
+    for (var df in datafields952) {
+      var libraryName = df
+          .findElements("subfield", namespace: SruService._marcNamespace)
+          .firstWhereOrNull((sf) => sf.getAttribute("code") == 'a')
+          ?.innerText
+          .trim();
+
+      if (libraryName != null && libraryName.isNotEmpty) {
+        libraries.add(libraryName);
+      }
+    }
+
+    return libraries.length;
   }
 }

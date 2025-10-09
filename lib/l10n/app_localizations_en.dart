@@ -69,7 +69,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get publishingDetails => 'Publishing details';
 
   @override
-  String get availability => 'Availability';
+  String get availability => 'In';
 
   @override
   String get allLibraries => 'All';
@@ -236,4 +236,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noMarcDataAvailable => 'No MARC data available';
+
+  @override
+  String get libraries => 'Libraries';
 }

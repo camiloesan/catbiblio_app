@@ -80,7 +80,7 @@
   "@publishingDetails": {
     "description": "Publishing details label in book preview"
   },
-  "availability": "Availability",
+  "availability": "In",
   "@availability": {
     "description": "Availability label in book preview"
   },
@@ -303,5 +303,9 @@
   "noMarcDataAvailable": "No MARC data available",
   "@noMarcDataAvailable": {
     "description": "Message shown when no MARC data is available for a book"
+  },
+  "libraries": "Libraries",
+  "@libraries": {
+    "description": "Libraries label in book preview"
   }
 }

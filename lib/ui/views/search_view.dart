@@ -87,8 +87,7 @@ class _SearchViewState extends SearchController {
           ),
 
           // Book list (only rendered if not page loading)
-          if (!isPageLoading)
-            BookList(books: books),
+          if (!isPageLoading) BookList(books: books),
 
           // Bottom pagination
           if (!isPageLoading)
@@ -169,10 +168,7 @@ class _SearchViewState extends SearchController {
 }
 
 class BookList extends StatelessWidget {
-  const BookList({
-    super.key,
-    required this.books,
-  });
+  const BookList({super.key, required this.books});
 
   final List<BookPreview> books;
 
@@ -189,8 +185,7 @@ class BookList extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        BookView(biblioNumber: book.biblioNumber),
+                    builder: (_) => BookView(biblioNumber: book.biblioNumber),
                   ),
                 );
               },
@@ -203,12 +198,9 @@ class BookList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FutureBuilder<Image?>(
-                      future: ImageService.fetchImageUrl(
-                        book.biblioNumber,
-                      ),
+                      future: ImageService.fetchImageUrl(book.biblioNumber),
                       builder: (context, snapshot) {
-                        if (snapshot.hasError ||
-                            snapshot.data == null) {
+                        if (snapshot.hasError || snapshot.data == null) {
                           return const SizedBox.shrink();
                         } else {
                           return SizedBox(child: snapshot.data!);
@@ -222,22 +214,40 @@ class BookList extends StatelessWidget {
                         children: [
                           Text(
                             book.title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           if (book.author.isNotEmpty)
-                            Text(
-                              '${AppLocalizations.of(context)!.byAuthor}: ${book.author}',
+                            Row(
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context)!.byAuthor}: ',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(book.author),
+                              ],
                             ),
                           if (book.publishingDetails.isNotEmpty)
-                            Text(
-                              '${AppLocalizations.of(context)!.publishingDetails}: ${book.publishingDetails}',
+                            Row(
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context)!.publishingDetails}: ',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(book.publishingDetails),
+                              ],
                             ),
-                          Text(
-                            '${AppLocalizations.of(context)!.availability}: 1 biblioteca',
-                          ),
+                          if (book.locatedInLibraries > 0)
+                            Text(
+                              '${AppLocalizations.of(context)!.availability} ${book.locatedInLibraries} ${book.locatedInLibraries == 1 ? AppLocalizations.of(context)!.library.toLowerCase() : AppLocalizations.of(context)!.libraries.toLowerCase()}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                         ],
                       ),
                     ),
