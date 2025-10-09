@@ -45,7 +45,7 @@ class BibliosDetailsService {
       //debugPrint('Requesting biblio $biblioNumber from ${dio.options.baseUrl}');
 
       final response = await dio.get(
-        '/biblios_details2',
+        '/biblios_details',
         queryParameters: {'biblionumber': biblioNumber, 'format': marcInJson},
       );
 
@@ -146,7 +146,7 @@ class BibliosDetailsService {
     try {
       // Example of how to make the request
       final response = await dio.get(
-        '/biblios_details2',
+        '/biblios_details',
         queryParameters: {'biblionumber': biblioNumber, 'format': plainText},
       );
 
