@@ -2,8 +2,13 @@ import 'package:test/test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/services/biblios_details.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
+  setUpAll(() async {
+    await dotenv.load();
+  });
+
   group('BibliosDetailsService requests', () {
     test(
       'getBibliosDetails returns biblios details for a valid biblionumber',

@@ -3,8 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/region.dart';
 import 'package:catbiblio_app/services/libraries.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
+  setUpAll(() async {
+    await dotenv.load();
+  });
+
   group('LibrariesService requests', () {
     test('getLibraries returns a list of libraries', () async {
       final libraries = await LibrariesService.getLibraries();

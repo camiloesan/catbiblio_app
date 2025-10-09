@@ -5,8 +5,13 @@ import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/search.dart';
 import 'package:catbiblio_app/models/search_result.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
+  setUpAll(() async {
+    await dotenv.load();
+  });
+
   group('SruService requests', () {
     debugPrint('Testing SruService searchBooks method');
     // title search tests
@@ -489,11 +494,7 @@ void main() {
     });
 
     test('test buildQueryParameters completely empty', () {
-      final params = QueryParams(
-        library: '',
-        searchBy: '',
-        searchQuery: '',
-      );
+      final params = QueryParams(library: '', searchBy: '', searchQuery: '');
 
       final expectedParams = {};
 
