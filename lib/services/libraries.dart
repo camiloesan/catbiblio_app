@@ -26,7 +26,7 @@ class LibrariesService {
 
   /// Fetches the list of libraries from a Koha-based service
   ///
-  /// Returns a List\<Library\> containing all available libraries.
+  /// Returns a `List<Library>` containing all available libraries.
   ///
   /// Returns an empty list if no libraries are found or in case of an error
   static Future<List<Library>> getLibraries() async {

@@ -26,7 +26,7 @@ class ItemTypesService {
 
   /// Fetches the list of item types from a Koha-based service
   ///
-  /// Returns a List\<ItemType\> containing all available item types.
+  /// Returns a `List<ItemType>` containing all available item types.
   ///
   /// Returns an empty list if no item types are found or in case of an error
   static Future<List<ItemType>> getItemTypes() async {

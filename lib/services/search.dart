@@ -54,7 +54,7 @@ class SruService {
 
   /// Searches for books based on the provided [QueryParams].
   ///
-  /// Returns a [SearchResult] containing a List\<[BookPreview]\> and the total [int] of records found,
+  /// Returns a [SearchResult] containing a `List<BookPreview>` and the total [int] of records found,
   /// or throws a [SruException] if the request fails.
   ///
   /// Examples:
