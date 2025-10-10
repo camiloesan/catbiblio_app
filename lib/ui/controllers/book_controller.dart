@@ -142,6 +142,15 @@ abstract class BookController extends State<BookView> {
     }
   }
 
+  void navigateToFinderView() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FinderView(),
+      ),
+    );
+  }
+
   _shareViaEmail(BuildContext context, String message) async {
     final Uri emailUri = Uri.parse(
       'mailto:?subject=&body=${Uri.encodeComponent(message)}',

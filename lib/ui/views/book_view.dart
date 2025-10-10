@@ -3,6 +3,7 @@ import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/services/biblios_items.dart';
 import 'package:catbiblio_app/services/images.dart';
+import 'package:catbiblio_app/ui/views/finder_view.dart';
 import 'package:catbiblio_app/ui/views/marc_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
@@ -221,7 +222,7 @@ class _BookViewState extends BookController {
                                               biblioItem.notForLoanStatus ==
                                                   BiblioItem.STATUS_AVAILABLE
                                           ? IconButton(
-                                              onPressed: () {},
+                                              onPressed: () => navigateToFinderView(),
                                               icon: const Icon(Icons.map),
                                             )
                                           : const SizedBox.shrink(),

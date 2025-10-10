@@ -224,7 +224,7 @@ class BookList extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           if (book.author.isNotEmpty)
-                            Row(
+                            Wrap(
                               children: [
                                 Text(
                                   '${AppLocalizations.of(context)!.byAuthor}: ',
@@ -236,7 +236,7 @@ class BookList extends StatelessWidget {
                               ],
                             ),
                           if (book.publishingDetails.isNotEmpty)
-                            Row(
+                            Wrap(
                               children: [
                                 Text(
                                   '${AppLocalizations.of(context)!.publishingDetails}: ',
