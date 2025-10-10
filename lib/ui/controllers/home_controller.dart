@@ -6,7 +6,9 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _libraryController;
   late TextEditingController _itemTypeController;
   late Future<List<Library>> _librariesFuture;
+  late Future<List<ItemType>> _itemTypesFuture;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
+  late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   final QueryParams _queryParams = QueryParams();
 
   List<DropdownMenuEntry<String>> get _filterEntries {
@@ -34,15 +36,6 @@ abstract class HomeController extends State<HomeView> {
     ];
   }
 
-  List<DropdownMenuEntry<String>> get _itemTypeEntries {
-    return [
-      DropdownMenuEntry(
-        value: 'all',
-        label: AppLocalizations.of(context)!.allLibraries,
-      ),
-    ];
-  }
-
   @override
   initState() {
     super.initState();
@@ -52,6 +45,10 @@ abstract class HomeController extends State<HomeView> {
     _itemTypeController = TextEditingController();
     if (_libraryEntries.length <= 1) {
       _librariesFuture = LibrariesService.getLibraries();
+    }
+
+    if (_itemTypeEntries.length <= 1) {
+      _itemTypesFuture = ItemTypesService.getItemTypes();
     }
   }
 

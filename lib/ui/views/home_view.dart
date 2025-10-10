@@ -1,7 +1,9 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
+import 'package:catbiblio_app/models/item_type.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
+import 'package:catbiblio_app/services/item_types.dart';
 import 'package:catbiblio_app/services/libraries.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
@@ -40,9 +42,13 @@ class _HomeViewState extends HomeController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              DropdownItemType(itemTypeController: _itemTypeController, itemTypeEntries: _itemTypeEntries, queryParams: _queryParams),
+              dropdownItemType(),
               const SizedBox(height: 12),
-              DropdownFilters(searchFilterController: _searchFilterController, filterEntries: _filterEntries, queryParams: _queryParams),
+              DropdownFilters(
+                searchFilterController: _searchFilterController,
+                filterEntries: _filterEntries,
+                queryParams: _queryParams,
+              ),
               const SizedBox(height: 12),
               dropdownLibraries(),
               const SizedBox(height: 12),
@@ -56,71 +62,116 @@ class _HomeViewState extends HomeController {
 
   TextField textFieldSearch(BuildContext context) {
     return TextField(
-              controller: _searchController,
-              onSubmitted: (value) => onSubmitAction(),
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: primaryColor),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () => clearSearchController(),
-                ),
-                labelText: AppLocalizations.of(context)!.search,
-                border: OutlineInputBorder(),
-              ),
-            );
+      controller: _searchController,
+      onSubmitted: (value) => onSubmitAction(),
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search, color: primaryColor),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () => clearSearchController(),
+        ),
+        labelText: AppLocalizations.of(context)!.search,
+        border: OutlineInputBorder(),
+      ),
+    );
   }
 
   FutureBuilder<List<Library>> dropdownLibraries() {
     return FutureBuilder(
-              future: _librariesFuture,
-              builder: (context, asyncSnapshot) {
-                if (asyncSnapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return const SizedBox(
-                    height: 56,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (asyncSnapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
-                    ),
-                  );
-                }
-                final libraries = asyncSnapshot.data!;
-                _libraryEntries = libraries.map((library) {
-                  return DropdownMenuEntry(
-                    value: library.libraryId,
-                    label: library.name,
-                  );
-                }).toList();
-                return DropdownMenu(
-                  controller: _libraryController,
-                  label: Text(AppLocalizations.of(context)!.library),
-                  enableSearch: true,
-                  menuHeight: 300,
-                  leadingIcon: const Icon(
-                    Icons.location_city,
-                    color: primaryColor,
-                  ),
-                  initialSelection: _queryParams.library,
-                  dropdownMenuEntries: [
-                    DropdownMenuEntry(
-                      value: 'all',
-                      label: AppLocalizations.of(context)!.allLibraries,
-                    ),
-                    ..._libraryEntries,
-                  ],
-                  onSelected: (value) {
-                    setState(() {
-                      _queryParams.library = value!;
-                    });
-                  },
-                  width: double.infinity,
-                );
-              },
-            );
+      future: _librariesFuture,
+      builder: (context, asyncSnapshot) {
+        if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(
+            height: 56,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (asyncSnapshot.hasError) {
+          return Center(
+            child: Text(
+              '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
+            ),
+          );
+        }
+        final libraries = asyncSnapshot.data!;
+        _libraryEntries = libraries.map((library) {
+          return DropdownMenuEntry(
+            value: library.libraryId,
+            label: library.name,
+          );
+        }).toList();
+        return DropdownMenu(
+          controller: _libraryController,
+          label: Text(AppLocalizations.of(context)!.library),
+          enableSearch: true,
+          menuHeight: 300,
+          leadingIcon: const Icon(Icons.location_city, color: primaryColor),
+          initialSelection: _queryParams.library,
+          dropdownMenuEntries: [
+            DropdownMenuEntry(
+              value: 'all',
+              label: AppLocalizations.of(context)!.allLibraries,
+            ),
+            ..._libraryEntries,
+          ],
+          onSelected: (value) {
+            setState(() {
+              _queryParams.library = value!;
+            });
+          },
+          width: double.infinity,
+        );
+      },
+    );
+  }
+
+  FutureBuilder<List<ItemType>> dropdownItemType() {
+    return FutureBuilder(
+      future: _itemTypesFuture,
+      builder: (context, asyncSnapshot) {
+        if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(
+            height: 56,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (asyncSnapshot.hasError) {
+          return Center(
+            child: Text(
+              '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
+            ),
+          );
+        }
+        final libraries = asyncSnapshot.data!;
+        _itemTypeEntries = libraries.map((itemType) {
+          return DropdownMenuEntry(
+            value: itemType.itemTypeId,
+            label: itemType.description,
+          );
+        }).toList();
+        return DropdownMenu(
+          controller: _itemTypeController,
+          label: Text(AppLocalizations.of(context)!.itemType),
+          enableSearch: true,
+          menuHeight: 300,
+          leadingIcon: const Icon(Icons.category, color: primaryColor),
+          initialSelection: _queryParams.itemType,
+          dropdownMenuEntries: [
+            DropdownMenuEntry(
+              value: 'all',
+              label: AppLocalizations.of(context)!.allLibraries,
+            ),
+            ..._itemTypeEntries,
+          ],
+          onSelected: (value) {
+            setState(() {
+              _queryParams.itemType = value!;
+            });
+          },
+          width: double.infinity,
+        );
+      },
+    );
   }
 
   NavigationDrawer navigationDrawer(BuildContext context) {
@@ -208,7 +259,9 @@ class DropdownFilters extends StatelessWidget {
     required TextEditingController searchFilterController,
     required List<DropdownMenuEntry<String>> filterEntries,
     required QueryParams queryParams,
-  }) : _searchFilterController = searchFilterController, _filterEntries = filterEntries, _queryParams = queryParams;
+  }) : _searchFilterController = searchFilterController,
+       _filterEntries = filterEntries,
+       _queryParams = queryParams;
 
   final TextEditingController _searchFilterController;
   final List<DropdownMenuEntry<String>> _filterEntries;
@@ -230,30 +283,3 @@ class DropdownFilters extends StatelessWidget {
   }
 }
 
-class DropdownItemType extends StatelessWidget {
-  const DropdownItemType({
-    super.key,
-    required TextEditingController itemTypeController,
-    required List<DropdownMenuEntry<String>> itemTypeEntries,
-    required QueryParams queryParams,
-  }) : _itemTypeController = itemTypeController, _itemTypeEntries = itemTypeEntries, _queryParams = queryParams;
-
-  final TextEditingController _itemTypeController;
-  final List<DropdownMenuEntry<String>> _itemTypeEntries;
-  final QueryParams _queryParams;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownMenu(
-      controller: _itemTypeController,
-      label: Text(AppLocalizations.of(context)!.itemType),
-      leadingIcon: const Icon(Icons.book, color: primaryColor),
-      dropdownMenuEntries: _itemTypeEntries,
-      initialSelection: _queryParams.itemType,
-      onSelected: (value) => _queryParams.itemType = value!,
-      width: double.infinity,
-      enableFilter: false,
-      requestFocusOnTap: false,
-    );
-  }
-}
