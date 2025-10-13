@@ -2,9 +2,13 @@ import 'package:test/test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/services/biblios_items.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   group('BibliosItemsService requests', () {
+    setUpAll(() async {
+      await dotenv.load();
+    });
     test('getBiblioItems returns a list of biblio items', () async {
       const testBiblionumber = 383385;
       final items = await BibliosItemsService.getBiblioItems(testBiblionumber);

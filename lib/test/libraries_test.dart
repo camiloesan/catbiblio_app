@@ -23,6 +23,7 @@ void main() {
       );
 
       expect(libraries, isA<List<Library>>());
+      expect(libraries, isNotEmpty);
     });
     test('getLibraries are ordered by library_id', () async {
       final libraries = await LibrariesService.getLibraries();
