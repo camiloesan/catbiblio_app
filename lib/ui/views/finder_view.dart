@@ -27,136 +27,147 @@ class _FinderViewState extends FinderController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.finderTitle)),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 0.0,
-          left: 16.0,
-          right: 16.0,
-          bottom: 16.0,
-        ),
-        child: Column(
-          spacing: 4.0,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                color: primaryUVColor,
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FutureBuilder<Image?>(
-                      future: ImageService.fetchImageUrl(widget.biblioNumber),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError || snapshot.data == null) {
-                          return const SizedBox.shrink();
-                        } else {
-                          return Row(
-                            children: [
-                              SizedBox(width: 120, child: snapshot.data!),
-                              const SizedBox(width: 16.0),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        '${widget.title}\n\n${AppLocalizations.of(context)!.classification}:\n${widget.classification}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 0.0,
+            left: 16.0,
+            right: 16.0,
+            bottom: 16.0,
+          ),
+          child: Column(
+            spacing: 4.0,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                  color: primaryUVColor,
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FutureBuilder<Image?>(
+                        future: ImageService.fetchImageUrl(widget.biblioNumber),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError || snapshot.data == null) {
+                            return const SizedBox.shrink();
+                          } else {
+                            return Row(
+                              children: [
+                                SizedBox(width: 120, child: snapshot.data!),
+                                const SizedBox(width: 16.0),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          '${widget.title}\n\n${AppLocalizations.of(context)!.classification}:\n${widget.classification}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const Divider(),
+              Text(
+                AppLocalizations.of(context)!.location,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4.0),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Nivel',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '1',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const VerticalDivider(),
+
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Sala',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '2',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const VerticalDivider(),
+
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Colección',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            widget.collection,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-
-            const Divider(),
-            Text(
-              AppLocalizations.of(context)!.location,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 4.0),
-            IntrinsicHeight(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Nivel',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '1',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const VerticalDivider(),
-              
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Sala',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '2',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const VerticalDivider(),
-              
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Colección',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          widget.collection,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              InteractiveViewer(
+                panEnabled: true,
+                minScale: 0.5,
+                maxScale: 4,
+                child: Image.asset('assets/images/croquis1.png'),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
