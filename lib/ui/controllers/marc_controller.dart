@@ -2,7 +2,7 @@ part of '../views/marc_view.dart';
 
 abstract class MarcController extends State<MarcView> {
   String? marcData;
-  bool isLoading = false;
+  bool isLoading = true;
   bool isError = false;
 
   @override
@@ -14,7 +14,9 @@ abstract class MarcController extends State<MarcView> {
   Future<void> loadMarcData() async {
     final biblioNumber = int.parse(widget.biblioNumber);
     try {
-      marcData = await BibliosDetailsService.getBibliosMarcPlainText(biblioNumber);
+      marcData = await BibliosDetailsService.getBibliosMarcPlainText(
+        biblioNumber,
+      );
     } catch (e) {
       debugPrint('Error loading MARC data: $e');
       isError = true;
