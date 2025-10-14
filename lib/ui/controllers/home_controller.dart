@@ -49,6 +49,7 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchData() async {
     try {
       final libraries = await LibrariesService.getLibraries();
+      _librariesFuture = Future.value(libraries);
       final itemTypes = await ItemTypesService.getItemTypes();
 
       if (!mounted) return;
