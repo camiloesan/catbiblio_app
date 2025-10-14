@@ -43,15 +43,6 @@ abstract class SearchController extends State<SearchView> {
     ];
   }
 
-  List<DropdownMenuEntry<String>> get _itemTypeEntries {
-    return [
-      DropdownMenuEntry(
-        value: 'all',
-        label: AppLocalizations.of(context)!.allLibraries,
-      ),
-    ];
-  }
-
   @override
   void initState() {
     super.initState();

@@ -42,7 +42,7 @@ class _SearchViewState extends SearchController {
                 children: [
                   DropdownItemType(
                     itemTypeController: _itemTypeController,
-                    itemTypeEntries: _itemTypeEntries,
+                    itemTypeEntries: widget.controllersData.itemTypeEntries,
                     queryParams: widget.queryParams,
                   ),
                   const SizedBox(height: 12),
@@ -344,13 +344,13 @@ class DropdownItemType extends StatelessWidget {
     return DropdownMenu(
       controller: _itemTypeController,
       label: Text(AppLocalizations.of(context)!.itemType),
+      enableSearch: true,
+      menuHeight: 300,
       leadingIcon: const Icon(Icons.book, color: primaryUVColor),
       dropdownMenuEntries: _itemTypeEntries,
       initialSelection: _queryParams.itemType,
       onSelected: (value) => _queryParams.itemType = value!,
       width: double.infinity,
-      enableFilter: false,
-      requestFocusOnTap: false,
     );
   }
 }
