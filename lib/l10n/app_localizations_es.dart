@@ -243,4 +243,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noLibrariesFound => 'No se encontraron bibliotecas';
+
+  @override
+  String get finderTitle => 'Localizador';
+
+  @override
+  String get location => 'Ubicación';
 }

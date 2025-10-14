@@ -311,5 +311,13 @@
   "noLibrariesFound": "No libraries found",
   "@noLibrariesFound": {
     "description": "Message shown when no libraries are found for the directory"
+  },
+  "finderTitle": "Finder",
+  "@finderTitle": {
+    "description": "Title for the finder view"
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Label for the location section in the finder view"
   }
 }

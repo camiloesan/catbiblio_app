@@ -242,4 +242,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noLibrariesFound => 'No libraries found';
+
+  @override
+  String get finderTitle => 'Finder';
+
+  @override
+  String get location => 'Location';
 }

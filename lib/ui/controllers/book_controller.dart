@@ -142,11 +142,11 @@ abstract class BookController extends State<BookView> {
     }
   }
 
-  void navigateToFinderView() {
+  void navigateToFinderView(String callNumber, String collection) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const FinderView(),
+        builder: (context) => FinderView(biblioNumber: widget.biblioNumber, title: bibliosDetails.title, classification: callNumber, collection: collection),
       ),
     );
   }

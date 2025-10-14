@@ -565,6 +565,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No libraries found'**
   String get noLibrariesFound;
+
+  /// Title for the finder view
+  ///
+  /// In en, this message translates to:
+  /// **'Finder'**
+  String get finderTitle;
+
+  /// Label for the location section in the finder view
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
 }
 
 class _AppLocalizationsDelegate
