@@ -96,7 +96,7 @@ class _SearchViewState extends SearchController {
           if (!isPageLoading) BookList(books: books),
 
           // Bottom pagination
-          if (!isPageLoading)
+          if (!isPageLoading && books.length > 5)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 16),
