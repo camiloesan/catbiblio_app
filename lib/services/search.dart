@@ -202,6 +202,7 @@ class SruService {
             'isbn': params.searchBy == 'isbn' ? params.searchQuery : null,
             'issn': params.searchBy == 'issn' ? params.searchQuery : null,
             'branch': params.library != 'all' ? params.library : null,
+            'itemType': params.itemType != 'all' ? params.itemType : null,
             'startRecord': params.startRecord > 1 ? params.startRecord : null,
           }..removeWhere(
             (key, value) =>
