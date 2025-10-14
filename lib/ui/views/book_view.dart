@@ -220,7 +220,7 @@ class _BookViewState extends BookController {
                                       ),
                                       biblioItem.holdingLibraryId == 'USBI-X' &&
                                               biblioItem.notForLoanStatus ==
-                                                  BiblioItem.STATUS_AVAILABLE
+                                                  BiblioItem.statusAvailable
                                           ? IconButton(
                                               onPressed: () => navigateToFinderView(),
                                               icon: const Icon(Icons.map),
@@ -230,18 +230,18 @@ class _BookViewState extends BookController {
                                   ),
                                   leading: Icon(
                                     biblioItem.overAllStatus ==
-                                            BiblioItem.STATUS_BORROWED
+                                            BiblioItem.statusBorrowed
                                         ? Icons.remove_circle
                                         : biblioItem.overAllStatus ==
-                                              BiblioItem.STATUS_NOT_FOR_LOAN
+                                              BiblioItem.statusNotForLoan
                                         ? Icons.remove_circle
                                         : Icons.check_circle,
                                     color:
                                         biblioItem.overAllStatus ==
-                                            BiblioItem.STATUS_BORROWED
+                                            BiblioItem.statusBorrowed
                                         ? Colors.orange
                                         : biblioItem.overAllStatus ==
-                                              BiblioItem.STATUS_NOT_FOR_LOAN
+                                              BiblioItem.statusNotForLoan
                                         ? Colors.red
                                         : Colors.green,
                                   ),

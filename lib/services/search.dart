@@ -136,7 +136,7 @@ class SruService {
       final author = _extractAuthor(dataFieldHelper);
       final biblioNumber = _extractBiblioNumber(dataFieldHelper);
       final publishingDetails = _extractPublishingDetails(dataFieldHelper);
-      final locatedInLibraries = _952Coincidences(dataFieldHelper);
+      final locatedInLibraries = _countCoincidences(dataFieldHelper);
 
       //if (title.trim().isEmpty) return null;
 
@@ -175,7 +175,7 @@ class SruService {
     return helper.getSubfield(_biblioNumberTag, 'c')?.trim() ?? '';
   }
 
-  static int _952Coincidences(_DataFieldHelper helper) {
+  static int _countCoincidences(_DataFieldHelper helper) {
     return helper._datafieldTagCoincidences('952');
   }
 

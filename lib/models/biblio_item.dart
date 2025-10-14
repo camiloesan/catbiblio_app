@@ -1,9 +1,9 @@
 //import 'package:catbiblio_app/models/item_location.dart';
 
 class BiblioItem {
-  static const int STATUS_AVAILABLE = 0;
-  static const int STATUS_BORROWED = 1;
-  static const int STATUS_NOT_FOR_LOAN = 2;
+  static const int statusAvailable = 0;
+  static const int statusBorrowed = 1;
+  static const int statusNotForLoan = 2;
 
   String itemTypeId;
   String itemType;
@@ -38,9 +38,9 @@ class BiblioItem {
     this.checkedOutDate,
     this.borrowedStatus = false,
     //ItemLocation? location,
-  }) : overAllStatus = notForLoanStatus != STATUS_AVAILABLE
-           ? STATUS_NOT_FOR_LOAN
-           : (checkedOutDate != null ? STATUS_BORROWED : STATUS_AVAILABLE);
+  }) : overAllStatus = notForLoanStatus != statusAvailable
+           ? statusNotForLoan
+           : (checkedOutDate != null ? statusBorrowed : statusAvailable);
   /*: location =
            location ??
            ItemLocation(floor: '', room: '', shelf: '', shelfSide: '');*/
