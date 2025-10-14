@@ -43,12 +43,34 @@ abstract class HomeController extends State<HomeView> {
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
     _itemTypeController = TextEditingController();
-    if (_libraryEntries.length <= 1) {
-      _librariesFuture = LibrariesService.getLibraries();
-    }
 
-    if (_itemTypeEntries.length <= 1) {
-      _itemTypesFuture = ItemTypesService.getItemTypes();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final libraries = await LibrariesService.getLibraries();
+      final itemTypes = await ItemTypesService.getItemTypes();
+
+      if (!mounted) return;
+
+      setState(() {
+        _libraryEntries = libraries.map((library) {
+          return DropdownMenuEntry(
+            value: library.libraryId,
+            label: library.name,
+          );
+        }).toList();
+
+        _itemTypeEntries = itemTypes.map((itemType) {
+          return DropdownMenuEntry(
+            value: itemType.itemTypeId,
+            label: itemType.description,
+          );
+        }).toList();
+      });
+    } catch (e) {
+      debugPrint('Error fetching data: $e');
     }
   }
 

@@ -42,7 +42,7 @@ class _HomeViewState extends HomeController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              dropdownItemType(),
+              dropdownItemTypes(context),
               const SizedBox(height: 12),
               DropdownFilters(
                 searchFilterController: _searchFilterController,
@@ -50,13 +50,61 @@ class _HomeViewState extends HomeController {
                 queryParams: _queryParams,
               ),
               const SizedBox(height: 12),
-              dropdownLibraries(),
+              dropdownLibraries(context),
               const SizedBox(height: 12),
               textFieldSearch(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  DropdownMenu<String> dropdownItemTypes(BuildContext context) {
+    return DropdownMenu(
+              controller: _itemTypeController,
+              label: Text(AppLocalizations.of(context)!.itemType),
+              enableSearch: true,
+              menuHeight: 300,
+              leadingIcon: const Icon(Icons.category, color: primaryColor),
+              initialSelection: _queryParams.itemType,
+              dropdownMenuEntries: [
+                DropdownMenuEntry(
+                  value: 'all',
+                  label: AppLocalizations.of(context)!.allLibraries,
+                ),
+                ..._itemTypeEntries,
+              ],
+              onSelected: (value) {
+                setState(() {
+                  _queryParams.itemType = value!;
+                });
+              },
+              width: double.infinity,
+            );
+  }
+
+  DropdownMenu<String> dropdownLibraries(BuildContext context) {
+    return DropdownMenu(
+      controller: _libraryController,
+      label: Text(AppLocalizations.of(context)!.library),
+      enableSearch: true,
+      menuHeight: 300,
+      leadingIcon: const Icon(Icons.location_city, color: primaryColor),
+      initialSelection: _queryParams.library,
+      dropdownMenuEntries: [
+        DropdownMenuEntry(
+          value: 'all',
+          label: AppLocalizations.of(context)!.allLibraries,
+        ),
+        ..._libraryEntries,
+      ],
+      onSelected: (value) {
+        setState(() {
+          _queryParams.library = value!;
+        });
+      },
+      width: double.infinity,
     );
   }
 
@@ -73,104 +121,6 @@ class _HomeViewState extends HomeController {
         labelText: AppLocalizations.of(context)!.search,
         border: OutlineInputBorder(),
       ),
-    );
-  }
-
-  FutureBuilder<List<Library>> dropdownLibraries() {
-    return FutureBuilder(
-      future: _librariesFuture,
-      builder: (context, asyncSnapshot) {
-        if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            height: 56,
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
-        if (asyncSnapshot.hasError) {
-          return Center(
-            child: Text(
-              '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
-            ),
-          );
-        }
-        final libraries = asyncSnapshot.data!;
-        _libraryEntries = libraries.map((library) {
-          return DropdownMenuEntry(
-            value: library.libraryId,
-            label: library.name,
-          );
-        }).toList();
-        return DropdownMenu(
-          controller: _libraryController,
-          label: Text(AppLocalizations.of(context)!.library),
-          enableSearch: true,
-          menuHeight: 300,
-          leadingIcon: const Icon(Icons.location_city, color: primaryColor),
-          initialSelection: _queryParams.library,
-          dropdownMenuEntries: [
-            DropdownMenuEntry(
-              value: 'all',
-              label: AppLocalizations.of(context)!.allLibraries,
-            ),
-            ..._libraryEntries,
-          ],
-          onSelected: (value) {
-            setState(() {
-              _queryParams.library = value!;
-            });
-          },
-          width: double.infinity,
-        );
-      },
-    );
-  }
-
-  FutureBuilder<List<ItemType>> dropdownItemType() {
-    return FutureBuilder(
-      future: _itemTypesFuture,
-      builder: (context, asyncSnapshot) {
-        if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            height: 56,
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
-        if (asyncSnapshot.hasError) {
-          return Center(
-            child: Text(
-              '${AppLocalizations.of(context)!.errorLoadingLibraries}: ${asyncSnapshot.error}',
-            ),
-          );
-        }
-        final libraries = asyncSnapshot.data!;
-        _itemTypeEntries = libraries.map((itemType) {
-          return DropdownMenuEntry(
-            value: itemType.itemTypeId,
-            label: itemType.description,
-          );
-        }).toList();
-        return DropdownMenu(
-          controller: _itemTypeController,
-          label: Text(AppLocalizations.of(context)!.itemType),
-          enableSearch: true,
-          menuHeight: 300,
-          leadingIcon: const Icon(Icons.category, color: primaryColor),
-          initialSelection: _queryParams.itemType,
-          dropdownMenuEntries: [
-            DropdownMenuEntry(
-              value: 'all',
-              label: AppLocalizations.of(context)!.allLibraries,
-            ),
-            ..._itemTypeEntries,
-          ],
-          onSelected: (value) {
-            setState(() {
-              _queryParams.itemType = value!;
-            });
-          },
-          width: double.infinity,
-        );
-      },
     );
   }
 
@@ -282,4 +232,3 @@ class DropdownFilters extends StatelessWidget {
     );
   }
 }
-
