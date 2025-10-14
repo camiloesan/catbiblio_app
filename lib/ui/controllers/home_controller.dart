@@ -6,7 +6,6 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _libraryController;
   late TextEditingController _itemTypeController;
   late Future<List<Library>> _librariesFuture;
-  late Future<List<ItemType>> _itemTypesFuture;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   final QueryParams _queryParams = QueryParams();

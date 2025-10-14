@@ -1,6 +1,5 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
-import 'package:catbiblio_app/models/item_type.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/item_types.dart';
