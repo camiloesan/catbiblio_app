@@ -35,7 +35,9 @@ class _LibrariesViewState extends LibrariesController {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No libraries found.'));
+                  return Center(
+                    child: Text(AppLocalizations.of(context)!.noLibrariesFound),
+                  );
                 } else {
                   final libraries = snapshot.data!;
                   return ListView.builder(

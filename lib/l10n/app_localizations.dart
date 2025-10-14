@@ -559,6 +559,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Libraries'**
   String get libraries;
+
+  /// Message shown when no libraries are found for the directory
+  ///
+  /// In en, this message translates to:
+  /// **'No libraries found'**
+  String get noLibrariesFound;
 }
 
 class _AppLocalizationsDelegate

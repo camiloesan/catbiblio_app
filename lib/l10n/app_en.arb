@@ -307,5 +307,9 @@
   "libraries": "Libraries",
   "@libraries": {
     "description": "Libraries label in book preview"
+  },
+  "noLibrariesFound": "No libraries found",
+  "@noLibrariesFound": {
+    "description": "Message shown when no libraries are found for the directory"
   }
 }

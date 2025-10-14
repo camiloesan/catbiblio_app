@@ -240,4 +240,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get libraries => 'Bibliotecas';
+
+  @override
+  String get noLibrariesFound => 'No se encontraron bibliotecas';
 }

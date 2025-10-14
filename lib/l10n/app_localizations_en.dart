@@ -239,4 +239,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get libraries => 'Libraries';
+
+  @override
+  String get noLibrariesFound => 'No libraries found';
 }

@@ -76,5 +76,6 @@
     "marcView": "Vista MARC",
     "errorLoadingMarc": "Error al cargar la vista MARC",
     "noMarcDataAvailable": "No hay datos MARC disponibles",
-    "libraries": "Bibliotecas"
+    "libraries": "Bibliotecas",
+    "noLibrariesFound": "No se encontraron bibliotecas"
 }
