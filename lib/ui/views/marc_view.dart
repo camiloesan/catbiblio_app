@@ -30,12 +30,13 @@ class _MarcViewState extends MarcController {
           : SingleChildScrollView(
               padding: const EdgeInsets.all(9.0),
               child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: primaryColor, width: 3.0),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Padding(
+                alignment: Alignment.center,
+                child: Container(
                   padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: primaryColor, width: 3.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   child: Text(
                     marcData ??
                         AppLocalizations.of(context)!.noMarcDataAvailable,
