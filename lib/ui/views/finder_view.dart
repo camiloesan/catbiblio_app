@@ -160,6 +160,7 @@ class _FinderViewState extends FinderController {
                   ],
                 ),
               ),
+              const SizedBox(height: 4.0),
               InteractiveViewer(
                 panEnabled: true,
                 minScale: 0.5,
