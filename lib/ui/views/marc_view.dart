@@ -27,21 +27,19 @@ class _MarcViewState extends MarcController {
           ? const Center(child: CircularProgressIndicator())
           : isError
           ? Center(child: Text(AppLocalizations.of(context)!.errorLoadingMarc))
-          : Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(9.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: primaryColor, width: 3.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      marcData ??
-                          AppLocalizations.of(context)!.noMarcDataAvailable,
-                      style: const TextStyle(fontFamily: 'monospace'),
-                    ),
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(9.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: primaryColor, width: 3.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    marcData ??
+                        AppLocalizations.of(context)!.noMarcDataAvailable,
+                    style: const TextStyle(fontFamily: 'monospace'),
                   ),
                 ),
               ),
