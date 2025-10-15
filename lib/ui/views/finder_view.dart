@@ -10,12 +10,14 @@ class FinderView extends StatefulWidget {
   final String title;
   final String classification;
   final String collection;
+  final String collectionCode;
   const FinderView({
     super.key,
     required this.biblioNumber,
     required this.title,
     required this.classification,
     required this.collection,
+    required this.collectionCode,
   });
 
   @override

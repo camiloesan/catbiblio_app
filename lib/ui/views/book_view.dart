@@ -222,7 +222,7 @@ class _BookViewState extends BookController {
                                               biblioItem.notForLoanStatus ==
                                                   BiblioItem.statusAvailable
                                           ? IconButton(
-                                              onPressed: () => navigateToFinderView(biblioItem.callNumber, biblioItem.collection),
+                                              onPressed: () => navigateToFinderView(biblioItem.callNumber, biblioItem.collection, biblioItem.collectionCode),
                                               icon: const Icon(Icons.map),
                                             )
                                           : const SizedBox.shrink(),
