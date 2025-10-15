@@ -9,6 +9,7 @@ class BiblioItem {
   String itemType;
   String holdingLibraryId;
   String holdingLibrary;
+  String homeLibraryId;
   String collectionCode;
   String collection;
   String callNumber;
@@ -29,6 +30,7 @@ class BiblioItem {
     required this.itemType,
     required this.holdingLibraryId,
     required this.holdingLibrary,
+    required this.homeLibraryId,
     required this.collectionCode,
     required this.collection,
     required this.callNumber,
@@ -53,6 +55,7 @@ class BiblioItem {
       itemType: json['item_type'],
       holdingLibraryId: json['holding_library_id'],
       holdingLibrary: json['holding_library'],
+      homeLibraryId: json['home_library_id'],
       collectionCode: json['collection_code'],
       collection: json['collection'],
       callNumber: json['callnumber'],

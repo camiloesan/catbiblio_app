@@ -319,5 +319,9 @@
   "location": "Location",
   "@location": {
     "description": "Label for the location section in the finder view"
+  },
+  "allItemTypes": "All",
+  "@allItemTypes": {
+    "description": "All item types entry in item type selection dropdown"
   }
 }

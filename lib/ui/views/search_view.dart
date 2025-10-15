@@ -347,7 +347,10 @@ class DropdownItemType extends StatelessWidget {
       enableSearch: true,
       menuHeight: 300,
       leadingIcon: const Icon(Icons.category, color: primaryUVColor),
-      dropdownMenuEntries: _itemTypeEntries,
+      dropdownMenuEntries: [
+        DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allItemTypes),
+        ..._itemTypeEntries
+        ],
       initialSelection: _queryParams.itemType,
       onSelected: (value) => _queryParams.itemType = value!,
       width: double.infinity,

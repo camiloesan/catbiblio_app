@@ -79,5 +79,6 @@
     "libraries": "Bibliotecas",
     "noLibrariesFound": "No se encontraron bibliotecas",
     "finderTitle": "Localizador",
-    "location": "Ubicación"
+    "location": "Ubicación",
+    "allItemTypes": "Todos"
 }

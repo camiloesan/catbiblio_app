@@ -577,6 +577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location'**
   String get location;
+
+  /// All item types entry in item type selection dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allItemTypes;
 }
 
 class _AppLocalizationsDelegate

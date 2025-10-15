@@ -218,7 +218,7 @@ class _BookViewState extends BookController {
                                           '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
                                         ),
                                       ),
-                                      biblioItem.holdingLibraryId == 'USBI-X' &&
+                                      biblioItem.holdingLibraryId == 'USBI-X' && biblioItem.homeLibraryId == biblioItem.holdingLibraryId &&
                                               biblioItem.notForLoanStatus ==
                                                   BiblioItem.statusAvailable
                                           ? IconButton(
@@ -231,10 +231,10 @@ class _BookViewState extends BookController {
                                   leading: Icon(
                                     biblioItem.overAllStatus ==
                                             BiblioItem.statusBorrowed
-                                        ? Icons.remove_circle
+                                        ? Icons.watch_later
                                         : biblioItem.overAllStatus ==
                                               BiblioItem.statusNotForLoan
-                                        ? Icons.remove_circle
+                                        ? Icons.lock
                                         : Icons.check_circle,
                                     color:
                                         biblioItem.overAllStatus ==
