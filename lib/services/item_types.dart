@@ -4,8 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
 import 'package:catbiblio_app/models/item_type.dart';
 
-final String _baseUrl =
-    dotenv.env['KOHA_SVC_URL'] ?? 'https://catbiblio.uv.mx/api/v1';
+final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
 final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class ItemTypesService {

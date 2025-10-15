@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final String _baseUrl =
-    dotenv.env['KOHA_SVC_URL'] ?? 'https://catbiblio.uv.mx/api/v1';
+final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
 final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class BibliosDetailsService {
@@ -49,13 +48,6 @@ class BibliosDetailsService {
         queryParameters: {'biblionumber': biblioNumber, 'format': marcInJson},
       );
 
-      //debugPrint('Request url: ${response.realUri}');
-      //debugPrint('Response status: ${response.statusCode}');
-      //debugPrint('Response headers: ${response.headers}');
-      //debugPrint('Response data type: ${response.data.runtimeType}');
-      //debugPrint('Response data: ${response.data}');
-
-      //final Map<String, dynamic> bibliosJson = json.decode(response.data);
       final Map<String, dynamic> bibliosJson = response.data is String
           ? json.decode(response.data)
           : response.data;
@@ -149,12 +141,6 @@ class BibliosDetailsService {
         '/biblios_details',
         queryParameters: {'biblionumber': biblioNumber, 'format': plainText},
       );
-
-      debugPrint('Request url: ${response.realUri}');
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response headers: ${response.headers}');
-      debugPrint('Response data type: ${response.data.runtimeType}');
-      debugPrint('Response data: ${response.data}');
 
       // Return the plain text MARC record
       return response.data as String;
