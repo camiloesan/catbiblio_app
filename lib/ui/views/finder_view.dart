@@ -1,5 +1,7 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
+import 'package:catbiblio_app/models/book_location.dart';
 import 'package:catbiblio_app/services/images.dart';
+import 'package:catbiblio_app/services/locations.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 
@@ -103,7 +105,7 @@ class _FinderViewState extends FinderController {
                             ),
                           ),
                           Text(
-                            '1',
+                            bookLocation.level,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
@@ -126,7 +128,7 @@ class _FinderViewState extends FinderController {
                             ),
                           ),
                           Text(
-                            '2',
+                            bookLocation.room,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
