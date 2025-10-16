@@ -80,5 +80,7 @@
     "noLibrariesFound": "No se encontraron bibliotecas",
     "finderTitle": "Localizador",
     "location": "Ubicación",
-    "allItemTypes": "Todos"
+    "allItemTypes": "Todos",
+    "room": "Sala",
+    "level": "Nivel"
 }

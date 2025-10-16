@@ -252,4 +252,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get allItemTypes => 'Todos';
+
+  @override
+  String get room => 'Sala';
+
+  @override
+  String get level => 'Nivel';
 }

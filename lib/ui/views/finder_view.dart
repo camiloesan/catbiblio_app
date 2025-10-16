@@ -98,7 +98,7 @@ class _FinderViewState extends FinderController {
                       child: Column(
                         children: [
                           Text(
-                            'Nivel',
+                            AppLocalizations.of(context)!.level,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ class _FinderViewState extends FinderController {
                       child: Column(
                         children: [
                           Text(
-                            'Sala',
+                            AppLocalizations.of(context)!.room,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class _FinderViewState extends FinderController {
                       child: Column(
                         children: [
                           Text(
-                            'Colección',
+                            AppLocalizations.of(context)!.collection,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

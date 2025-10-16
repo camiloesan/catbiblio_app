@@ -323,5 +323,13 @@
   "allItemTypes": "All",
   "@allItemTypes": {
     "description": "All item types entry in item type selection dropdown"
+  },
+  "room": "Room",
+  "@room": {
+    "description": "Label for the room in book preview"
+  },
+  "level": "Level",
+  "@level": {
+    "description": "Label for the level in book preview"
   }
 }

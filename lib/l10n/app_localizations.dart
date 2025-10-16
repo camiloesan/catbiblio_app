@@ -583,6 +583,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get allItemTypes;
+
+  /// Label for the room in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Room'**
+  String get room;
+
+  /// Label for the level in book preview
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get level;
 }
 
 class _AppLocalizationsDelegate
