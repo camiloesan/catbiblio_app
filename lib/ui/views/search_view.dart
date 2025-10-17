@@ -38,26 +38,39 @@ class _SearchViewState extends SearchController {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  DropdownItemType(
-                    itemTypeController: _itemTypeController,
-                    itemTypeEntries: widget.controllersData.itemTypeEntries,
-                    queryParams: widget.queryParams,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width < 600
+                          ? MediaQuery.of(context).size.width
+                          : (MediaQuery.of(context).size.width / 3) * 2,
+                    ),
+                    child: Column(
+                      children: [
+                        DropdownItemType(
+                          itemTypeController: _itemTypeController,
+                          itemTypeEntries:
+                              widget.controllersData.itemTypeEntries,
+                          queryParams: widget.queryParams,
+                        ),
+                        const SizedBox(height: 12),
+                        DropdownFilter(
+                          filterController: _filterController,
+                          filterEntries: _filterEntries,
+                          widget: widget,
+                        ),
+                        const SizedBox(height: 12),
+                        DropdownLibraries(
+                          libraryController: _libraryController,
+                          widget: widget,
+                        ),
+                        const SizedBox(height: 12),
+                        textFieldSearch(context),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 12),
-                  DropdownFilter(
-                    filterController: _filterController,
-                    filterEntries: _filterEntries,
-                    widget: widget,
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownLibraries(
-                    libraryController: _libraryController,
-                    widget: widget,
-                  ),
-                  const SizedBox(height: 12),
-                  textFieldSearch(context),
+
                   const SizedBox(height: 12),
                   buildPaginationButtonRow(),
                   const SizedBox(height: 8),
@@ -333,7 +346,9 @@ class DropdownItemType extends StatelessWidget {
     required TextEditingController itemTypeController,
     required List<DropdownMenuEntry<String>> itemTypeEntries,
     required QueryParams queryParams,
-  }) : _itemTypeController = itemTypeController, _itemTypeEntries = itemTypeEntries, _queryParams = queryParams;
+  }) : _itemTypeController = itemTypeController,
+       _itemTypeEntries = itemTypeEntries,
+       _queryParams = queryParams;
 
   final TextEditingController _itemTypeController;
   final List<DropdownMenuEntry<String>> _itemTypeEntries;
@@ -348,9 +363,12 @@ class DropdownItemType extends StatelessWidget {
       menuHeight: 300,
       leadingIcon: const Icon(Icons.category, color: primaryUVColor),
       dropdownMenuEntries: [
-        DropdownMenuEntry(value: 'all', label: AppLocalizations.of(context)!.allItemTypes),
-        ..._itemTypeEntries
-        ],
+        DropdownMenuEntry(
+          value: 'all',
+          label: AppLocalizations.of(context)!.allItemTypes,
+        ),
+        ..._itemTypeEntries,
+      ],
       initialSelection: _queryParams.itemType,
       onSelected: (value) => _queryParams.itemType = value!,
       width: double.infinity,

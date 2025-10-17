@@ -35,24 +35,39 @@ class _HomeViewState extends HomeController {
       ),
       drawer: navigationDrawer(context),
       drawerEnableOpenDragGesture: true,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              dropdownItemTypes(context),
-              const SizedBox(height: 12),
-              DropdownFilters(
-                searchFilterController: _searchFilterController,
-                filterEntries: _filterEntries,
-                queryParams: _queryParams,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+            maxWidth: MediaQuery.of(context).size.width < 600
+                ? MediaQuery.of(context).size.width
+                : (MediaQuery.of(context).size.width / 3) * 2,
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 12),
+                  isItemTypesLoading
+                      ? const CircularProgressIndicator()
+                      : dropdownItemTypes(context),
+                  const SizedBox(height: 12),
+                  DropdownFilters(
+                    searchFilterController: _searchFilterController,
+                    filterEntries: _filterEntries,
+                    queryParams: _queryParams,
+                  ),
+                  const SizedBox(height: 12),
+                  isLibrariesLoading
+                      ? const CircularProgressIndicator()
+                      : dropdownLibraries(context),
+                  const SizedBox(height: 12),
+                  textFieldSearch(context),
+                ],
               ),
-              const SizedBox(height: 12),
-              dropdownLibraries(context),
-              const SizedBox(height: 12),
-              textFieldSearch(context),
-            ],
+            ),
           ),
         ),
       ),
@@ -61,26 +76,26 @@ class _HomeViewState extends HomeController {
 
   DropdownMenu<String> dropdownItemTypes(BuildContext context) {
     return DropdownMenu(
-              controller: _itemTypeController,
-              label: Text(AppLocalizations.of(context)!.itemType),
-              enableSearch: true,
-              menuHeight: 300,
-              leadingIcon: const Icon(Icons.category, color: primaryColor),
-              initialSelection: _queryParams.itemType,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(
-                  value: 'all',
-                  label: AppLocalizations.of(context)!.allLibraries,
-                ),
-                ..._itemTypeEntries,
-              ],
-              onSelected: (value) {
-                setState(() {
-                  _queryParams.itemType = value!;
-                });
-              },
-              width: double.infinity,
-            );
+      controller: _itemTypeController,
+      label: Text(AppLocalizations.of(context)!.itemType),
+      enableSearch: true,
+      menuHeight: 300,
+      leadingIcon: const Icon(Icons.category, color: primaryColor),
+      initialSelection: _queryParams.itemType,
+      dropdownMenuEntries: [
+        DropdownMenuEntry(
+          value: 'all',
+          label: AppLocalizations.of(context)!.allLibraries,
+        ),
+        ..._itemTypeEntries,
+      ],
+      onSelected: (value) {
+        setState(() {
+          _queryParams.itemType = value!;
+        });
+      },
+      width: double.infinity,
+    );
   }
 
   DropdownMenu<String> dropdownLibraries(BuildContext context) {

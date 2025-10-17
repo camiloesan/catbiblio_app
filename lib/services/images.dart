@@ -20,7 +20,7 @@ class ImageService {
 
     try {
       final response = await dio.get(
-        'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=$biblionumber',
+        'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=$biblionumber',
       );
       if (response.headers.value('content-type') != null &&
           response.headers

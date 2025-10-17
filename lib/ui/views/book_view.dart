@@ -29,313 +29,334 @@ class _BookViewState extends BookController {
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 0.0,
-                left: 16.0,
-                right: 16.0,
-                bottom: 16.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 4.0,
-                children: [
-                  if (isLoadingDetails)
-                    Center(
-                      child: Column(
-                        children: [
-                          const CircularProgressIndicator(),
-                          const SizedBox(height: 8.0),
-                        ],
-                      ),
-                    )
-                  else if (isErrorLoadingDetails)
-                    Center(
-                      child: Column(
-                        children: [
-                          const Icon(Icons.error, color: Colors.red, size: 48),
-                          const SizedBox(height: 8.0),
-                          Text('Error loading book details'),
-                        ],
-                      ),
-                    )
-                  else
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Container(
-                        color: primaryUVColor,
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FutureBuilder<Image?>(
-                              future: ImageService.fetchImageUrl(
-                                widget.biblioNumber,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                  maxWidth: MediaQuery.of(context).size.width < 600
+                      ? MediaQuery.of(context).size.width
+                      : (MediaQuery.of(context).size.width / 3) * 2,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0.0,
+                    left: 16.0,
+                    right: 16.0,
+                    bottom: 16.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 4.0,
+                    children: [
+                      if (isLoadingDetails)
+                        Center(
+                          child: Column(
+                            children: [
+                              const CircularProgressIndicator(),
+                              const SizedBox(height: 8.0),
+                            ],
+                          ),
+                        )
+                      else if (isErrorLoadingDetails)
+                        Center(
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.error,
+                                color: Colors.red,
+                                size: 48,
                               ),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasError ||
-                                    snapshot.data == null) {
-                                  return const SizedBox.shrink();
-                                } else {
-                                  return Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 120,
-                                        child: snapshot.data!,
-                                      ),
-                                      const SizedBox(width: 16.0),
-                                    ],
-                                  );
-                                }
-                              },
-                            ),
-                            Expanded(
-                              child: Text(
-                                bibliosDetails.title,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
+                              const SizedBox(height: 8.0),
+                              Text('Error loading book details'),
+                            ],
+                          ),
+                        )
+                      else
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Container(
+                            color: primaryUVColor,
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FutureBuilder<Image?>(
+                                  future: ImageService.fetchImageUrl(
+                                    widget.biblioNumber,
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError ||
+                                        snapshot.data == null) {
+                                      return const SizedBox.shrink();
+                                    } else {
+                                      return Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 120,
+                                            child: snapshot.data!,
+                                          ),
+                                          const SizedBox(width: 16.0),
+                                        ],
+                                      );
+                                    }
+                                  },
                                 ),
-                              ),
+                                Expanded(
+                                  child: Text(
+                                    bibliosDetails.title,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                        ),
+                      const Divider(),
+                      Text(
+                        AppLocalizations.of(context)!.bibliographicDetails,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  const Divider(),
-                  Text(
-                    AppLocalizations.of(context)!.bibliographicDetails,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: BibliographicDetails(
-                      bibliosDetails: bibliosDetails,
-                      languageMap: languageMap,
-                    ),
-                  ),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  MarcView(biblioNumber: widget.biblioNumber),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.library_books),
-                        label: const Text('MARC'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: BibliographicDetails(
+                          bibliosDetails: bibliosDetails,
+                          languageMap: languageMap,
+                        ),
                       ),
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          showShareDialog(
-                            context,
-                            bibliosDetails.title,
-                            widget.biblioNumber,
-                          );
-                        },
-                        icon: const Icon(Icons.share),
-                        label: Text(AppLocalizations.of(context)!.share),
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-
-                  if (isErrorLoadingBiblioItems)
-                    Center(
-                      child: Column(
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Icon(Icons.error, color: Colors.red, size: 48),
-                          const SizedBox(height: 8.0),
-                          Text('Error loading item copies'),
-                        ],
-                      ),
-                    )
-                  else if (biblioItems.isEmpty && !isLoadingDetails)
-                    Center(
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Icons.info,
-                            color: primaryUVColor,
-                            size: 48,
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(AppLocalizations.of(context)!.noCopiesFound),
-                        ],
-                      ),
-                    )
-                  else
-                    Text(
-                      '${AppLocalizations.of(context)!.copies}: ${biblioItems.length}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: holdingLibraries.length,
-                    itemBuilder: (context, index) {
-                      final item = holdingLibraries[index];
-
-                      return Card(
-                        color: Colors.grey[100],
-                        child: Theme(
-                          data: Theme.of(
-                            context,
-                          ).copyWith(dividerColor: Colors.transparent),
-                          child: ExpansionTile(
-                            tilePadding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                            ),
-                            dense: true,
-                            childrenPadding: const EdgeInsets.only(bottom: 8.0),
-                            title: Text(
-                              '$item (${groupedItems[item]!.length})',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            children: groupedItems[item]!.map((biblioItem) {
-                              return Card(
-                                child: ExpansionTile(
-                                  title: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
-                                        ),
-                                      ),
-                                      biblioItem.holdingLibraryId == 'USBI-X' && biblioItem.homeLibraryId == biblioItem.holdingLibraryId &&
-                                              biblioItem.notForLoanStatus ==
-                                                  BiblioItem.statusAvailable
-                                          ? IconButton(
-                                              onPressed: () => navigateToFinderView(biblioItem.callNumber, biblioItem.collection, biblioItem.collectionCode),
-                                              icon: const Icon(Icons.map),
-                                            )
-                                          : const SizedBox.shrink(),
-                                    ],
+                          OutlinedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MarcView(
+                                    biblioNumber: widget.biblioNumber,
                                   ),
-                                  leading: Icon(
-                                    biblioItem.overAllStatus ==
-                                            BiblioItem.statusBorrowed
-                                        ? Icons.watch_later
-                                        : biblioItem.overAllStatus ==
-                                              BiblioItem.statusNotForLoan
-                                        ? Icons.lock
-                                        : Icons.check_circle,
-                                    color:
-                                        biblioItem.overAllStatus ==
-                                            BiblioItem.statusBorrowed
-                                        ? Colors.orange
-                                        : biblioItem.overAllStatus ==
-                                              BiblioItem.statusNotForLoan
-                                        ? Colors.red
-                                        : Colors.green,
-                                  ),
-                                  childrenPadding: const EdgeInsets.only(
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: 8.0,
-                                  ),
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Wrap(
-                                        children: [
-                                          Text(
-                                            '${AppLocalizations.of(context)!.itemType}: ',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(biblioItem.itemType),
-                                        ],
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Wrap(
-                                        children: [
-                                          Text(
-                                            '${AppLocalizations.of(context)!.holdingLibrary}: ',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(biblioItem.holdingLibrary),
-                                        ],
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Wrap(
-                                        children: [
-                                          Text(
-                                            '${AppLocalizations.of(context)!.collection}: ',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(biblioItem.collection),
-                                        ],
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Wrap(
-                                        children: [
-                                          Text(
-                                            '${AppLocalizations.of(context)!.classification}: ',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(biblioItem.callNumber),
-                                        ],
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Wrap(
-                                        children: [
-                                          Text(
-                                            '${AppLocalizations.of(context)!.copyNumber}: ',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(biblioItem.copyNumber),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               );
-                            }).toList(),
+                            },
+                            icon: const Icon(Icons.library_books),
+                            label: const Text('MARC'),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: () {
+                              showShareDialog(
+                                context,
+                                bibliosDetails.title,
+                                widget.biblioNumber,
+                              );
+                            },
+                            icon: const Icon(Icons.share),
+                            label: Text(AppLocalizations.of(context)!.share),
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+
+                      if (isErrorLoadingBiblioItems)
+                        Center(
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.error,
+                                color: Colors.red,
+                                size: 48,
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text('Error loading item copies'),
+                            ],
+                          ),
+                        )
+                      else if (biblioItems.isEmpty && !isLoadingDetails)
+                        Center(
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.info,
+                                color: primaryUVColor,
+                                size: 48,
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(AppLocalizations.of(context)!.noCopiesFound),
+                            ],
+                          ),
+                        )
+                      else
+                        Text(
+                          '${AppLocalizations.of(context)!.copies}: ${biblioItems.length}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      );
-                    },
+
+                      buildLibrariesList(),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  ListView buildLibrariesList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: holdingLibraries.length,
+      itemBuilder: (context, index) {
+        final item = holdingLibraries[index];
+
+        return Card(
+          color: Colors.grey[100],
+          child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 8.0),
+              dense: true,
+              childrenPadding: const EdgeInsets.only(bottom: 8.0),
+              title: Text(
+                '$item (${groupedItems[item]!.length})',
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              children: groupedItems[item]!.map((biblioItem) {
+                return Card(
+                  child: ExpansionTile(
+                    title: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
+                          ),
+                        ),
+                        biblioItem.holdingLibraryId == 'USBI-X' &&
+                                biblioItem.homeLibraryId ==
+                                    biblioItem.holdingLibraryId &&
+                                biblioItem.notForLoanStatus ==
+                                    BiblioItem.statusAvailable
+                            ? IconButton(
+                                onPressed: () => navigateToFinderView(
+                                  biblioItem.callNumber,
+                                  biblioItem.collection,
+                                  biblioItem.collectionCode,
+                                ),
+                                icon: const Icon(Icons.map),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                    leading: Icon(
+                      biblioItem.overAllStatus == BiblioItem.statusBorrowed
+                          ? Icons.watch_later
+                          : biblioItem.overAllStatus ==
+                                BiblioItem.statusNotForLoan
+                          ? Icons.lock
+                          : Icons.check_circle,
+                      color:
+                          biblioItem.overAllStatus == BiblioItem.statusBorrowed
+                          ? Colors.orange
+                          : biblioItem.overAllStatus ==
+                                BiblioItem.statusNotForLoan
+                          ? Colors.red
+                          : Colors.green,
+                    ),
+                    childrenPadding: const EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      bottom: 8.0,
+                    ),
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.itemType}: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(biblioItem.itemType),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.holdingLibrary}: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(biblioItem.holdingLibrary),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.collection}: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(biblioItem.collection),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.classification}: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(biblioItem.callNumber),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.copyNumber}: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(biblioItem.copyNumber),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 }

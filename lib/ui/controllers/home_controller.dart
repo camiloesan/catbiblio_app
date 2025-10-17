@@ -9,6 +9,8 @@ abstract class HomeController extends State<HomeView> {
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   final QueryParams _queryParams = QueryParams();
+  bool isItemTypesLoading = true;
+  bool isLibrariesLoading = true;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -49,10 +51,8 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchData() async {
     try {
       final libraries = await LibrariesService.getLibraries();
+      isLibrariesLoading = false;
       _librariesFuture = Future.value(libraries);
-      final itemTypes = await ItemTypesService.getItemTypes();
-
-      if (!mounted) return;
 
       setState(() {
         _libraryEntries = libraries.map((library) {
@@ -61,7 +61,16 @@ abstract class HomeController extends State<HomeView> {
             label: library.name,
           );
         }).toList();
+      });
+    } catch (e) {
+      debugPrint('Error fetching data: $e');
+    }
 
+    try {
+      final itemTypes = await ItemTypesService.getItemTypes();
+      isItemTypesLoading = false;
+      
+      setState(() {
         _itemTypeEntries = itemTypes.map((itemType) {
           return DropdownMenuEntry(
             value: itemType.itemTypeId,
@@ -70,7 +79,7 @@ abstract class HomeController extends State<HomeView> {
         }).toList();
       });
     } catch (e) {
-      debugPrint('Error fetching data: $e');
+      debugPrint('Error fetching item types: $e');
     }
   }
 
