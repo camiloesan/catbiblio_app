@@ -70,215 +70,51 @@ class _LibrariesViewState extends LibrariesController {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              children: libraries.where((lib) => lib.region == item).map((
-                                library,
-                              ) {
-                                return ListTile(
-                                  title: Text(library.name),
-                                  subtitle: Text(
-                                    '${library.city}, ${library.state}',
-                                  ),
-                                  trailing: library.url.isNotEmpty
-                                      ? IconButton(
-                                          icon: const Icon(Icons.link),
-                                          color: Colors.blue,
-                                          onPressed: () =>
-                                              openLink(library.url),
-                                        )
-                                      : null,
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text(library.name),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              if (library.area.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                          bottom: 8.0,
-                                                        ),
-                                                    child: Chip(
-                                                      label: Text(library.area),
-                                                    ),
-                                                  ),
-                                                ),
-                                              if (library.address.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Wrap(
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.address}: ',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(library.address),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (library.postalCode.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Wrap(
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.postalCode}: ',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(library.postalCode),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (library.city.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Wrap(
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.city}: ',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(library.city),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (library.state.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Wrap(
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.state}: ',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(library.state),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (library.country.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Wrap(
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.country}: ',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(library.country),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (library.email.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Wrap(
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.email}: ',
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () async {
-                                                          final Uri
-                                                          emailLaunchUri = Uri(
-                                                            scheme: 'mailto',
-                                                            path: library.email,
-                                                          );
-                                                          await launchUrl(
-                                                            emailLaunchUri,
-                                                          );
-                                                        },
-                                                        child: Text(
-                                                          library.email,
-                                                          style: const TextStyle(
-                                                            color: Colors.blue,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (library.url.isNotEmpty)
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                          top: 8.0,
-                                                        ),
-                                                    child: Chip(
-                                                      label: GestureDetector(
-                                                        onTap: () => openLink(
-                                                          library.url,
-                                                        ),
-                                                        child: Text(
-                                                          library.url,
-                                                          style: const TextStyle(
-                                                            color: Colors.blue,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .none,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                          actions: [
-                                            TextButton(
+                              children: libraries
+                                  .where((lib) => lib.region == item)
+                                  .map((library) {
+                                    return ListTile(
+                                      title: Text(library.name),
+                                      subtitle: Text(
+                                        '${library.city}, ${library.state}',
+                                      ),
+                                      trailing: library.url.isNotEmpty
+                                          ? IconButton(
+                                              icon: const Icon(Icons.link),
+                                              color: Colors.blue,
                                               onPressed: () =>
-                                                  Navigator.of(context).pop(),
-                                              child: Text(
-                                                AppLocalizations.of(
-                                                  context,
-                                                )!.close,
+                                                  openLink(library.url),
+                                            )
+                                          : null,
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text(library.name),
+                                              content: buildDialogFields(
+                                                library,
+                                                context,
                                               ),
-                                            ),
-                                          ],
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(
+                                                    context,
+                                                  ).pop(),
+                                                  child: Text(
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.close,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
                                     );
-                                  },
-                                );
-                              }).toList(),
+                                  })
+                                  .toList(),
                             ),
                           );
                         },
