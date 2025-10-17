@@ -29,18 +29,30 @@ class _MarcViewState extends MarcController {
           ? Center(child: Text(AppLocalizations.of(context)!.errorLoadingMarc))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(9.0),
-              child: Container(
-                alignment: Alignment.center,
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: primaryColor, width: 3.0),
-                    borderRadius: BorderRadius.circular(10.0),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                    maxWidth: MediaQuery.of(context).size.width < 600
+                        ? MediaQuery.of(context).size.width
+                        : (MediaQuery.of(context).size.width / 3) * 2,
                   ),
-                  child: Text(
-                    marcData ??
-                        AppLocalizations.of(context)!.noMarcDataAvailable,
-                    style: const TextStyle(fontFamily: 'monospace'),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: primaryColor, width: 3.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    alignment: Alignment.center,
+                    child: InteractiveViewer(
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          marcData ??
+                              AppLocalizations.of(context)!.noMarcDataAvailable,
+                          style: const TextStyle(fontFamily: 'monospace'),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
