@@ -9,6 +9,7 @@ abstract class HomeController extends State<HomeView> {
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   final QueryParams _queryParams = QueryParams();
+  bool isSearchable = false;
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
 
@@ -97,7 +98,7 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void onSubmitAction() {
-    if (_searchController.text.isEmpty) return;
+    if (_searchController.text.isEmpty || _searchController.text.trim().isEmpty || _searchController.text.trim().length < 2) return;
 
     ControllersData controllersData = ControllersData(
       filterController: _searchFilterController,

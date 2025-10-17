@@ -35,81 +35,163 @@ class _HomeViewState extends HomeController {
       ),
       drawer: navigationDrawer(context),
       drawerEnableOpenDragGesture: true,
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-            maxWidth: MediaQuery.of(context).size.width < 600
-                ? MediaQuery.of(context).size.width
-                : (MediaQuery.of(context).size.width / 3) * 2,
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-              child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12),
-                  isItemTypesLoading
-                      ? const CircularProgressIndicator()
-                      : LayoutBuilder(
-                          builder: (context, constraints) {
-                            return dropdownItemTypes(
-                              context,
-                              constraints.maxWidth,
-                            );
-                          },
-                        ),
-                  const SizedBox(height: 12),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return DropdownFilters(
-                        searchFilterController: _searchFilterController,
-                        filterEntries: _filterEntries,
-                        queryParams: _queryParams,
-                        maxWidth: constraints.maxWidth,
-                      );
-                    },
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                  maxWidth: MediaQuery.of(context).size.width < 600
+                      ? MediaQuery.of(context).size.width
+                      : (MediaQuery.of(context).size.width / 3) * 2,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8.0,
+                    left: 16.0,
+                    right: 16.0,
                   ),
-                  const SizedBox(height: 12),
-                  isLibrariesLoading
-                      ? const CircularProgressIndicator()
-                      : LayoutBuilder(
-                          builder: (context, constraints) {
-                            return dropdownLibraries(
-                              context,
-                              constraints.maxWidth,
-                            );
-                          },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Buscar en el Catálogo Bibliotecario UV',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                  const SizedBox(height: 12),
-                  textFieldSearch(context),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Servicios bibliotecarios de la Universidad Veracruzana',
-                  ),
-                  DropdownMenu(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: InputBorder.none,
-                    ),
-                    initialSelection: 'USBI-X',
-                    dropdownMenuEntries: [
-                      DropdownMenuEntry(
-                        value: 'USBI-X',
-                        label: 'USBI - Xalapa',
+                      ),
+                      const SizedBox(height: 24),
+                      isItemTypesLoading
+                          ? const CircularProgressIndicator()
+                          : LayoutBuilder(
+                              builder: (context, constraints) {
+                                return dropdownItemTypes(
+                                  context,
+                                  constraints.maxWidth,
+                                );
+                              },
+                            ),
+                      const SizedBox(height: 12),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return DropdownFilters(
+                            searchFilterController: _searchFilterController,
+                            filterEntries: _filterEntries,
+                            queryParams: _queryParams,
+                            maxWidth: constraints.maxWidth,
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      isLibrariesLoading
+                          ? const CircularProgressIndicator()
+                          : LayoutBuilder(
+                              builder: (context, constraints) {
+                                return dropdownLibraries(
+                                  context,
+                                  constraints.maxWidth,
+                                );
+                              },
+                            ),
+                      const SizedBox(height: 12),
+                      textFieldSearch(context),
+                      const SizedBox(height: 12),
+                      Divider(),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Servicios bibliotecarios de la Universidad Veracruzana',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Center(
+                        child: DropdownMenu(
+                          inputDecorationTheme: InputDecorationTheme(
+                            border: InputBorder.none,
+                          ),
+                          initialSelection: 'USBI-X',
+                          dropdownMenuEntries: [
+                            DropdownMenuEntry(
+                              value: 'USBI-X',
+                              label: 'USBI - Xalapa',
+                            ),
+                          ],
+                          enableSearch: false,
+                          enableFilter: false,
+                          requestFocusOnTap: false,
+                        ),
+                      ),
+                      Card(
+                        color: primaryUVColor,
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Image(
+                                image: AssetImage('assets/images/image.png'),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'Préstamo en sala',
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        color: primaryUVColor,
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Image(
+                                image: AssetImage('assets/images/image.png'),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'Préstamo a domicilio',
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        color: primaryUVColor,
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Image(
+                                image: AssetImage('assets/images/image.png'),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'Préstamo interbibliotecario',
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                    menuStyle: MenuStyle(
-                      alignment: AlignmentDirectional.bottomStart,
-                    ),
-                    width: double.infinity,
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -132,7 +214,6 @@ class _HomeViewState extends HomeController {
         ),
         ..._itemTypeEntries,
       ],
-      // menuStyle: const MenuStyle(alignment: Alignment.bottomLeft, maximumSize: ),
       width: maxWidth,
       onSelected: (value) {
         setState(() {
@@ -172,13 +253,26 @@ class _HomeViewState extends HomeController {
   TextField textFieldSearch(BuildContext context) {
     return TextField(
       controller: _searchController,
+      onChanged: (text) {
+        if (text.isEmpty || text.trim().isEmpty) {
+          setState(() {
+            isSearchable = false;
+          });
+        } else {
+          setState(() {
+            isSearchable = true;
+          });
+        }
+      },
       onSubmitted: (value) => onSubmitAction(),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search, color: primaryColor),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () => clearSearchController(),
-        ),
+        suffixIcon: isSearchable
+            ? IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => clearSearchController(),
+              )
+            : null,
         labelText: AppLocalizations.of(context)!.search,
         border: OutlineInputBorder(),
       ),
