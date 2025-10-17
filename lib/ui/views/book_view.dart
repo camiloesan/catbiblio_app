@@ -1,6 +1,7 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
+import 'package:catbiblio_app/models/finder_params.dart';
 import 'package:catbiblio_app/services/biblios_items.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/ui/views/finder_view.dart';
@@ -252,6 +253,7 @@ class _BookViewState extends BookController {
                                   biblioItem.callNumber,
                                   biblioItem.collection,
                                   biblioItem.collectionCode,
+                                  biblioItem.holdingLibrary,
                                 ),
                                 icon: const Icon(Icons.map),
                               )

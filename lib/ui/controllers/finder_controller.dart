@@ -14,8 +14,8 @@ abstract class FinderController extends State<FinderView> {
 
     try {
       location = await LocationsService.getBookLocation(
-        widget.classification,
-        widget.collectionCode,
+        widget.params.classification,
+        widget.params.collectionCode,
       );
     } catch (error) {
       debugPrint('Error loading details: $error');

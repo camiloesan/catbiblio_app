@@ -1,5 +1,6 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_location.dart';
+import 'package:catbiblio_app/models/finder_params.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/services/locations.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
@@ -8,18 +9,10 @@ import 'package:flutter/material.dart';
 part '../controllers/finder_controller.dart';
 
 class FinderView extends StatefulWidget {
-  final String biblioNumber;
-  final String title;
-  final String classification;
-  final String collection;
-  final String collectionCode;
+  final FinderParams params;
   const FinderView({
     super.key,
-    required this.biblioNumber,
-    required this.title,
-    required this.classification,
-    required this.collection,
-    required this.collectionCode,
+    required this.params,
   });
 
   @override
@@ -60,7 +53,7 @@ class _FinderViewState extends FinderController {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FutureBuilder<Image?>(
-                            future: ImageService.fetchImageUrl(widget.biblioNumber),
+                            future: ImageService.fetchImageUrl(widget.params.biblioNumber),
                             builder: (context, snapshot) {
                               if (snapshot.hasError || snapshot.data == null) {
                                 return const SizedBox.shrink();
@@ -76,7 +69,7 @@ class _FinderViewState extends FinderController {
                           ),
                           Expanded(
                             child: Text(
-                              '${widget.title}\n\n${AppLocalizations.of(context)!.classification}:\n${widget.classification}',
+                              '${widget.params.title}\n\n${AppLocalizations.of(context)!.classification}:\n${widget.params.classification}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
@@ -97,6 +90,13 @@ class _FinderViewState extends FinderController {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  Text(
+                    widget.params.holdingLibrary,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const SizedBox(height: 4.0),
                   IntrinsicHeight(
                     child: Row(
@@ -105,6 +105,11 @@ class _FinderViewState extends FinderController {
                         Expanded(
                           child: Column(
                             children: [
+                              Icon( 
+                                Icons.location_on,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 24,
+                              ),
                               Text(
                                 AppLocalizations.of(context)!.level,
                                 style: TextStyle(
@@ -128,6 +133,11 @@ class _FinderViewState extends FinderController {
                         Expanded(
                           child: Column(
                             children: [
+                              Icon( 
+                                Icons.meeting_room,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 24,
+                              ),
                               Text(
                                 AppLocalizations.of(context)!.room,
                                 style: TextStyle(
@@ -151,6 +161,11 @@ class _FinderViewState extends FinderController {
                         Expanded(
                           child: Column(
                             children: [
+                              Icon( 
+                                Icons.library_books,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 24,
+                              ),
                               Text(
                                 AppLocalizations.of(context)!.collection,
                                 style: TextStyle(
@@ -159,7 +174,7 @@ class _FinderViewState extends FinderController {
                                 ),
                               ),
                               Text(
-                                widget.collection,
+                                widget.params.collection,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
