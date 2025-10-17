@@ -28,11 +28,11 @@ class _MarcViewState extends MarcController {
           : isError
           ? Center(child: Text(AppLocalizations.of(context)!.errorLoadingMarc))
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(9.0),
+              padding: const EdgeInsets.all(10),
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
+                    maxHeight: MediaQuery.of(context).size.height,
                     maxWidth: MediaQuery.of(context).size.width < 600
                         ? MediaQuery.of(context).size.width
                         : (MediaQuery.of(context).size.width / 3) * 2,
@@ -42,7 +42,6 @@ class _MarcViewState extends MarcController {
                       border: Border.all(color: primaryColor, width: 3.0),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    alignment: Alignment.center,
                     child: InteractiveViewer(
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
