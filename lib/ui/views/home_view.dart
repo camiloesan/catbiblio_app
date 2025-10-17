@@ -47,6 +47,7 @@ class _HomeViewState extends HomeController {
             child: Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
               child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12),
@@ -65,6 +66,26 @@ class _HomeViewState extends HomeController {
                       : dropdownLibraries(context),
                   const SizedBox(height: 12),
                   textFieldSearch(context),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Servicios bibliotecarios de la Universidad Veracruzana',
+                  ),
+                  DropdownMenu(
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: InputBorder.none,
+                    ),
+                    initialSelection: 'USBI-X',
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(
+                        value: 'USBI-X',
+                        label: 'USBI - Xalapa',
+                      ),
+                    ],
+                    menuStyle: MenuStyle(
+                      alignment: AlignmentDirectional.bottomStart,
+                    ),
+                    width: double.infinity,
+                  ),
                 ],
               ),
             ),
@@ -89,12 +110,13 @@ class _HomeViewState extends HomeController {
         ),
         ..._itemTypeEntries,
       ],
+      // menuStyle: const MenuStyle(alignment: Alignment.bottomLeft, maximumSize: ),
+      width: double.infinity,
       onSelected: (value) {
         setState(() {
           _queryParams.itemType = value!;
         });
       },
-      width: double.infinity,
     );
   }
 
@@ -118,7 +140,6 @@ class _HomeViewState extends HomeController {
           _queryParams.library = value!;
         });
       },
-      width: double.infinity,
     );
   }
 
