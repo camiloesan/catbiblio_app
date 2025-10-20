@@ -32,10 +32,9 @@ class _MarcViewState extends MarcController {
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height,
-                    maxWidth: MediaQuery.of(context).size.width < 600
+                    maxWidth: MediaQuery.of(context).size.width < 800
                         ? MediaQuery.of(context).size.width
-                        : (MediaQuery.of(context).size.width / 3) * 2,
+                        : (MediaQuery.of(context).size.width / 3) * 2.2,
                   ),
                   child: Container(
                     decoration: BoxDecoration(
