@@ -2,6 +2,7 @@ import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
+import 'package:catbiblio_app/services/config.dart';
 import 'package:catbiblio_app/services/item_types.dart';
 import 'package:catbiblio_app/services/libraries.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
@@ -101,6 +102,16 @@ class _HomeViewState extends HomeController {
                       const SizedBox(height: 12),
                       Divider(),
                       const SizedBox(height: 12),
+                      if (isSelectionsEnabled)
+                        Text( 
+                          'Selecciones',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+
+                      
                       Text(
                         'Servicios bibliotecarios de la Universidad Veracruzana',
                         style: TextStyle(
@@ -113,13 +124,8 @@ class _HomeViewState extends HomeController {
                           inputDecorationTheme: InputDecorationTheme(
                             border: InputBorder.none,
                           ),
+                          dropdownMenuEntries: _enabledLibrariesEntries,
                           initialSelection: 'USBI-X',
-                          dropdownMenuEntries: [
-                            DropdownMenuEntry(
-                              value: 'USBI-X',
-                              label: 'USBI - Xalapa',
-                            ),
-                          ],
                           enableSearch: false,
                           enableFilter: false,
                           requestFocusOnTap: false,

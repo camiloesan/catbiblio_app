@@ -8,10 +8,13 @@ abstract class HomeController extends State<HomeView> {
   late Future<List<Library>> _librariesFuture;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
+  late List<DropdownMenuEntry<String>> _enabledLibrariesEntries = [];
   final QueryParams _queryParams = QueryParams();
+  bool isSelectionsEnabled = false;
   bool isSearchable = false;
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
+  bool isConfigLoading = true;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -81,6 +84,23 @@ abstract class HomeController extends State<HomeView> {
       });
     } catch (e) {
       debugPrint('Error fetching item types: $e');
+    }
+
+    try {
+      final config = await ConfigService.getConfig();
+      isConfigLoading = false;
+      
+      setState(() {
+        isSelectionsEnabled = config.selectionsSectionState;
+        _enabledLibrariesEntries = config.enabledLibrariesHome.map((library) {
+          return DropdownMenuEntry(
+            value: library.libraryCode,
+            label: library.libraryCode,
+          );
+        }).toList();
+      });
+    } catch (e) {
+      debugPrint('Error fetching config: $e');
     }
   }
 
