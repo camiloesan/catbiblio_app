@@ -45,7 +45,9 @@ class _MarcViewState extends MarcController {
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          marcData ??
+                          formattedMarcData =
+                              MarcController.formatAltMarcStyle(marcData) ??
+                              marcData ??
                               AppLocalizations.of(context)!.noMarcDataAvailable,
                           style: const TextStyle(fontFamily: 'monospace'),
                         ),
