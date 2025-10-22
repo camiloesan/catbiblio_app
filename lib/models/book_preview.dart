@@ -23,23 +23,24 @@ class BookPreview {
       author: json['author'] as String? ?? '',
       coverUrl: '',
       biblioNumber: json['biblionumber'] as String,
-      publishingDetails:
-          ((json['place']?.toString().trim() ?? '').isNotEmpty &&
-              (json['publishercode']?.toString().trim() ?? '').isNotEmpty &&
-              (json['copyrightdate']?.toString().trim() ?? '').isNotEmpty)
-          ? [
-              json['place']!.toString().trim(),
-              json['publishercode']!.toString().trim(),
-              json['copyrightdate']!.toString().trim(),
-            ].join(' ')
-          : '',
-      locatedInLibraries: json['libraries_count'] as int? ?? 0,
+      publishingDetails: (() {
+        final place = json['place']?.toString().trim() ?? '';
+        final publisher = json['publishercode']?.toString().trim() ?? '';
+        final copyright = json['copyrightdate']?.toString().trim() ?? '';
+        final parts = [
+          place,
+          publisher,
+          copyright,
+        ].where((s) => s.isNotEmpty).toList();
+        return parts.isNotEmpty ? parts.join(' ') : '';
+      })(),
       totalRecords: json['total_results'] as int? ?? 0,
+      locatedInLibraries: json['libraries_count'] as int? ?? 0,
     );
   }
 
   @override
   String toString() {
-    return 'BookPreview(title: $title, author: $author, coverUrl: $coverUrl, biblioNumber: $biblioNumber, publishingDetails: $publishingDetails, locatedInLibraries: $locatedInLibraries)';
+    return 'BookPreview(title: $title, author: $author, coverUrl: $coverUrl, biblioNumber: $biblioNumber, publishingDetails: $publishingDetails, locatedInLibraries: $locatedInLibraries, totalRecords: $totalRecords)';
   }
 }
