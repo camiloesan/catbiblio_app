@@ -55,14 +55,14 @@ class _SearchViewState extends SearchController {
                           queryParams: widget.queryParams,
                         ),
                         const SizedBox(height: 12),
-                        DropdownFilter(
-                          filterController: _filterController,
-                          filterEntries: _filterEntries,
+                        DropdownLibraries(
+                          libraryController: _libraryController,
                           widget: widget,
                         ),
                         const SizedBox(height: 12),
-                        DropdownLibraries(
-                          libraryController: _libraryController,
+                        DropdownFilter(
+                          filterController: _filterController,
+                          filterEntries: _filterEntries,
                           widget: widget,
                         ),
                         const SizedBox(height: 12),
