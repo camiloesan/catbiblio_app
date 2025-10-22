@@ -23,20 +23,23 @@ class BookPreview {
       author: json['author'] as String? ?? '',
       coverUrl: '',
       biblioNumber: json['biblionumber'] as String,
-      publishingDetails: (() {
-        final place = json['place']?.toString().trim() ?? '';
-        final publisher = json['publishercode']?.toString().trim() ?? '';
-        final copyright = json['copyrightdate']?.toString().trim() ?? '';
-        final parts = [
-          place,
-          publisher,
-          copyright,
-        ].where((s) => s.isNotEmpty).toList();
-        return parts.isNotEmpty ? parts.join(' ') : '';
-      })(),
+      publishingDetails: buildPublishingDetails(json),
       totalRecords: json['total_results'] as int? ?? 0,
       locatedInLibraries: json['libraries_count'] as int? ?? 0,
     );
+  }
+
+  static String buildPublishingDetails(Map<String, dynamic> json) {
+    final place = json['place']?.toString().trim() ?? '';
+    final publisher = json['publishercode']?.toString().trim() ?? '';
+    final copyright = json['copyrightdate']?.toString().trim() ?? '';
+    final parts = [
+      place,
+      publisher,
+      copyright,
+    ].where((s) => s.isNotEmpty).toList();
+
+    return parts.isNotEmpty ? parts.join(' ') : '';
   }
 
   @override
