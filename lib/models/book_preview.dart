@@ -33,7 +33,7 @@ class BookPreview {
               json['copyrightdate']!.toString().trim(),
             ].join(' ')
           : '',
-      locatedInLibraries: json['located_in_libraries'] as int? ?? 0,
+      locatedInLibraries: json['libraries_count'] as int? ?? 0,
       totalRecords: json['total_results'] as int? ?? 0,
     );
   }

@@ -61,7 +61,7 @@ abstract class SearchController extends State<SearchView> {
   void loadSearch() {
     isInitialRequestLoading = true;
     isError = false;
-    SruService.newSearchBooks(widget.queryParams)
+    SruService.searchBooks(widget.queryParams)
         .then((result) {
           if (!mounted) return;
           setState(() {
@@ -114,7 +114,7 @@ abstract class SearchController extends State<SearchView> {
     setState(() {
       isPageLoading = true;
     });
-    SruService.newSearchBooks(widget.queryParams)
+    SruService.searchBooks(widget.queryParams)
         .then((result) {
           setState(() {
             books = result.books;

@@ -77,7 +77,7 @@ class SruService {
   ///   - searchBooks(QueryParams(library: 'USBI-X', searchBy: 'author', searchQuery: 'frank herbert'))
   /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
   ///   - searchBooks(QueryParams(library: 'USBI-V', searchBy: 'subject', searchQuery: 'ciencia ficcion'))
-  static Future<SearchResult> searchBooks(QueryParams params) async {
+  static Future<SearchResult> sruSearchBooks(QueryParams params) async {
     final queryParameters = buildQueryParameters(params);
 
     try {
@@ -94,7 +94,7 @@ class SruService {
     }
   }
 
-  static Future<SearchResult> newSearchBooks(QueryParams params) async {
+  static Future<SearchResult> searchBooks(QueryParams params) async {
     final dio = _createDio();
     final queryParameters = buildQueryParameters(params);
 
