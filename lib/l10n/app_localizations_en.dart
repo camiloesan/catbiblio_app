@@ -257,4 +257,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get level => 'Level';
+
+  @override
+  String get searchSectionTitle => 'Search in UV Library Catalog';
+
+  @override
+  String get libraryServices => 'Library Services';
+
+  @override
+  String get bookSelections => 'Selections';
 }

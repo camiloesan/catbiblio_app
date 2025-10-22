@@ -4,17 +4,24 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _searchController;
   late TextEditingController _searchFilterController;
   late TextEditingController _libraryController;
+  late TextEditingController _libraryServicesController;
   late TextEditingController _itemTypeController;
   late Future<List<Library>> _librariesFuture;
+  late CarouselSliderController _booksCarouselSliderController;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   late List<DropdownMenuEntry<String>> _enabledLibrariesEntries = [];
+  late List<LibraryServices> _librariesServices = [];
+  late List<BookSelection> _bookSelections = [];
   final QueryParams _queryParams = QueryParams();
+  String selectedLibraryServices = 'USBI-X';
   bool isSelectionsEnabled = false;
   bool isSearchable = false;
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
   bool isConfigLoading = true;
+  String currentBookName = '';
+  String currentBiblionumber = '';
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
@@ -48,6 +55,8 @@ abstract class HomeController extends State<HomeView> {
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
     _itemTypeController = TextEditingController();
+    _booksCarouselSliderController = CarouselSliderController();
+    _libraryServicesController = TextEditingController();
 
     fetchData();
   }
@@ -91,6 +100,9 @@ abstract class HomeController extends State<HomeView> {
       isConfigLoading = false;
       
       setState(() {
+        _librariesServices = config.librariesServices;
+        _bookSelections = config.bookSelections;
+        currentBookName = _bookSelections[0].bookName;
         isSelectionsEnabled = config.selectionsSectionState;
         _enabledLibrariesEntries = config.enabledLibrariesHome.map((library) {
           return DropdownMenuEntry(

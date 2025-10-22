@@ -82,5 +82,8 @@
     "location": "Ubicación",
     "allItemTypes": "Todos",
     "room": "Sala",
-    "level": "Nivel"
+    "level": "Nivel",
+    "searchSectionTitle": "Buscar en el Catálogo Bibliotecario UV",
+    "libraryServices": "Servicios de la Biblioteca",
+    "bookSelections": "Selecciones"
 }
