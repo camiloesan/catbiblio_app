@@ -6,6 +6,7 @@ import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/search_result.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
 final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
 final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
@@ -42,6 +43,18 @@ class SruService {
     ),
   );
 
+  static Dio _createDio() {
+    return Dio(
+      BaseOptions(
+        baseUrl: _baseUrl,
+        responseType: ResponseType.plain,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {'x-api-key': _apiKey},
+      ),
+    );
+  }
+
   /// MARC and SRU namespaces
   static const String _marcNamespace = "http://www.loc.gov/MARC21/slim";
   static const String _sruNamespace = "http://www.loc.gov/zing/srw/";
@@ -64,7 +77,7 @@ class SruService {
   ///   - searchBooks(QueryParams(library: 'USBI-X', searchBy: 'author', searchQuery: 'frank herbert'))
   /// - Subject search: http://baseUrl/cgi-bin/koha/svc/bibliosItems?subject=ciencia+ficcion&branch=USBI-V
   ///   - searchBooks(QueryParams(library: 'USBI-V', searchBy: 'subject', searchQuery: 'ciencia ficcion'))
-  static Future<SearchResult> searchBooks(QueryParams params) async {
+  static Future<SearchResult> sruSearchBooks(QueryParams params) async {
     final queryParameters = buildQueryParameters(params);
 
     try {
@@ -78,6 +91,36 @@ class SruService {
       throw _handleDioException(e);
     } catch (e) {
       throw ParseException("Unexpected error: $e");
+    }
+  }
+
+  static Future<SearchResult> searchBooks(QueryParams params) async {
+    final dio = _createDio();
+    final queryParameters = buildQueryParameters(params);
+
+    try {
+      final response = await dio.get(
+        '/new_search',
+        queryParameters: queryParameters,
+      );
+
+      final List<BookPreview> results = json
+          .decode(response.data)
+          .map<BookPreview>(
+            (json) => BookPreview.fromJson(json as Map<String, dynamic>),
+          )
+          .toList();
+
+      return SearchResult(
+        books: results,
+        totalRecords: results.isNotEmpty ? results.first.totalRecords : 0,
+      );
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    } catch (e) {
+      throw ParseException("Unexpected error: $e");
+    } finally {
+      dio.close();
     }
   }
 
@@ -147,6 +190,7 @@ class SruService {
         biblioNumber: biblioNumber,
         publishingDetails: publishingDetails,
         locatedInLibraries: locatedInLibraries,
+        totalRecords: 0,
       );
     } catch (e) {
       debugPrint("Error parsing book record: ${e.toString()}");
@@ -202,13 +246,13 @@ class SruService {
             'isbn': params.searchBy == 'isbn' ? params.searchQuery : null,
             'issn': params.searchBy == 'issn' ? params.searchQuery : null,
             'branch': params.library != 'all' ? params.library : null,
-            'itemType': params.itemType != 'all' ? params.itemType : null,
-            'startRecord': params.startRecord > 1 ? params.startRecord : null,
+            'item_type': params.itemType != 'all' ? params.itemType : null,
+            'offset': params.startRecord > 0 ? params.startRecord : null,
           }..removeWhere(
             (key, value) =>
                 value == null ||
                 (value is String && value.isEmpty) ||
-                (value is int && value <= 1),
+                (value is int && value < 0),
           );
 
       return queryParameters;
@@ -311,6 +355,7 @@ class SruService {
           biblioNumber: '',
           publishingDetails: '',
           locatedInLibraries: 0,
+          totalRecords: 0,
         );
 
         book.author = getSubfield(datafield100, "a") ?? "";

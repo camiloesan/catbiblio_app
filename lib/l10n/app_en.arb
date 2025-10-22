@@ -80,7 +80,7 @@
   "@publishingDetails": {
     "description": "Publishing details label in book preview"
   },
-  "availability": "In",
+  "availability": "Available in",
   "@availability": {
     "description": "Availability label in book preview"
   },

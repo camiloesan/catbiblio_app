@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// Availability label in book preview
   ///
   /// In en, this message translates to:
-  /// **'In'**
+  /// **'Available in'**
   String get availability;
 
   /// All libraries entry in library selection dropdown

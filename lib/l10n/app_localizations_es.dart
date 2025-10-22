@@ -69,7 +69,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get publishingDetails => 'Detalles de publicación';
 
   @override
-  String get availability => 'En';
+  String get availability => 'Disponible en';
 
   @override
   String get allLibraries => 'Todas';

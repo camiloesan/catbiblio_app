@@ -55,6 +55,10 @@ abstract class SearchController extends State<SearchView> {
     setMiddleSpace = setUpperLimit - 2;
 
     if (widget.queryParams.searchQuery.isEmpty) return;
+    loadSearch();
+  }
+
+  void loadSearch() {
     isInitialRequestLoading = true;
     isError = false;
     SruService.searchBooks(widget.queryParams)
@@ -105,7 +109,7 @@ abstract class SearchController extends State<SearchView> {
   }
 
   void updatePageResults() {
-    widget.queryParams.startRecord = (currentPage - 1) * 10 + 1;
+    widget.queryParams.startRecord = (currentPage - 1) * 10;
 
     setState(() {
       isPageLoading = true;
