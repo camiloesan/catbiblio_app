@@ -247,12 +247,12 @@ class SruService {
             'issn': params.searchBy == 'issn' ? params.searchQuery : null,
             'branch': params.library != 'all' ? params.library : null,
             'item_type': params.itemType != 'all' ? params.itemType : null,
-            'offset': params.startRecord > 1 ? params.startRecord : null,
+            'offset': params.startRecord > 0 ? params.startRecord : null,
           }..removeWhere(
             (key, value) =>
                 value == null ||
                 (value is String && value.isEmpty) ||
-                (value is int && value <= 1),
+                (value is int && value <= 0),
           );
 
       return queryParameters;
