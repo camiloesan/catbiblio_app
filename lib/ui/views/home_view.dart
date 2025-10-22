@@ -7,6 +7,7 @@ import 'package:catbiblio_app/services/libraries.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,16 +65,29 @@ class _HomeViewState extends HomeController {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      isItemTypesLoading
-                          ? const CircularProgressIndicator()
-                          : LayoutBuilder(
-                              builder: (context, constraints) {
-                                return dropdownItemTypes(
-                                  context,
-                                  constraints.maxWidth,
-                                );
-                              },
-                            ),
+                      Skeletonizer(
+                        enabled: isItemTypesLoading,
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            return dropdownItemTypes(
+                              context,
+                              constraints.maxWidth,
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Skeletonizer(
+                        enabled: isLibrariesLoading,
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            return dropdownLibraries(
+                              context,
+                              constraints.maxWidth,
+                            );
+                          },
+                        ),
+                      ),
                       const SizedBox(height: 12),
                       LayoutBuilder(
                         builder: (context, constraints) {
@@ -85,17 +99,6 @@ class _HomeViewState extends HomeController {
                           );
                         },
                       ),
-                      const SizedBox(height: 12),
-                      isLibrariesLoading
-                          ? const CircularProgressIndicator()
-                          : LayoutBuilder(
-                              builder: (context, constraints) {
-                                return dropdownLibraries(
-                                  context,
-                                  constraints.maxWidth,
-                                );
-                              },
-                            ),
                       const SizedBox(height: 12),
                       textFieldSearch(context),
                       const SizedBox(height: 12),
@@ -139,7 +142,11 @@ class _HomeViewState extends HomeController {
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 'Préstamo en sala',
-                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
@@ -159,7 +166,11 @@ class _HomeViewState extends HomeController {
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 'Préstamo a domicilio',
-                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
@@ -179,7 +190,11 @@ class _HomeViewState extends HomeController {
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 'Préstamo interbibliotecario',
-                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
