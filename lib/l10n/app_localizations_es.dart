@@ -258,4 +258,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get level => 'Nivel';
+
+  @override
+  String get searchSectionTitle => 'Buscar en el Catálogo Bibliotecario UV';
+
+  @override
+  String get libraryServices => 'Servicios de la Biblioteca';
+
+  @override
+  String get bookSelections => 'Selecciones';
 }
