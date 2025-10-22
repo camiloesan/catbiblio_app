@@ -252,7 +252,7 @@ class SruService {
             (key, value) =>
                 value == null ||
                 (value is String && value.isEmpty) ||
-                (value is int && value < 0),
+                (value is int && value <= 1),
           );
 
       return queryParameters;
