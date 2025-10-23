@@ -98,6 +98,10 @@ class SruService {
     final dio = _createDio();
     final queryParameters = buildQueryParameters(params);
 
+    if (params.searchQuery.isEmpty) {
+      return SearchResult(books: [], totalRecords: 0);
+    }
+
     try {
       final response = await dio.get(
         '/new_search',
