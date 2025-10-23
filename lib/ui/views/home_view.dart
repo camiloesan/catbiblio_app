@@ -13,6 +13,7 @@ import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -48,11 +49,11 @@ class _HomeViewState extends HomeController {
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
-                  maxWidth: MediaQuery.of(context).size.width < 600
-                      ? MediaQuery.of(context).size.width
-                      : (MediaQuery.of(context).size.width / 3) * 2,
-                ),
+                    minHeight: MediaQuery.of(context).size.height,
+                    maxWidth: MediaQuery.of(context).size.width < 600
+                        ? MediaQuery.of(context).size.width
+                        : (MediaQuery.of(context).size.width / 3) * 2,
+                  ),
                   child: Column(
                     children: [
                       Padding(
@@ -73,21 +74,35 @@ class _HomeViewState extends HomeController {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            isItemTypesLoading
-                                ? Center(child: const CircularProgressIndicator())
-                                : LayoutBuilder(
-                                    builder: (context, constraints) {
-                                      return dropdownItemTypes(
-                                        context,
-                                        constraints.maxWidth,
-                                      );
-                                    },
-                                  ),
+                            Skeletonizer(
+                              enabled: isItemTypesLoading,
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return dropdownItemTypes(
+                                    context,
+                                    constraints.maxWidth,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Skeletonizer(
+                              enabled: isLibrariesLoading,
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return dropdownLibraries(
+                                    context,
+                                    constraints.maxWidth,
+                                  );
+                                },
+                              ),
+                            ),
                             const SizedBox(height: 12),
                             LayoutBuilder(
                               builder: (context, constraints) {
                                 return DropdownFilters(
-                                  searchFilterController: _searchFilterController,
+                                  searchFilterController:
+                                      _searchFilterController,
                                   filterEntries: _filterEntries,
                                   queryParams: _queryParams,
                                   maxWidth: constraints.maxWidth,
@@ -95,24 +110,12 @@ class _HomeViewState extends HomeController {
                               },
                             ),
                             const SizedBox(height: 12),
-                            isLibrariesLoading
-                                ? Center(child: const CircularProgressIndicator())
-                                : LayoutBuilder(
-                                    builder: (context, constraints) {
-                                      return dropdownLibraries(
-                                        context,
-                                        constraints.maxWidth,
-                                      );
-                                    },
-                                  ),
-                            const SizedBox(height: 12),
                             textFieldSearch(context),
                             // Divider(),
                             const SizedBox(height: 16),
                           ],
                         ),
                       ),
-                          
                       SizedBox(height: 4.0),
                       if (!isSelectionsEnabled)
                         SizedBox.shrink()
@@ -134,7 +137,9 @@ class _HomeViewState extends HomeController {
                                 ),
                               ),
                               _buildBooksCarouselSlider(context),
-                              BookNameFooterWidget(currentBookName: currentBookName),
+                              BookNameFooterWidget(
+                                currentBookName: currentBookName,
+                              ),
                             ],
                           ),
                         ),
@@ -145,13 +150,21 @@ class _HomeViewState extends HomeController {
                           padding: const EdgeInsets.only(left: 16.0, top: 16.0),
                           child: Text(
                             AppLocalizations.of(context)!.libraryServices,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: DropdownLibrariesServicesWidget(libraryServicesController: _libraryServicesController, libraryEntries: _libraryEntries, enabledHomeLibrariesEntries: _enabledHomeLibrariesEntries),
+                        child: DropdownLibrariesServicesWidget(
+                          libraryServicesController: _libraryServicesController,
+                          libraryEntries: _libraryEntries,
+                          enabledHomeLibrariesEntries:
+                              _enabledHomeLibrariesEntries,
+                        ),
                       ),
                       _buildServicesCarouselSlider(context),
                     ],
@@ -167,106 +180,88 @@ class _HomeViewState extends HomeController {
 
   CarouselSlider _buildBooksCarouselSlider(BuildContext context) {
     return CarouselSlider(
-                                items: [
-                                  for (var book in _bookSelections)
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (currentBiblionumber !=
-                                            book.biblionumber) {
-                                          _booksCarouselSliderController
-                                              .animateToPage(
-                                                _bookSelections.indexOf(book),
-                                              );
-                                          return;
-                                        }
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => BookView(
-                                              biblioNumber: book.biblionumber,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: _buildCarouselBooks(
-                                        context,
-                                        color: primaryColor,
-                                        title: "",
-                                        imageUrl:
-                                            'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                    ),
-                                ],
-                                carouselController:
-                                    _booksCarouselSliderController,
-                                options: CarouselOptions(
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      currentBiblionumber =
-                                          _bookSelections[index].biblionumber;
-                                      currentBookName =
-                                          _bookSelections[index].bookName;
-                                    });
-                                  },
-                                  disableCenter: true,
-                                  height: 300.0,
-                                  enlargeCenterPage: true,
-                                  autoPlay: true,
-                                  enableInfiniteScroll: true,
-                                  autoPlayInterval: const Duration(seconds: 6),
-                                  autoPlayAnimationDuration: const Duration(
-                                    milliseconds: 800,
-                                  ),
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  enlargeFactor: 0.4,
-                                  aspectRatio: 9 / 16,
-                                  viewportFraction:
-                                      MediaQuery.of(context).size.width < 600
-                                      ? 0.5
-                                      : 0.25,
-                                ),
-                              );
+      items: [
+        for (var book in _bookSelections)
+          GestureDetector(
+            onTap: () {
+              if (currentBiblionumber != book.biblionumber) {
+                _booksCarouselSliderController.animateToPage(
+                  _bookSelections.indexOf(book),
+                );
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      BookView(biblioNumber: book.biblionumber),
+                ),
+              );
+            },
+            child: _buildCarouselBooks(
+              context,
+              color: primaryColor,
+              title: "",
+              imageUrl:
+                  'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+      ],
+      carouselController: _booksCarouselSliderController,
+      options: CarouselOptions(
+        onPageChanged: (index, reason) {
+          setState(() {
+            currentBiblionumber = _bookSelections[index].biblionumber;
+            currentBookName = _bookSelections[index].bookName;
+          });
+        },
+        disableCenter: true,
+        height: 300.0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        enableInfiniteScroll: true,
+        autoPlayInterval: const Duration(seconds: 6),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeFactor: 0.4,
+        aspectRatio: 9 / 16,
+        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.5 : 0.25,
+      ),
+    );
   }
 
   CarouselSlider _buildServicesCarouselSlider(BuildContext context) {
     return CarouselSlider(
-                      items: [
-                        for (var service
-                            in _librariesServices
-                                .firstWhere(
-                                  (lib) =>
-                                      lib.libraryCode ==
-                                      selectedLibraryServices,
-                                  orElse: () => LibraryServices(
-                                    libraryCode: 'USBI-X',
-                                    services: [],
-                                  ),
-                                )
-                                .services)
-                          _buildCarouselServicesCards(
-                            context,
-                            color: primaryColor,
-                            title: service.name,
-                            imageUrl: service.imageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                      ],
-                      options: CarouselOptions(
-                        height: 350.0,
-                        enlargeCenterPage: true,
-                        autoPlay: true,
-                        enableInfiniteScroll: false,
-                        autoPlayInterval: const Duration(seconds: 6),
-                        autoPlayAnimationDuration: const Duration(
-                          milliseconds: 800,
-                        ),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        aspectRatio: 16 / 9,
-                        viewportFraction:
-                            MediaQuery.of(context).size.width < 600 ? 0.8 : 0.6,
-                      ),
-                    );
+      items: [
+        for (var service
+            in _librariesServices
+                .firstWhere(
+                  (lib) => lib.libraryCode == selectedLibraryServices,
+                  orElse: () =>
+                      LibraryServices(libraryCode: 'USBI-X', services: []),
+                )
+                .services)
+          _buildCarouselServicesCards(
+            context,
+            color: primaryColor,
+            title: service.name,
+            imageUrl: service.imageUrl,
+            fit: BoxFit.cover,
+          ),
+      ],
+      options: CarouselOptions(
+        height: 350.0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        enableInfiniteScroll: false,
+        autoPlayInterval: const Duration(seconds: 6),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        aspectRatio: 16 / 9,
+        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.8 : 0.6,
+      ),
+    );
   }
 
   DropdownMenu<String> dropdownItemTypes(
@@ -548,10 +543,7 @@ class _HomeViewState extends HomeController {
 }
 
 class BookNameFooterWidget extends StatelessWidget {
-  const BookNameFooterWidget({
-    super.key,
-    required this.currentBookName,
-  });
+  const BookNameFooterWidget({super.key, required this.currentBookName});
 
   final String currentBookName;
 
@@ -579,7 +571,9 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
     required TextEditingController libraryServicesController,
     required List<DropdownMenuEntry<String>> libraryEntries,
     required List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries,
-  }) : _libraryServicesController = libraryServicesController, _libraryEntries = libraryEntries, _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries;
+  }) : _libraryServicesController = libraryServicesController,
+       _libraryEntries = libraryEntries,
+       _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries;
 
   final TextEditingController _libraryServicesController;
   final List<DropdownMenuEntry<String>> _libraryEntries;
@@ -589,9 +583,7 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownMenu(
       controller: _libraryServicesController,
-      inputDecorationTheme: InputDecorationTheme(
-        border: InputBorder.none,
-      ),
+      inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),
       dropdownMenuEntries: _libraryEntries
           .where(
             (entry) => _enabledHomeLibrariesEntries.any(
