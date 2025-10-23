@@ -332,6 +332,10 @@
   "@level": {
     "description": "Label for the level in book preview"
   },
+  "errorLoadingBookDetails": "Error loading book details",
+  "@errorLoadingBookDetails": {
+    "description": "Message shown when there is an error loading the book details"
+    },
   "searchSectionTitle": "Search in UV Library Catalog",
   "@searchSectionTitle": {
     "description": "Title for the search section in home view"

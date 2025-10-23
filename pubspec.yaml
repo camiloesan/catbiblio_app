@@ -20,6 +20,7 @@ dependencies:
   provider: ^6.1.5
   readmore: ^3.0.0
   flutter_dotenv: ^6.0.0
+  skeletonizer: ^2.1.0+1
 
 dev_dependencies:
   flutter_test:

@@ -6,6 +6,7 @@ import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/search.dart';
 import 'package:catbiblio_app/services/images.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 part '../controllers/search_controller.dart';
 
@@ -55,14 +56,14 @@ class _SearchViewState extends SearchController {
                           queryParams: widget.queryParams,
                         ),
                         const SizedBox(height: 12),
-                        DropdownFilter(
-                          filterController: _filterController,
-                          filterEntries: _filterEntries,
+                        DropdownLibraries(
+                          libraryController: _libraryController,
                           widget: widget,
                         ),
                         const SizedBox(height: 12),
-                        DropdownLibraries(
-                          libraryController: _libraryController,
+                        DropdownFilter(
+                          filterController: _filterController,
+                          filterEntries: _filterEntries,
                           widget: widget,
                         ),
                         const SizedBox(height: 12),
@@ -106,7 +107,11 @@ class _SearchViewState extends SearchController {
           ),
 
           // Book list (only rendered if not page loading)
-          if (!isPageLoading) BookList(books: books),
+          BookList(
+            books: books,
+            isPageLoading: isPageLoading,
+            isInitialRequestLoading: isInitialRequestLoading,
+          ),
 
           // Bottom pagination
           if (!isPageLoading && books.length > 5)
@@ -187,12 +192,75 @@ class _SearchViewState extends SearchController {
 }
 
 class BookList extends StatelessWidget {
-  const BookList({super.key, required this.books});
+  const BookList({
+    super.key,
+    required this.books,
+    required this.isPageLoading,
+    required this.isInitialRequestLoading,
+  });
 
   final List<BookPreview> books;
+  final bool isPageLoading;
+  final bool isInitialRequestLoading;
 
   @override
   Widget build(BuildContext context) {
+    if (isPageLoading || isInitialRequestLoading) {
+      return SliverList.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Skeletonizer(
+                enabled: true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 120,
+                        color: Colors.grey.shade300,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '---------------------------------',
+                              style: const TextStyle(fontSize: 25),
+                            ),
+                            Text(
+                              '---------------------------',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              '-------------------------------',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              '---------------------',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(color: Colors.grey),
+            ],
+          );
+        },
+      );
+    }
+
     return SliverList.builder(
       itemCount: books.length,
       itemBuilder: (context, index) {

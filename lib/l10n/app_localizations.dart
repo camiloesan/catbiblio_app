@@ -596,6 +596,12 @@ abstract class AppLocalizations {
   /// **'Level'**
   String get level;
 
+  /// Message shown when there is an error loading the book details
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading book details'**
+  String get errorLoadingBookDetails;
+
   /// Title for the search section in home view
   ///
   /// In en, this message translates to:

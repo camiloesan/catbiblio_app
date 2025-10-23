@@ -259,6 +259,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get level => 'Level';
 
   @override
+  String get errorLoadingBookDetails => 'Error loading book details';
+
+  @override
   String get searchSectionTitle => 'Search in UV Library Catalog';
 
   @override
