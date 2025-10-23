@@ -159,11 +159,16 @@ class _HomeViewState extends HomeController {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: DropdownLibrariesServicesWidget(
-                          libraryServicesController: _libraryServicesController,
-                          libraryEntries: _libraryEntries,
-                          enabledHomeLibrariesEntries:
-                              _enabledHomeLibrariesEntries,
+                        child: LayoutBuilder(
+                          builder: (context, constraints) =>
+                              DropdownLibrariesServicesWidget(
+                                libraryServicesController:
+                                    _libraryServicesController,
+                                libraryEntries: _libraryEntries,
+                                enabledHomeLibrariesEntries:
+                                    _enabledHomeLibrariesEntries,
+                                maxWidth: constraints.maxWidth,
+                              ),
                         ),
                       ),
                       _buildServicesCarouselSlider(context),
@@ -571,17 +576,21 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
     required TextEditingController libraryServicesController,
     required List<DropdownMenuEntry<String>> libraryEntries,
     required List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries,
+    required double maxWidth,
   }) : _libraryServicesController = libraryServicesController,
        _libraryEntries = libraryEntries,
-       _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries;
+       _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries,
+       _maxWidth = maxWidth;
 
   final TextEditingController _libraryServicesController;
   final List<DropdownMenuEntry<String>> _libraryEntries;
   final List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries;
+  final double _maxWidth;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
+      width: _maxWidth,
       controller: _libraryServicesController,
       inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),
       dropdownMenuEntries: _libraryEntries
