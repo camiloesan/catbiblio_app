@@ -238,7 +238,7 @@ class _HomeViewState extends HomeController {
                                       ),
                                     )
                                     .services)
-                              _buildCarouselServices(
+                              _buildCarouselServicesCards(
                                 context,
                                 color: primaryColor,
                                 title: service.name,
@@ -358,7 +358,7 @@ class _HomeViewState extends HomeController {
     );
   }
 
-  Widget _buildCarouselServices(
+  Widget _buildCarouselServicesCards(
     BuildContext context, {
     required Color color,
     required String title,
@@ -553,6 +553,68 @@ class _HomeViewState extends HomeController {
           ),
         ),
       ],
+    );
+  }
+}
+
+class BookNameFooterWidget extends StatelessWidget {
+  const BookNameFooterWidget({
+    super.key,
+    required this.currentBookName,
+  });
+
+  final String currentBookName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(
+        currentBookName,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+class DropdownLibrariesServicesWidget extends StatelessWidget {
+  const DropdownLibrariesServicesWidget({
+    super.key,
+    required TextEditingController libraryServicesController,
+    required List<DropdownMenuEntry<String>> libraryEntries,
+    required List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries,
+  }) : _libraryServicesController = libraryServicesController, _libraryEntries = libraryEntries, _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries;
+
+  final TextEditingController _libraryServicesController;
+  final List<DropdownMenuEntry<String>> _libraryEntries;
+  final List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      controller: _libraryServicesController,
+      inputDecorationTheme: InputDecorationTheme(
+        border: InputBorder.none,
+      ),
+      dropdownMenuEntries: _libraryEntries
+          .where(
+            (entry) => _enabledHomeLibrariesEntries.any(
+              (enabled) => enabled.value == entry.value,
+            ),
+          )
+          .toList(),
+      initialSelection: _enabledHomeLibrariesEntries.isNotEmpty
+          ? _enabledHomeLibrariesEntries[0].value
+          : null,
+      enableSearch: false,
+      enableFilter: false,
+      requestFocusOnTap: false,
     );
   }
 }
