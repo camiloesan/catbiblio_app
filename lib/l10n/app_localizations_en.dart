@@ -257,4 +257,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get level => 'Level';
+
+  @override
+  String get errorLoadingBookDetails => 'Error loading book details';
 }

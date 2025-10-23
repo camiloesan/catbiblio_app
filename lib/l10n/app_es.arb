@@ -82,5 +82,6 @@
     "location": "Ubicación",
     "allItemTypes": "Todos",
     "room": "Sala",
-    "level": "Nivel"
+    "level": "Nivel",
+    "errorLoadingBookDetails": "Error al cargar los detalles del libro"
 }
