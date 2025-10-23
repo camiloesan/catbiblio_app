@@ -83,5 +83,8 @@
     "allItemTypes": "Todos",
     "room": "Sala",
     "level": "Nivel",
-    "errorLoadingBookDetails": "Error al cargar los detalles del libro"
+    "errorLoadingBookDetails": "Error al cargar los detalles del libro",
+    "searchSectionTitle": "Buscar en el Catálogo Bibliotecario UV",
+    "libraryServices": "Servicios de la Biblioteca",
+    "bookSelections": "Selecciones"
 }

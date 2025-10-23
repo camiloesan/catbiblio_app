@@ -335,5 +335,17 @@
   "errorLoadingBookDetails": "Error loading book details",
   "@errorLoadingBookDetails": {
     "description": "Message shown when there is an error loading the book details"
+    },
+  "searchSectionTitle": "Search in UV Library Catalog",
+  "@searchSectionTitle": {
+    "description": "Title for the search section in home view"
+  },
+  "libraryServices": "Library Services",
+  "@libraryServices": {
+    "description": "Library services section title"
+  },
+  "bookSelections": "Selections",
+  "@bookSelections": {
+    "description": "Book selections section title"
   }
 }

@@ -601,6 +601,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading book details'**
   String get errorLoadingBookDetails;
+
+  /// Title for the search section in home view
+  ///
+  /// In en, this message translates to:
+  /// **'Search in UV Library Catalog'**
+  String get searchSectionTitle;
+
+  /// Library services section title
+  ///
+  /// In en, this message translates to:
+  /// **'Library Services'**
+  String get libraryServices;
+
+  /// Book selections section title
+  ///
+  /// In en, this message translates to:
+  /// **'Selections'**
+  String get bookSelections;
 }
 
 class _AppLocalizationsDelegate
