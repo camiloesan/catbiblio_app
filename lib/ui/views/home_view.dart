@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/config.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
+import 'package:catbiblio_app/models/global_provider.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/config.dart';
@@ -11,6 +12,7 @@ import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -202,11 +204,11 @@ class _HomeViewState extends HomeController {
                           border: InputBorder.none,
                         ),
                         dropdownMenuEntries: _libraryEntries
-                            .where((entry) => _enabledLibrariesEntries
+                            .where((entry) => _enabledHomeLibrariesEntries
                                 .any((enabled) => enabled.value == entry.value))
                             .toList(),
-                        initialSelection: _enabledLibrariesEntries.isNotEmpty
-                            ? _enabledLibrariesEntries[0].value
+                        initialSelection: _enabledHomeLibrariesEntries.isNotEmpty
+                            ? _enabledHomeLibrariesEntries[0].value
                             : null,
                         enableSearch: false,
                         enableFilter: false,

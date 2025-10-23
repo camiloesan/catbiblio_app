@@ -2,6 +2,7 @@ import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/models/finder_params.dart';
+import 'package:catbiblio_app/models/global_provider.dart';
 import 'package:catbiblio_app/services/biblios_items.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/ui/views/finder_view.dart';
@@ -9,6 +10,7 @@ import 'package:catbiblio_app/ui/views/marc_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/biblios_details.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -243,7 +245,7 @@ class _BookViewState extends BookController {
                             '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
                           ),
                         ),
-                        biblioItem.holdingLibraryId == 'USBI-X' &&
+                        Provider.of<GlobalProvider>(context).globalEnabledLibrariesEntries.contains(biblioItem.holdingLibraryId) &&
                                 biblioItem.homeLibraryId ==
                                     biblioItem.holdingLibraryId &&
                                 biblioItem.notForLoanStatus ==

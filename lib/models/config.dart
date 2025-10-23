@@ -2,7 +2,7 @@ class Config {
   final List<BookSelection> bookSelections;
   final List<LibraryCode> enabledLibrariesHome;
   final List<LibraryServices> librariesServices;
-  final List<LibraryCode> bookFinderLibraries;
+  final List<String> bookFinderLibraries;
   final bool selectionsSectionState;
 
   Config({
@@ -18,16 +18,19 @@ class Config {
       bookSelections: (json['book_selections'] as List<dynamic>? ?? [])
           .map((e) => BookSelection.fromJson(e))
           .toList(),
-      enabledLibrariesHome: (json['enabled_libraries_home'] as List<dynamic>? ?? [])
-          .map((e) => LibraryCode.fromJson(e))
-          .toList(),
+      enabledLibrariesHome:
+          (json['enabled_libraries_home'] as List<dynamic>? ?? [])
+              .map((e) => LibraryCode.fromJson(e))
+              .toList(),
       librariesServices: (json['libraries_services'] as List<dynamic>? ?? [])
           .map((e) => LibraryServices.fromJson(e))
           .toList(),
-      bookFinderLibraries: (json['book_finder_libraries'] as List<dynamic>? ?? [])
-          .map((e) => LibraryCode.fromJson(e))
-          .toList(),
-      selectionsSectionState: json['is_selections_section_enabled'] as bool? ?? false,
+      bookFinderLibraries:
+          (json['book_finder_libraries'] as List<dynamic>? ?? [])
+              .map((e) => e['library_code'] as String? ?? '')
+              .toList(),
+      selectionsSectionState:
+          json['is_selections_section_enabled'] as bool? ?? false,
     );
   }
 }
@@ -36,10 +39,7 @@ class BookSelection {
   final String bookName;
   final String biblionumber;
 
-  BookSelection({
-    required this.bookName,
-    required this.biblionumber,
-  });
+  BookSelection({required this.bookName, required this.biblionumber});
 
   factory BookSelection.fromJson(Map<String, dynamic> json) {
     return BookSelection(
@@ -52,14 +52,10 @@ class BookSelection {
 class LibraryCode {
   final String libraryCode;
 
-  LibraryCode({
-    required this.libraryCode,
-  });
+  LibraryCode({required this.libraryCode});
 
   factory LibraryCode.fromJson(Map<String, dynamic> json) {
-    return LibraryCode(
-      libraryCode: json['library_code'] ?? '',
-    );
+    return LibraryCode(libraryCode: json['library_code'] ?? '');
   }
 }
 
@@ -67,10 +63,7 @@ class LibraryServices {
   final String libraryCode;
   final List<Service> services;
 
-  LibraryServices({
-    required this.libraryCode,
-    required this.services,
-  });
+  LibraryServices({required this.libraryCode, required this.services});
 
   factory LibraryServices.fromJson(Map<String, dynamic> json) {
     return LibraryServices(
@@ -86,15 +79,9 @@ class Service {
   final String name;
   final String imageUrl;
 
-  Service({
-    required this.name,
-    required this.imageUrl,
-  });
+  Service({required this.name, required this.imageUrl});
 
   factory Service.fromJson(Map<String, dynamic> json) {
-    return Service(
-      name: json['name'] ?? '',
-      imageUrl: json['image_url'] ?? '',
-    );
+    return Service(name: json['name'] ?? '', imageUrl: json['image_url'] ?? '');
   }
 }
