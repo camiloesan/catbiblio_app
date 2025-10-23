@@ -16,15 +16,16 @@ void main() {
 
       debugPrint('Fetched ${libraries.length} libraries');
       debugPrint(
-        'First library: ${libraries.isNotEmpty ? libraries.first : 'No libraries found'}',
+        'First library: ${libraries.isNotEmpty ? libraries.first.name : 'No libraries found'}',
       );
       debugPrint(
-        'Last library: ${libraries.isNotEmpty ? libraries.last : 'No libraries found'}',
+        'Last library: ${libraries.isNotEmpty ? libraries.last.name : 'No libraries found'}',
       );
 
       expect(libraries, isA<List<Library>>());
       expect(libraries, isNotEmpty);
     });
+
     test('getLibraries are ordered by library_id', () async {
       final libraries = await LibrariesService.getLibraries();
 
@@ -33,6 +34,7 @@ void main() {
 
       expect(libraries, isNot(equals(sortedLibraries)));
     });
+
     test('getLibraries at least one library for each region', () async {
       final libraries = await LibrariesService.getLibraries();
 
@@ -41,9 +43,10 @@ void main() {
         regionsFound.add(library.region);
       }
 
-      debugPrint('Regions found: $regionsFound');
+      for (var entry in regions.entries) {
+        if (entry.key == 0) continue; // skip 'Sin región'
 
-      for (var region in regions.values) {
+        final region = entry.value;
         expect(
           regionsFound.contains(region),
           isTrue,
@@ -55,10 +58,11 @@ void main() {
     test('getLibraries returns libraries with valid regions', () async {
       final libraries = await LibrariesService.getLibraries();
 
-      debugPrint('Found regions in libraries:');
+      // debugPrint('Found regions in libraries:');
 
       for (var library in libraries) {
-        debugPrint(' - ${library.name}: ${library.region}');
+        // print each library's region
+        // debugPrint(' - ${library.name}: ${library.region}');
         expect(
           regions.containsValue(library.region),
           isTrue,
