@@ -1,4 +1,3 @@
-import 'package:catbiblio_app/models/config.dart';
 import 'package:flutter/material.dart';
 
 class GlobalProvider with ChangeNotifier {
