@@ -10,7 +10,7 @@ abstract class HomeController extends State<HomeView> {
   late CarouselSliderController _booksCarouselSliderController;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
-  late List<DropdownMenuEntry<String>> _enabledLibrariesEntries = [];
+  late List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries = [];
   late List<LibraryServices> _librariesServices = [];
   late List<BookSelection> _bookSelections = [];
   final QueryParams _queryParams = QueryParams();
@@ -67,14 +67,26 @@ abstract class HomeController extends State<HomeView> {
       isLibrariesLoading = false;
       _librariesFuture = Future.value(libraries);
 
-      setState(() {
-        _libraryEntries = libraries.map((library) {
-          return DropdownMenuEntry(
-            value: library.libraryId,
-            label: library.name,
-          );
-        }).toList();
-      });
+      if (mounted) {
+        Provider.of<GlobalProvider>(
+          context,
+          listen: false,
+        ).setGlobalLibraryEntries(
+          libraries.map((library) {
+            return DropdownMenuEntry(
+              value: library.libraryId,
+              label: library.name,
+            );
+          }).toList(),
+        );
+
+        setState(() {
+          _libraryEntries = Provider.of<GlobalProvider>(
+            context,
+            listen: false,
+          ).globalLibraryEntries;
+        });
+      }
     } catch (e) {
       debugPrint('Error fetching data: $e');
     }
@@ -82,14 +94,25 @@ abstract class HomeController extends State<HomeView> {
     try {
       final itemTypes = await ItemTypesService.getItemTypes();
       isItemTypesLoading = false;
-      
+
+      if (mounted) {
+        Provider.of<GlobalProvider>(
+          context,
+          listen: false,
+        ).setGlobalItemTypeEntries(
+          itemTypes.map((itemType) {
+            return DropdownMenuEntry(
+              value: itemType.itemTypeId,
+              label: itemType.description,
+            );
+          }).toList(),
+        );
+      }
+
       setState(() {
-        _itemTypeEntries = itemTypes.map((itemType) {
-          return DropdownMenuEntry(
-            value: itemType.itemTypeId,
-            label: itemType.description,
-          );
-        }).toList();
+        _itemTypeEntries = Provider.of<GlobalProvider>(
+          context, listen: false
+        ).globalItemTypeEntries;
       });
     } catch (e) {
       debugPrint('Error fetching item types: $e');
@@ -98,13 +121,21 @@ abstract class HomeController extends State<HomeView> {
     try {
       final config = await ConfigService.getConfig();
       isConfigLoading = false;
-      
+
+      if (mounted) {
+        Provider.of<GlobalProvider>(
+          context,
+          listen: false,
+        ).setGlobalEnabledLibrariesEntries(config.bookFinderLibraries.toSet());
+      }
+
       setState(() {
         _librariesServices = config.librariesServices;
         _bookSelections = config.bookSelections;
         currentBookName = _bookSelections[0].bookName;
+        currentBiblionumber = _bookSelections[0].biblionumber;
         isSelectionsEnabled = config.selectionsSectionState;
-        _enabledLibrariesEntries = config.enabledLibrariesHome.map((library) {
+        _enabledHomeLibrariesEntries = config.enabledLibrariesHome.map((library) {
           return DropdownMenuEntry(
             value: library.libraryCode,
             label: library.libraryCode,
@@ -130,7 +161,11 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void onSubmitAction() {
-    if (_searchController.text.isEmpty || _searchController.text.trim().isEmpty || _searchController.text.trim().length < 2) return;
+    if (_searchController.text.isEmpty ||
+        _searchController.text.trim().isEmpty ||
+        _searchController.text.trim().length < 2) {
+      return;
+    }
 
     ControllersData controllersData = ControllersData(
       filterController: _searchFilterController,
