@@ -260,7 +260,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorLoadingBookDetails => 'Error loading book details';
-  
+
   @override
   String get searchSectionTitle => 'Search in UV Library Catalog';
 

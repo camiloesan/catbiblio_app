@@ -262,7 +262,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get errorLoadingBookDetails =>
       'Error al cargar los detalles del libro';
-  
+
   @override
   String get searchSectionTitle => 'Buscar en el Catálogo Bibliotecario UV';
 
