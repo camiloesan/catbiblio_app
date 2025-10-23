@@ -42,218 +42,245 @@ class _HomeViewState extends HomeController {
       ),
       drawer: navigationDrawer(context),
       drawerEnableOpenDragGesture: true,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
+      body: Scrollbar(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
                   minHeight: MediaQuery.of(context).size.height,
                   maxWidth: MediaQuery.of(context).size.width < 600
                       ? MediaQuery.of(context).size.width
                       : (MediaQuery.of(context).size.width / 3) * 2,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8.0,
-                    left: 16.0,
-                    right: 16.0,
-                  ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        AppLocalizations.of(context)!.searchSectionTitle,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                          left: 16.0,
+                          right: 16.0,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.searchSectionTitle,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            isItemTypesLoading
+                                ? Center(child: const CircularProgressIndicator())
+                                : LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return dropdownItemTypes(
+                                        context,
+                                        constraints.maxWidth,
+                                      );
+                                    },
+                                  ),
+                            const SizedBox(height: 12),
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                return DropdownFilters(
+                                  searchFilterController: _searchFilterController,
+                                  filterEntries: _filterEntries,
+                                  queryParams: _queryParams,
+                                  maxWidth: constraints.maxWidth,
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            isLibrariesLoading
+                                ? Center(child: const CircularProgressIndicator())
+                                : LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return dropdownLibraries(
+                                        context,
+                                        constraints.maxWidth,
+                                      );
+                                    },
+                                  ),
+                            const SizedBox(height: 12),
+                            textFieldSearch(context),
+                            // Divider(),
+                            const SizedBox(height: 16),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      Skeletonizer(
-                        enabled: isItemTypesLoading,
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return dropdownItemTypes(
-                              context,
-                              constraints.maxWidth,
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Skeletonizer(
-                        enabled: isLibrariesLoading,
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return dropdownLibraries(
-                              context,
-                              constraints.maxWidth,
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          return DropdownFilters(
-                            searchFilterController: _searchFilterController,
-                            filterEntries: _filterEntries,
-                            queryParams: _queryParams,
-                            maxWidth: constraints.maxWidth,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      textFieldSearch(context),
-                      Divider(),
-                      if (isSelectionsEnabled)
-                        Text(
-                          AppLocalizations.of(context)!.bookSelections,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      Center(
-                        child: CarouselSlider(
-                          items: [
-                            for (var book in _bookSelections)
-                              GestureDetector(
-                                onTap: () {
-                                  if (currentBiblionumber != book.biblionumber) {
-                                    _booksCarouselSliderController.animateToPage(
-                                      _bookSelections.indexOf(book),
-                                    );
-                                    return;
-                                  }
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BookView(
-                                        biblioNumber: book.biblionumber,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: _buildCarouselBooks(
-                                  context,
-                                  color: primaryColor,
-                                  title: "",
-                                  imageUrl:
-                                      'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
-                                  fit: BoxFit.fitHeight,
+                          
+                      SizedBox(height: 4.0),
+                      if (!isSelectionsEnabled)
+                        SizedBox.shrink()
+                      else
+                        Container(
+                          color: primaryUVColor,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  AppLocalizations.of(context)!.bookSelections,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                          ],
-                          carouselController: _booksCarouselSliderController,
-                          options: CarouselOptions(
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                currentBiblionumber =
-                                    _bookSelections[index].biblionumber;
-                                currentBookName =
-                                    _bookSelections[index].bookName;
-                              });
-                            },
-                            height: 300.0,
-                            enlargeCenterPage: true,
-                            autoPlay: true,
-                            enableInfiniteScroll: true,
-                            autoPlayInterval: const Duration(seconds: 6),
-                            autoPlayAnimationDuration: const Duration(
-                              milliseconds: 800,
-                            ),
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enlargeFactor: 0.2,
-                            aspectRatio: 9 / 16,
-                            viewportFraction:
-                                MediaQuery.of(context).size.width < 600
-                                ? 0.5
-                                : 0.25,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.0),
-                      Center(
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              currentBookName,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.0),
-                      Divider(),
-                      Text(
-                        AppLocalizations.of(context)!.libraryServices,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      DropdownMenu(
-                        controller: _libraryServicesController,
-                        inputDecorationTheme: InputDecorationTheme(
-                          border: InputBorder.none,
-                        ),
-                        dropdownMenuEntries: _libraryEntries
-                            .where((entry) => _enabledHomeLibrariesEntries
-                                .any((enabled) => enabled.value == entry.value))
-                            .toList(),
-                        initialSelection: _enabledHomeLibrariesEntries.isNotEmpty
-                            ? _enabledHomeLibrariesEntries[0].value
-                            : null,
-                        enableSearch: false,
-                        enableFilter: false,
-                        requestFocusOnTap: false,
-                      ),
-                      Center(
-                        child: CarouselSlider(
-                          items: [
-                            for (var service
-                                in _librariesServices
-                                    .firstWhere(
-                                      (lib) => lib.libraryCode == selectedLibraryServices,
-                                      orElse: () => LibraryServices(
-                                        libraryCode: 'USBI-X',
-                                        services: [],
+                              Center(
+                                child: CarouselSlider(
+                                  items: [
+                                    for (var book in _bookSelections)
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (currentBiblionumber !=
+                                              book.biblionumber) {
+                                            _booksCarouselSliderController
+                                                .animateToPage(
+                                                  _bookSelections.indexOf(book),
+                                                );
+                                            return;
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => BookView(
+                                                biblioNumber: book.biblionumber,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: _buildCarouselBooks(
+                                          context,
+                                          color: primaryColor,
+                                          title: "",
+                                          imageUrl:
+                                              'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
+                                          fit: BoxFit.fitHeight,
+                                        ),
                                       ),
-                                    )
-                                    .services)
-                              _buildCarouselServices(
-                                context,
-                                color: primaryColor,
-                                title: service.name,
-                                imageUrl: service.imageUrl,
-                                fit: BoxFit.cover,
+                                  ],
+                                  carouselController:
+                                      _booksCarouselSliderController,
+                                  options: CarouselOptions(
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        currentBiblionumber =
+                                            _bookSelections[index].biblionumber;
+                                        currentBookName =
+                                            _bookSelections[index].bookName;
+                                      });
+                                    },
+                                    disableCenter: true,
+                                    height: 300.0,
+                                    enlargeCenterPage: true,
+                                    autoPlay: true,
+                                    enableInfiniteScroll: true,
+                                    autoPlayInterval: const Duration(seconds: 6),
+                                    autoPlayAnimationDuration: const Duration(
+                                      milliseconds: 800,
+                                    ),
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    enlargeFactor: 0.4,
+                                    aspectRatio: 9 / 16,
+                                    viewportFraction:
+                                        MediaQuery.of(context).size.width < 600
+                                        ? 0.5
+                                        : 0.25,
+                                  ),
+                                ),
                               ),
-                          ],
-                          options: CarouselOptions(
-                            height: 350.0,
-                            enlargeCenterPage: true,
-                            autoPlay: true,
-                            enableInfiniteScroll: false,
-                            autoPlayInterval: const Duration(seconds: 6),
-                            autoPlayAnimationDuration: const Duration(
-                              milliseconds: 800,
-                            ),
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            aspectRatio: 16 / 9,
-                            viewportFraction:
-                                MediaQuery.of(context).size.width < 600
-                                ? 0.8
-                                : 0.6,
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  currentBookName,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                          child: Text(
+                            AppLocalizations.of(context)!.libraryServices,
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: DropdownMenu(
+                          controller: _libraryServicesController,
+                          inputDecorationTheme: InputDecorationTheme(
+                            border: InputBorder.none,
+                          ),
+                          dropdownMenuEntries: _libraryEntries
+                              .where(
+                                (entry) => _enabledHomeLibrariesEntries.any(
+                                  (enabled) => enabled.value == entry.value,
+                                ),
+                              )
+                              .toList(),
+                          initialSelection: _enabledHomeLibrariesEntries.isNotEmpty
+                              ? _enabledHomeLibrariesEntries[0].value
+                              : null,
+                          enableSearch: false,
+                          enableFilter: false,
+                          requestFocusOnTap: false,
+                        ),
+                      ),
+                      CarouselSlider(
+                        items: [
+                          for (var service
+                              in _librariesServices
+                                  .firstWhere(
+                                    (lib) =>
+                                        lib.libraryCode ==
+                                        selectedLibraryServices,
+                                    orElse: () => LibraryServices(
+                                      libraryCode: 'USBI-X',
+                                      services: [],
+                                    ),
+                                  )
+                                  .services)
+                            _buildCarouselServices(
+                              context,
+                              color: primaryColor,
+                              title: service.name,
+                              imageUrl: service.imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                        ],
+                        options: CarouselOptions(
+                          height: 350.0,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          enableInfiniteScroll: false,
+                          autoPlayInterval: const Duration(seconds: 6),
+                          autoPlayAnimationDuration: const Duration(
+                            milliseconds: 800,
+                          ),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          aspectRatio: 16 / 9,
+                          viewportFraction:
+                              MediaQuery.of(context).size.width < 600 ? 0.8 : 0.6,
                         ),
                       ),
                     ],
@@ -261,8 +288,8 @@ class _HomeViewState extends HomeController {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -360,8 +387,7 @@ class _HomeViewState extends HomeController {
     return Card(
       color: color,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      elevation: 8.0,
-      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+      elevation: 16.0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -426,44 +452,41 @@ class _HomeViewState extends HomeController {
     required String imageUrl,
     required BoxFit fit,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              spreadRadius: 2,
-              blurRadius: 5, 
-              offset: Offset(0, 3), 
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-          child: Image.network(
-            imageUrl,
-            fit: fit,
-            loadingBuilder:
-                (
-                  BuildContext context,
-                  Widget child,
-                  ImageChunkEvent? loadingProgress,
-                ) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  );
-                },
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(Icons.error_outline, color: Colors.white, size: 40),
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            spreadRadius: 0,
+            blurRadius: 24.0,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+        child: Image.network(
+          imageUrl,
+          fit: fit,
+          loadingBuilder:
+              (
+                BuildContext context,
+                Widget child,
+                ImageChunkEvent? loadingProgress,
+              ) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+          errorBuilder: (context, error, stackTrace) => const Center(
+            child: Icon(Icons.error_outline, color: Colors.white, size: 40),
           ),
         ),
       ),
