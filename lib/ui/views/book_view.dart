@@ -243,15 +243,18 @@ class _BookViewState extends BookController {
                           ),
                         )
                       else
-                        Text(
-                          '${AppLocalizations.of(context)!.copies}: ${biblioItems.length}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+                        Skeletonizer(
+                          enabled: isLoadingBiblioItems,
+                          child: Text(
+                            '${AppLocalizations.of(context)!.copies}: ${biblioItems.length}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
 
-                      buildLibrariesList(),
+                      buildLibrariesList(isLoadingBiblioItems),
                     ],
                   ),
                 ),
@@ -263,7 +266,25 @@ class _BookViewState extends BookController {
     );
   }
 
-  ListView buildLibrariesList() {
+  ListView buildLibrariesList(bool isLoadingBiblioItems) {
+    if (isLoadingBiblioItems) {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 3, // Show 3 placeholder items
+        itemBuilder: (context, index) {
+          return Skeletonizer.zone(
+            child: Card(
+              child: ListTile(
+                title: Bone.text(words: 4),
+                trailing: Bone.icon(),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
