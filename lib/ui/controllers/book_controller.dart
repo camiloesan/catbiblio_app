@@ -10,6 +10,9 @@ abstract class BookController extends State<BookView> {
   final Map<String, List<BiblioItem>> groupedItems = {};
   final List<String> holdingLibraries = [];
 
+  final mockTitle =
+      'Título de ejemplo para mostrar en la interfaz de usuario mientras se cargan los datos reales del libro.';
+
   Map<String, String> get languageMap => {
     'eng': AppLocalizations.of(context)!.english,
     'spa': AppLocalizations.of(context)!.spanish,
@@ -142,7 +145,12 @@ abstract class BookController extends State<BookView> {
     }
   }
 
-  void navigateToFinderView(String callNumber, String collection, String collectionCode, String holdingLibrary) {
+  void navigateToFinderView(
+    String callNumber,
+    String collection,
+    String collectionCode,
+    String holdingLibrary,
+  ) {
     FinderParams params = FinderParams(
       biblioNumber: widget.biblioNumber,
       title: bibliosDetails.title,
@@ -154,9 +162,7 @@ abstract class BookController extends State<BookView> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => FinderView(params: params),
-      ),
+      MaterialPageRoute(builder: (context) => FinderView(params: params)),
     );
   }
 
