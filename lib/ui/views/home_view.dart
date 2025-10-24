@@ -48,7 +48,6 @@ class _HomeViewState extends HomeController {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
                   maxWidth: MediaQuery.of(context).size.width < 600
                       ? MediaQuery.of(context).size.width
                       : (MediaQuery.of(context).size.width / 3) * 2,
@@ -100,8 +99,7 @@ class _HomeViewState extends HomeController {
                           LayoutBuilder(
                             builder: (context, constraints) {
                               return DropdownFilters(
-                                searchFilterController:
-                                    _searchFilterController,
+                                searchFilterController: _searchFilterController,
                                 filterEntries: _filterEntries,
                                 queryParams: _queryParams,
                                 maxWidth: constraints.maxWidth,
@@ -142,38 +140,53 @@ class _HomeViewState extends HomeController {
                           ],
                         ),
                       ),
-      
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                        child: Text(
-                          AppLocalizations.of(context)!.libraryServices,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) =>
-                            DropdownLibrariesServicesWidget(
-                              libraryServicesController:
-                                  _libraryServicesController,
-                              libraryEntries: _libraryEntries,
-                              enabledHomeLibrariesEntries:
-                                  _enabledHomeLibrariesEntries,
-                              maxWidth: constraints.maxWidth,
-                            ),
-                      ),
-                    ),
-                    _buildServicesCarouselSlider(context),
                   ],
                 ),
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width < 600
+                        ? MediaQuery.of(context).size.width
+                        : (MediaQuery.of(context).size.width / 3) * 2,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!.libraryServices,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        LayoutBuilder(
+                          builder: (context, constraints) =>
+                              DropdownLibrariesServicesWidget(
+                                libraryServicesController:
+                                    _libraryServicesController,
+                                libraryEntries: _libraryEntries,
+                                enabledHomeLibrariesEntries:
+                                    _enabledHomeLibrariesEntries,
+                                maxWidth: constraints.maxWidth,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                _buildServicesCarouselSlider(context),
+                SizedBox(height: 32.0),
+              ],
             ),
           ),
         ],
@@ -254,7 +267,7 @@ class _HomeViewState extends HomeController {
           ),
       ],
       options: CarouselOptions(
-        height: 350.0,
+        height: 320,
         enlargeCenterPage: true,
         autoPlay: true,
         enableInfiniteScroll: false,
@@ -262,7 +275,7 @@ class _HomeViewState extends HomeController {
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
         aspectRatio: 16 / 9,
-        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.8 : 0.6,
+        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.8 : 0.4,
       ),
     );
   }
@@ -359,6 +372,7 @@ class _HomeViewState extends HomeController {
   }) {
     return Card(
       color: color,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
@@ -374,6 +388,7 @@ class _HomeViewState extends HomeController {
               child: Image.network(
                 imageUrl,
                 fit: fit,
+                width: double.infinity,
                 loadingBuilder:
                     (
                       BuildContext context,
