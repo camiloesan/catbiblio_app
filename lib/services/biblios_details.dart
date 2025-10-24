@@ -91,6 +91,13 @@ class BibliosDetailsService {
       // debugPrint('Request: ${e.requestOptions.uri}');
 
       // Handle specific error types
+      if (e.response?.statusCode == 404) {
+        debugPrint(
+          'BibliosDetails not found (404) for biblionumber $biblioNumber',
+        );
+        return BibliosDetails(title: '', author: '');
+      }
+
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.receiveTimeout:
@@ -145,7 +152,15 @@ class BibliosDetailsService {
       // Return the plain text MARC record
       return response.data as String;
     } on DioException catch (e) {
-      debugPrint('DioException in getBibliosMarcPlainText: ${e.message}');
+      //debugPrint('DioException in getBibliosMarcPlainText: ${e.message}');
+
+      // Handle specific error types
+      if (e.response?.statusCode == 404) {
+        // debugPrint(
+        //   'BibliosDetails not found (404) for biblionumber $biblioNumber',
+        // );
+        return null;
+      }
 
       switch (e.type) {
         case DioExceptionType.connectionTimeout:

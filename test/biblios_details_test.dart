@@ -28,11 +28,12 @@ void main() {
     );
 
     test('getBibliosDetails handles invalid biblionumber gracefully', () async {
-      const invalidBiblionumber = -1; // Assuming negative numbers are invalid
+      const invalidBiblionumber = -1;
       BibliosDetails details = await BibliosDetailsService.getBibliosDetails(
         invalidBiblionumber,
       );
 
+      // Empty details expected for invalid biblionumber
       debugPrint('Fetched biblios details for invalid biblionumber: $details');
 
       expect(details, isA<BibliosDetails>());
@@ -40,18 +41,17 @@ void main() {
       expect(details.author.isEmpty, isTrue);
     });
 
-    //TODO: make service handle 404 gracefully
     test(
       'getBibliosDetails handles not found biblionumber gracefully',
       () async {
-        const invalidBiblionumber =
-            99999999; // Assuming negative numbers are invalid
+        const invalidBiblionumber = 99999999;
         BibliosDetails details = await BibliosDetailsService.getBibliosDetails(
           invalidBiblionumber,
         );
 
+        // Empty details expected for not found biblionumber
         debugPrint(
-          'Fetched biblios details for invalid biblionumber: $details',
+          'Fetched biblios details for not found biblionumber: $details',
         );
 
         expect(details, isA<BibliosDetails>());
@@ -95,7 +95,6 @@ void main() {
       },
     );
 
-    //TODO: make service handle 404 gracefully
     test(
       'getBibliosMarcPlainText handles not found biblionumber gracefully',
       () async {
@@ -105,6 +104,7 @@ void main() {
               invalidBiblionumber,
             );
 
+        // MARC plain text is expected to be null for not found biblionumber
         debugPrint(
           'Fetched MARC plain text for not found biblionumber: $marcPlainText',
         );
