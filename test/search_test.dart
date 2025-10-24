@@ -22,7 +22,7 @@ void main() {
         searchQuery: 'sistemas operativos',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint("Response: ${response.toString()}");
 
       expect(response, isA<SearchResult>());
@@ -37,7 +37,7 @@ void main() {
         searchQuery: 'sistemas operativos',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint(" Response: $response");
 
       expect(response, isA<SearchResult>());
@@ -53,7 +53,7 @@ void main() {
         searchQuery: 'frank herbert',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
       expect(response, isA<SearchResult>());
@@ -68,7 +68,7 @@ void main() {
         searchQuery: 'frank herbert',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
       expect(response, isA<SearchResult>());
@@ -83,7 +83,7 @@ void main() {
         searchQuery: 'ciencia ficcion',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
       expect(response, isA<SearchResult>());
@@ -98,7 +98,7 @@ void main() {
         searchQuery: 'ciencia ficcion',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
       expect(response, isA<SearchResult>());
@@ -113,7 +113,7 @@ void main() {
         searchQuery: '',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       //debugPrint("Response: $response");
 
       expect(response, isA<SearchResult>());
@@ -130,7 +130,7 @@ void main() {
         searchQuery: '9780123456789',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -143,7 +143,7 @@ void main() {
         searchQuery: '9780123456789',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
 
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
@@ -158,7 +158,7 @@ void main() {
         searchQuery: '1234-5678',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -171,7 +171,7 @@ void main() {
         searchQuery: '1234-5678',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -185,7 +185,7 @@ void main() {
         searchQuery: 'programacion',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -199,7 +199,7 @@ void main() {
         searchQuery: 'programación básica',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -212,7 +212,7 @@ void main() {
         searchQuery: 'josé martínez',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -226,7 +226,7 @@ void main() {
         searchQuery: 'introduction to computer science',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -239,7 +239,7 @@ void main() {
         searchQuery: 'garcia marquez',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -253,7 +253,7 @@ void main() {
         searchQuery: 'a',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -267,7 +267,7 @@ void main() {
             'this is a very long search query that might test the limits of the search system and how it handles extensive input',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -281,7 +281,7 @@ void main() {
         searchQuery: '  programming  ',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -294,7 +294,7 @@ void main() {
         searchQuery: 'computer    science',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -308,7 +308,7 @@ void main() {
         searchQuery: 'PROGRAMMING',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -321,7 +321,7 @@ void main() {
         searchQuery: 'Frank Herbert',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -335,7 +335,7 @@ void main() {
         searchQuery: '2024',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -349,7 +349,7 @@ void main() {
         searchQuery: 'test',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
 
@@ -372,7 +372,7 @@ void main() {
         searchQuery: '',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.books.isEmpty, true);
@@ -387,7 +387,7 @@ void main() {
         searchQuery: 'matematicas',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -400,7 +400,7 @@ void main() {
         searchQuery: 'garcía márquez',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -414,7 +414,7 @@ void main() {
         searchQuery: 'el',
       );
 
-      final response = await SruService.searchBooks(queryParams);
+      final response = await SearchService.searchBooks(queryParams);
       expect(response, isA<SearchResult>());
       expect(response.books, isA<List<BookPreview>>());
       expect(response.totalRecords, isA<int>());
@@ -437,7 +437,7 @@ void main() {
           searchBy: searchTypes[i],
           searchQuery: searchQueries[i],
         );
-        final response = await SruService.searchBooks(queryParams);
+        final response = await SearchService.searchBooks(queryParams);
         expect(
           response.books,
           isA<List<BookPreview>>(),
@@ -460,7 +460,7 @@ void main() {
         'branch': 'USBI-X',
       };
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });
@@ -474,7 +474,7 @@ void main() {
 
       final expectedParams = {'author': 'frank herbert'};
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });
@@ -488,7 +488,7 @@ void main() {
 
       final expectedParams = {};
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });
@@ -498,7 +498,7 @@ void main() {
 
       final expectedParams = {};
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });
@@ -514,10 +514,10 @@ void main() {
       final expectedParams = {
         'title': 'sistemas operativos',
         'branch': 'USBI-X',
-        'startRecord': 5,
+        'offset': 5,
       };
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });
@@ -533,10 +533,10 @@ void main() {
       final expectedParams = {
         'title': 'sistemas operativos',
         'branch': 'USBI-X',
-        'startRecord': 100,
+        'offset': 100,
       };
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });
@@ -554,7 +554,7 @@ void main() {
         'branch': 'USBI-X',
       };
 
-      final queryParameters = SruService.buildQueryParameters(params);
+      final queryParameters = SearchService.buildQueryParameters(params);
 
       expect(queryParameters, equals(expectedParams));
     });

@@ -32,7 +32,7 @@ class ApiException extends SruException {
   const ApiException(super.message, {this.statusCode});
 }
 
-class SruService {
+class SearchService {
   static final Dio _dio = Dio(
     BaseOptions(
       baseUrl: _baseUrl,
@@ -397,7 +397,7 @@ class _DataFieldHelper {
   xml.XmlElement? _getDataField(String tag) {
     if (!_dataFieldCache.containsKey(tag)) {
       _dataFieldCache[tag] = record
-          .findElements("datafield", namespace: SruService._marcNamespace)
+          .findElements("datafield", namespace: SearchService._marcNamespace)
           .firstWhereOrNull((df) => df.getAttribute("tag") == tag);
     }
     return _dataFieldCache[tag];
@@ -409,7 +409,7 @@ class _DataFieldHelper {
     if (dataField == null) return null;
 
     return dataField
-        .findElements("subfield", namespace: SruService._marcNamespace)
+        .findElements("subfield", namespace: SearchService._marcNamespace)
         .firstWhereOrNull((sf) => sf.getAttribute("code") == subfieldCode)
         ?.innerText
         .trim();
@@ -419,12 +419,12 @@ class _DataFieldHelper {
     Set libraries = {};
 
     final datafields952 = record
-        .findElements("datafield", namespace: SruService._marcNamespace)
+        .findElements("datafield", namespace: SearchService._marcNamespace)
         .where((element) => element.getAttribute("tag") == tag);
 
     for (var df in datafields952) {
       var libraryName = df
-          .findElements("subfield", namespace: SruService._marcNamespace)
+          .findElements("subfield", namespace: SearchService._marcNamespace)
           .firstWhereOrNull((sf) => sf.getAttribute("code") == 'a')
           ?.innerText
           .trim();
