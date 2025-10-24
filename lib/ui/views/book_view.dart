@@ -124,7 +124,6 @@ class _BookViewState extends BookController {
                                     }
                                   },
                                 ),
-                              const SizedBox(width: 16.0),
                         
                               Expanded(
                                 child: Column(
