@@ -30,7 +30,10 @@ class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.search)),
+      appBar: AppBar(title: Image.asset(  
+        'assets/images/head-icon.png',
+        height: 40,
+      )),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
