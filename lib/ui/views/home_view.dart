@@ -240,16 +240,16 @@ class _HomeViewState extends HomeController {
           });
         },
         disableCenter: true,
-        height: 300.0,
+        height: 420.0,
         enlargeCenterPage: true,
         autoPlay: true,
         enableInfiniteScroll: true,
         autoPlayInterval: const Duration(seconds: 6),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeFactor: 0.4,
-        aspectRatio: 9 / 16,
-        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.5 : 0.25,
+        enlargeFactor: 0.3,
+        aspectRatio: 3 / 4,
+        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.60 : 0.20,
       ),
     );
   }
@@ -446,41 +446,41 @@ class _HomeViewState extends HomeController {
     required String imageUrl,
     required BoxFit fit,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            spreadRadius: 0,
-            blurRadius: 24.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-        child: Image.network(
-          imageUrl,
-          fit: fit,
-          loadingBuilder:
-              (
-                BuildContext context,
-                Widget child,
-                ImageChunkEvent? loadingProgress,
-              ) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
-          errorBuilder: (context, error, stackTrace) => const Center(
-            child: Icon(Icons.error_outline, color: Colors.white, size: 40),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0, bottom: 24.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              spreadRadius: 8,
+              blurRadius: 8,
+              offset: const Offset(8, 10),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          clipBehavior: Clip.hardEdge,
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            loadingBuilder:
+                (
+                  BuildContext context,
+                  Widget child,
+                  ImageChunkEvent? loadingProgress,
+                ) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+            errorBuilder: (context, error, stackTrace) => const Center(
+              child: Icon(Icons.error_outline, color: Colors.white, size: 40),
+            ),
           ),
         ),
       ),
