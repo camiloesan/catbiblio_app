@@ -503,6 +503,7 @@ class _HomeViewState extends HomeController {
         ListTile(
           leading: const Icon(Icons.map, color: primaryColor),
           title: Text(AppLocalizations.of(context)!.libraryDirectory),
+          enabled: !isLibrariesLoading,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
