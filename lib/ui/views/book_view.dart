@@ -118,12 +118,12 @@ class _BookViewState extends BookController {
                                             height: 160,
                                             child: snapshot.data!,
                                           ),
-                                          const SizedBox(width: 16.0),
                                         ],
                                       );
                                     }
                                   },
                                 ),
+                                const SizedBox(width: 16.0),
                         
                               Expanded(
                                 child: Column(
