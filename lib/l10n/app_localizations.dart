@@ -239,7 +239,7 @@ abstract class AppLocalizations {
   /// Snackbar message shown when the language is changed to Spanish
   ///
   /// In en, this message translates to:
-  /// **'Language changed to Spanish'**
+  /// **'Idioma cambiado a Español'**
   String get languageChanged;
 
   /// Label for total number of search results
