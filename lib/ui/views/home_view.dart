@@ -76,9 +76,11 @@ class _HomeViewState extends HomeController {
                             enabled: isItemTypesLoading,
                             child: LayoutBuilder(
                               builder: (context, constraints) {
-                                return dropdownItemTypes(
-                                  context,
-                                  constraints.maxWidth,
+                                return DropdownItemTypesWidget(
+                                  itemTypeController: _itemTypeController,
+                                  itemTypeEntries: _itemTypeEntries,
+                                  queryParams: _queryParams,
+                                  maxWidth: constraints.maxWidth,
                                 );
                               },
                             ),
@@ -88,9 +90,11 @@ class _HomeViewState extends HomeController {
                             enabled: isLibrariesLoading,
                             child: LayoutBuilder(
                               builder: (context, constraints) {
-                                return dropdownLibraries(
-                                  context,
-                                  constraints.maxWidth,
+                                return DropdownLibrariesWidget(
+                                  libraryController: _libraryController,
+                                  libraryEntries: _libraryEntries,
+                                  queryParams: _queryParams,
+                                  maxWidth: constraints.maxWidth,
                                 );
                               },
                             ),
@@ -107,7 +111,13 @@ class _HomeViewState extends HomeController {
                             },
                           ),
                           const SizedBox(height: 12),
-                          textFieldSearch(context),
+                          TextFieldSearchWidget(
+                            searchController: _searchController,
+                            isSearchable: isSearchable,
+                            onSubmitted: (value) => onSubmitAction(),
+                            clearSearchController: () =>
+                                clearSearchController(),
+                          ),
                           // Divider(),
                           const SizedBox(height: 16),
                         ],
@@ -146,8 +156,36 @@ class _HomeViewState extends HomeController {
                         ),
                       ),
                     ),
-                    _buildBooksCarouselSlider(context),
-                    BookNameFooterWidget(currentBookName: currentBookName),
+                    BooksCarouselSliderWidget(
+                      booksCarouselSliderController:
+                          _booksCarouselSliderController,
+                      items: [
+                        for (var book in _bookSelections)
+                          GestureDetector(
+                            onTap: () {
+                              if (currentBiblionumber != book.biblionumber) {
+                                _booksCarouselSliderController.animateToPage(
+                                  _bookSelections.indexOf(book),
+                                );
+                                return;
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      BookView(biblioNumber: book.biblionumber),
+                                ),
+                              );
+                            },
+                            child: CarouselBookCard(
+                              title: book.bookName,
+                              imageUrl:
+                                  'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -191,298 +229,33 @@ class _HomeViewState extends HomeController {
                     ),
                   ),
                 ),
-                _buildServicesCarouselSlider(context),
+                ServicesCarouselSliderWidget(
+                  servicesCarouselSliderController:
+                      _servicesCarouselSliderController,
+                  items: [
+                    for (var service
+                        in _librariesServices
+                            .firstWhere(
+                              (lib) =>
+                                  lib.libraryCode == selectedLibraryServices,
+                              orElse: () => LibraryServices(
+                                libraryCode: 'USBI-X',
+                                services: [],
+                              ),
+                            )
+                            .services)
+                      CarouselServiceCard(
+                        title: service.name,
+                        imageUrl: service.imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                  ],
+                ),
                 SizedBox(height: 32.0),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  CarouselSlider _buildBooksCarouselSlider(BuildContext context) {
-    return CarouselSlider(
-      items: [
-        for (var book in _bookSelections)
-          GestureDetector(
-            onTap: () {
-              if (currentBiblionumber != book.biblionumber) {
-                _booksCarouselSliderController.animateToPage(
-                  _bookSelections.indexOf(book),
-                );
-                return;
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      BookView(biblioNumber: book.biblionumber),
-                ),
-              );
-            },
-            child: _buildCarouselBooks(
-              context,
-              color: primaryColor,
-              title: "",
-              imageUrl:
-                  'http://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-      ],
-      carouselController: _booksCarouselSliderController,
-      options: CarouselOptions(
-        onPageChanged: (index, reason) {
-          setState(() {
-            currentBiblionumber = _bookSelections[index].biblionumber;
-            currentBookName = _bookSelections[index].bookName;
-          });
-        },
-        disableCenter: true,
-        height: 420.0,
-        enlargeCenterPage: true,
-        autoPlay: true,
-        enableInfiniteScroll: true,
-        autoPlayInterval: const Duration(seconds: 6),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeFactor: 0.3,
-        aspectRatio: 3 / 4,
-        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.60 : 0.20,
-      ),
-    );
-  }
-
-  CarouselSlider _buildServicesCarouselSlider(BuildContext context) {
-    return CarouselSlider(
-      items: [
-        for (var service
-            in _librariesServices
-                .firstWhere(
-                  (lib) => lib.libraryCode == selectedLibraryServices,
-                  orElse: () =>
-                      LibraryServices(libraryCode: 'USBI-X', services: []),
-                )
-                .services)
-          _buildCarouselServicesCards(
-            context,
-            color: primaryColor,
-            title: service.name,
-            imageUrl: service.imageUrl,
-            fit: BoxFit.cover,
-          ),
-      ],
-      options: CarouselOptions(
-        height: 320,
-        enlargeCenterPage: true,
-        autoPlay: true,
-        enableInfiniteScroll: false,
-        autoPlayInterval: const Duration(seconds: 6),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        aspectRatio: 16 / 9,
-        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.8 : 0.4,
-      ),
-    );
-  }
-
-  DropdownMenu<String> dropdownItemTypes(
-    BuildContext context,
-    double maxWidth,
-  ) {
-    return DropdownMenu(
-      controller: _itemTypeController,
-      label: Text(AppLocalizations.of(context)!.itemType),
-      enableSearch: true,
-      menuHeight: 300,
-      leadingIcon: const Icon(Icons.category, color: primaryColor),
-      initialSelection: _queryParams.itemType,
-      dropdownMenuEntries: [
-        DropdownMenuEntry(
-          value: 'all',
-          label: AppLocalizations.of(context)!.allLibraries,
-        ),
-        ..._itemTypeEntries,
-      ],
-      width: maxWidth,
-      onSelected: (value) {
-        setState(() {
-          _queryParams.itemType = value!;
-        });
-      },
-    );
-  }
-
-  DropdownMenu<String> dropdownLibraries(
-    BuildContext context,
-    double maxWidth,
-  ) {
-    return DropdownMenu(
-      controller: _libraryController,
-      label: Text(AppLocalizations.of(context)!.library),
-      enableSearch: true,
-      menuHeight: 300,
-      leadingIcon: const Icon(Icons.location_city, color: primaryColor),
-      initialSelection: _queryParams.library,
-      width: maxWidth,
-      dropdownMenuEntries: [
-        DropdownMenuEntry(
-          value: 'all',
-          label: AppLocalizations.of(context)!.allLibraries,
-        ),
-        ..._libraryEntries,
-      ],
-      onSelected: (value) {
-        setState(() {
-          _queryParams.library = value!;
-        });
-      },
-    );
-  }
-
-  TextField textFieldSearch(BuildContext context) {
-    return TextField(
-      controller: _searchController,
-      onChanged: (text) {
-        if (text.isEmpty || text.trim().isEmpty) {
-          setState(() {
-            isSearchable = false;
-          });
-        } else {
-          setState(() {
-            isSearchable = true;
-          });
-        }
-      },
-      onSubmitted: (value) => onSubmitAction(),
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search, color: primaryColor),
-        suffixIcon: isSearchable
-            ? IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => clearSearchController(),
-              )
-            : null,
-        labelText: AppLocalizations.of(context)!.search,
-        border: OutlineInputBorder(),
-      ),
-    );
-  }
-
-  Widget _buildCarouselServicesCards(
-    BuildContext context, {
-    required Color color,
-    required String title,
-    required String imageUrl,
-    required BoxFit fit,
-  }) {
-    return Card(
-      color: color,
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      elevation: 16.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-              ),
-              child: Image.network(
-                imageUrl,
-                fit: fit,
-                width: double.infinity,
-                loadingBuilder:
-                    (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                errorBuilder: (context, error, stackTrace) => const Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCarouselBooks(
-    BuildContext context, {
-    required Color color,
-    required String title,
-    required String imageUrl,
-    required BoxFit fit,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 24.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              spreadRadius: 8,
-              blurRadius: 8,
-              offset: const Offset(8, 10),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          clipBehavior: Clip.hardEdge,
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            loadingBuilder:
-                (
-                  BuildContext context,
-                  Widget child,
-                  ImageChunkEvent? loadingProgress,
-                ) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(Icons.error_outline, color: Colors.white, size: 40),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -567,29 +340,6 @@ class _HomeViewState extends HomeController {
   }
 }
 
-class BookNameFooterWidget extends StatelessWidget {
-  const BookNameFooterWidget({super.key, required this.currentBookName});
-
-  final String currentBookName;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-        currentBookName,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.white,
-        ),
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-}
-
 class DropdownLibrariesServicesWidget extends StatelessWidget {
   const DropdownLibrariesServicesWidget({
     super.key,
@@ -659,6 +409,343 @@ class DropdownFilters extends StatelessWidget {
       width: _maxWidth,
       enableFilter: false,
       requestFocusOnTap: false,
+    );
+  }
+}
+
+class TextFieldSearchWidget extends StatelessWidget {
+  const TextFieldSearchWidget({
+    super.key,
+    required TextEditingController searchController,
+    required bool isSearchable,
+    required Function(String) onSubmitted,
+    required VoidCallback clearSearchController,
+  }) : _searchController = searchController,
+       _isSearchable = isSearchable,
+       _onSubmitted = onSubmitted,
+       _clearSearchController = clearSearchController;
+
+  final TextEditingController _searchController;
+  final bool _isSearchable;
+  final Function(String) _onSubmitted;
+  final VoidCallback _clearSearchController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _searchController,
+      onSubmitted: (value) => _onSubmitted(value),
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search, color: primaryColor),
+        suffixIcon: _isSearchable
+            ? IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => _clearSearchController(),
+              )
+            : null,
+        labelText: AppLocalizations.of(context)!.search,
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+}
+
+class DropdownLibrariesWidget extends StatelessWidget {
+  const DropdownLibrariesWidget({
+    super.key,
+    required TextEditingController libraryController,
+    required List<DropdownMenuEntry<String>> libraryEntries,
+    required QueryParams queryParams,
+    required double maxWidth,
+  }) : _libraryController = libraryController,
+       _libraryEntries = libraryEntries,
+       _queryParams = queryParams,
+       _maxWidth = maxWidth;
+  final TextEditingController _libraryController;
+  final List<DropdownMenuEntry<String>> _libraryEntries;
+  final QueryParams _queryParams;
+  final double _maxWidth;
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      controller: _libraryController,
+      label: Text(AppLocalizations.of(context)!.library),
+      enableSearch: true,
+      menuHeight: 300,
+      leadingIcon: const Icon(Icons.location_city, color: primaryColor),
+      initialSelection: _queryParams.library,
+      width: _maxWidth,
+      dropdownMenuEntries: [
+        DropdownMenuEntry(
+          value: 'all',
+          label: AppLocalizations.of(context)!.allLibraries,
+        ),
+        ..._libraryEntries,
+      ],
+      onSelected: (value) {
+        _queryParams.library = value!;
+      },
+    );
+  }
+}
+
+class DropdownItemTypesWidget extends StatelessWidget {
+  const DropdownItemTypesWidget({
+    super.key,
+    required TextEditingController itemTypeController,
+    required List<DropdownMenuEntry<String>> itemTypeEntries,
+    required QueryParams queryParams,
+    required double maxWidth,
+  }) : _itemTypeController = itemTypeController,
+       _itemTypeEntries = itemTypeEntries,
+       _queryParams = queryParams,
+       _maxWidth = maxWidth;
+  final TextEditingController _itemTypeController;
+  final List<DropdownMenuEntry<String>> _itemTypeEntries;
+  final QueryParams _queryParams;
+  final double _maxWidth;
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      controller: _itemTypeController,
+      label: Text(AppLocalizations.of(context)!.itemType),
+      enableSearch: true,
+      menuHeight: 300,
+      leadingIcon: const Icon(Icons.category, color: primaryColor),
+      initialSelection: _queryParams.itemType,
+      dropdownMenuEntries: [
+        DropdownMenuEntry(
+          value: 'all',
+          label: AppLocalizations.of(context)!.allLibraries,
+        ),
+        ..._itemTypeEntries,
+      ],
+      width: _maxWidth,
+      onSelected: (value) {
+        _queryParams.itemType = value!;
+      },
+    );
+  }
+}
+
+class CarouselBookCard extends StatelessWidget {
+  const CarouselBookCard({
+    super.key,
+    required String title,
+    required String imageUrl,
+    required BoxFit fit,
+  }) : _title = title,
+       _imageUrl = imageUrl,
+       _fit = fit;
+
+  final String _title;
+  final String _imageUrl;
+  final BoxFit _fit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: primaryColor,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      elevation: 16.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+              child: Image.network(
+                _imageUrl,
+                fit: _fit,
+                width: double.infinity,
+                loadingBuilder:
+                    (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent? loadingProgress,
+                    ) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                errorBuilder: (context, error, stackTrace) => const Center(
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              _title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BooksCarouselSliderWidget extends StatelessWidget {
+  const BooksCarouselSliderWidget({
+    super.key,
+    required CarouselSliderController booksCarouselSliderController,
+    required List<Widget> items,
+  }) : _booksCarouselSliderController = booksCarouselSliderController,
+       _items = items;
+
+  final CarouselSliderController _booksCarouselSliderController;
+  final List<Widget> _items;
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      items: _items,
+      carouselController: _booksCarouselSliderController,
+      options: CarouselOptions(
+        disableCenter: true,
+        height: 400.0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        enableInfiniteScroll: true,
+        autoPlayInterval: const Duration(seconds: 6),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeFactor: 0.3,
+        aspectRatio: 3 / 4,
+        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.60 : 0.20,
+      ),
+    );
+  }
+}
+
+class CarouselServiceCard extends StatelessWidget {
+  const CarouselServiceCard({
+    super.key,
+    required String title,
+    required String imageUrl,
+    required BoxFit fit,
+  }) : _title = title,
+       _imageUrl = imageUrl,
+       _fit = fit;
+
+  final String _title;
+  final String _imageUrl;
+  final BoxFit _fit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: primaryColor,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      elevation: 16.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+              child: Image.network(
+                _imageUrl,
+                fit: _fit,
+                width: double.infinity,
+                loadingBuilder:
+                    (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent? loadingProgress,
+                    ) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                errorBuilder: (context, error, stackTrace) => const Center(
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              _title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ServicesCarouselSliderWidget extends StatelessWidget {
+  const ServicesCarouselSliderWidget({
+    super.key,
+    required CarouselSliderController servicesCarouselSliderController,
+    required List<Widget> items,
+  }) : _servicesCarouselSliderController = servicesCarouselSliderController,
+       _items = items;
+
+  final CarouselSliderController _servicesCarouselSliderController;
+  final List<Widget> _items;
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      items: _items,
+      carouselController: _servicesCarouselSliderController,
+      options: CarouselOptions(
+        height: 320,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        enableInfiniteScroll: false,
+        autoPlayInterval: const Duration(seconds: 6),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        aspectRatio: 16 / 9,
+        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.8 : 0.4,
+      ),
     );
   }
 }

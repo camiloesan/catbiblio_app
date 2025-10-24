@@ -8,6 +8,7 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _itemTypeController;
   late Future<List<Library>> _librariesFuture;
   late CarouselSliderController _booksCarouselSliderController;
+  late CarouselSliderController _servicesCarouselSliderController;
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   late List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries = [];
@@ -57,6 +58,7 @@ abstract class HomeController extends State<HomeView> {
     _itemTypeController = TextEditingController();
     _booksCarouselSliderController = CarouselSliderController();
     _libraryServicesController = TextEditingController();
+    _servicesCarouselSliderController = CarouselSliderController();
 
     fetchData();
   }
