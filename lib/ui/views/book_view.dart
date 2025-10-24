@@ -62,125 +62,151 @@ class _BookViewState extends BookController {
                         ),
                       )
                     else
-                      Skeletonizer(
-                        enabled: isLoadingDetails,
-                        child: Container(
-                          color: primaryUVColor,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Imagen real cuando esté disponible, si está cargando mostramos un mock.
-                              if (isLoadingDetails)
-                                SizedBox(
-                                  width: 120,
-                                  height: 160,
-                                  child: Container(
-                                    color: Colors.white24,
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 48,
-                                        color: Colors.white60,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              else
-                                FutureBuilder<Image?>(
-                                  future: ImageService.fetchImageUrl(
-                                    widget.biblioNumber,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasError ||
-                                        snapshot.data == null) {
-                                      // If there was an error or no image, show a placeholder.
-                                      // A small placeholder must be shown after loading. To avoid breaking the layout, we use a reduced placeholder.
-                                      return SizedBox(
-                                        width: 120,
-                                        height: 160,
-                                        child: Container(
-                                          color: Colors.white24,
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.broken_image,
-                                              size: 36,
-                                              color: Colors.white70,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 120,
-                                            height: 160,
-                                            child: snapshot.data!,
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  },
-                                ),
-                                const SizedBox(width: 16.0),
-                        
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    // Texto mock mientras carga, título real cuando esté disponible.
-                                    Text(
-                                      isLoadingDetails
-                                          ? mockTitle
-                                          : bibliosDetails.title,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 4.0,
                         children: [
                           Skeletonizer(
                             enabled: isLoadingDetails,
-                            child: Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.bibliographicDetails,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                            child: Container(
+                              color: primaryUVColor,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 24.0,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Imagen real cuando esté disponible, si está cargando mostramos un mock.
+                                  if (isLoadingDetails)
+                                    SizedBox(
+                                      width: 120,
+                                      height: 160,
+                                      child: Container(
+                                        color: Colors.white24,
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.image,
+                                            size: 48,
+                                            color: Colors.white60,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    FutureBuilder<Image?>(
+                                      future: ImageService.fetchImageUrl(
+                                        widget.biblioNumber,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError ||
+                                            snapshot.data == null) {
+                                          // If there was an error or no image, show a placeholder.
+                                          // A small placeholder must be shown after loading. To avoid breaking the layout, we use a reduced placeholder.
+                                          return SizedBox(
+                                            width: 120,
+                                            height: 160,
+                                            child: Container(
+                                              color: Colors.white24,
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.broken_image,
+                                                  size: 36,
+                                                  color: Colors.white70,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 120,
+                                                height: 160,
+                                                child: snapshot.data!,
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Texto mock mientras carga, título real cuando esté disponible.
+                                        Text(
+                                          isLoadingDetails
+                                              ? mockTitle
+                                              : bibliosDetails.title,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                              left: 8.0,
-                              right: 8.0,
+                              top: 16.0,
+                              left: 16.0,
+                              right: 16.0,
                             ),
-                            child: BibliographicDetails(
-                              bibliosDetails: bibliosDetails,
-                              languageMap: languageMap,
-                              isLoadingDetails: isLoadingDetails,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Skeletonizer(
+                                      enabled: isLoadingDetails,
+                                      child: Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.bibliographicDetails,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 8.0,
+                                        right: 8.0,
+                                      ),
+                                      child: BibliographicDetails(
+                                        bibliosDetails: bibliosDetails,
+                                        languageMap: languageMap,
+                                        isLoadingDetails: isLoadingDetails,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
+                        ],
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 16.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           const Divider(),
                           Skeletonizer(
-                            enabled: isLoadingDetails,
+                            enabled: isLoadingDetails || isErrorLoadingDetails,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
