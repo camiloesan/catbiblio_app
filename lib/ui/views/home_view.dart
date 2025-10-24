@@ -114,37 +114,44 @@ class _HomeViewState extends HomeController {
                       ),
                     ),
                     SizedBox(height: 4.0),
-                    if (!isSelectionsEnabled)
-                      SizedBox.shrink()
-                    else
-                      Container(
-                        color: primaryUVColor,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                AppLocalizations.of(context)!.bookSelections,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            _buildBooksCarouselSlider(context),
-                            BookNameFooterWidget(
-                              currentBookName: currentBookName,
-                            ),
-                          ],
-                        ),
-                      ),
                   ],
                 ),
               ),
             ),
           ),
+          if (isSelectionsEnabled)
+            SliverToBoxAdapter(
+              child: Container(
+                color: primaryUVColor,
+                child: Column(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width < 600
+                            ? MediaQuery.of(context).size.width
+                            : (MediaQuery.of(context).size.width / 3) * 2,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!.bookSelections,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    _buildBooksCarouselSlider(context),
+                    BookNameFooterWidget(currentBookName: currentBookName),
+                  ],
+                ),
+              ),
+            ),
           SliverToBoxAdapter(
             child: Column(
               children: [
@@ -155,7 +162,7 @@ class _HomeViewState extends HomeController {
                         : (MediaQuery.of(context).size.width / 3) * 2,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         Align(
@@ -415,7 +422,6 @@ class _HomeViewState extends HomeController {
               ),
             ),
           ),
-          // Padding adds space around the text.
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
