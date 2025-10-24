@@ -42,143 +42,141 @@ class _HomeViewState extends HomeController {
       ),
       drawer: navigationDrawer(context),
       drawerEnableOpenDragGesture: true,
-      body: Scrollbar(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
-                    maxWidth: MediaQuery.of(context).size.width < 600
-                        ? MediaQuery.of(context).size.width
-                        : (MediaQuery.of(context).size.width / 3) * 2,
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                          left: 16.0,
-                          right: 16.0,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.searchSectionTitle,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Skeletonizer(
-                              enabled: isItemTypesLoading,
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return dropdownItemTypes(
-                                    context,
-                                    constraints.maxWidth,
-                                  );
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Skeletonizer(
-                              enabled: isLibrariesLoading,
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return dropdownLibraries(
-                                    context,
-                                    constraints.maxWidth,
-                                  );
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            LayoutBuilder(
-                              builder: (context, constraints) {
-                                return DropdownFilters(
-                                  searchFilterController:
-                                      _searchFilterController,
-                                  filterEntries: _filterEntries,
-                                  queryParams: _queryParams,
-                                  maxWidth: constraints.maxWidth,
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                            textFieldSearch(context),
-                            // Divider(),
-                            const SizedBox(height: 16),
-                          ],
-                        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                  maxWidth: MediaQuery.of(context).size.width < 600
+                      ? MediaQuery.of(context).size.width
+                      : (MediaQuery.of(context).size.width / 3) * 2,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                        left: 16.0,
+                        right: 16.0,
                       ),
-                      SizedBox(height: 4.0),
-                      if (!isSelectionsEnabled)
-                        SizedBox.shrink()
-                      else
-                        Container(
-                          color: primaryUVColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  AppLocalizations.of(context)!.bookSelections,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              _buildBooksCarouselSlider(context),
-                              BookNameFooterWidget(
-                                currentBookName: currentBookName,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                          child: Text(
-                            AppLocalizations.of(context)!.libraryServices,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.searchSectionTitle,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: LayoutBuilder(
-                          builder: (context, constraints) =>
-                              DropdownLibrariesServicesWidget(
-                                libraryServicesController:
-                                    _libraryServicesController,
-                                libraryEntries: _libraryEntries,
-                                enabledHomeLibrariesEntries:
-                                    _enabledHomeLibrariesEntries,
+                          const SizedBox(height: 16),
+                          Skeletonizer(
+                            enabled: isItemTypesLoading,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return dropdownItemTypes(
+                                  context,
+                                  constraints.maxWidth,
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Skeletonizer(
+                            enabled: isLibrariesLoading,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return dropdownLibraries(
+                                  context,
+                                  constraints.maxWidth,
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return DropdownFilters(
+                                searchFilterController:
+                                    _searchFilterController,
+                                filterEntries: _filterEntries,
+                                queryParams: _queryParams,
                                 maxWidth: constraints.maxWidth,
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          textFieldSearch(context),
+                          // Divider(),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 4.0),
+                    if (!isSelectionsEnabled)
+                      SizedBox.shrink()
+                    else
+                      Container(
+                        color: primaryUVColor,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                AppLocalizations.of(context)!.bookSelections,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
+                            ),
+                            _buildBooksCarouselSlider(context),
+                            BookNameFooterWidget(
+                              currentBookName: currentBookName,
+                            ),
+                          ],
                         ),
                       ),
-                      _buildServicesCarouselSlider(context),
-                    ],
-                  ),
+      
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.libraryServices,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) =>
+                            DropdownLibrariesServicesWidget(
+                              libraryServicesController:
+                                  _libraryServicesController,
+                              libraryEntries: _libraryEntries,
+                              enabledHomeLibrariesEntries:
+                                  _enabledHomeLibrariesEntries,
+                              maxWidth: constraints.maxWidth,
+                            ),
+                      ),
+                    ),
+                    _buildServicesCarouselSlider(context),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
