@@ -14,15 +14,36 @@ class BibliosDetailsService {
   static const String plainText = 'text';
 
   static Dio _createDio({ResponseType responseType = ResponseType.json}) {
-    return Dio(
-      BaseOptions(
-        baseUrl: _baseUrl,
-        responseType: responseType, // Changed from plain
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {'x-api-key': _apiKey},
+    Dio dio = Dio();
+
+    dio.options = BaseOptions(
+      baseUrl: _baseUrl,
+      responseType: responseType,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Accept': 'application/json;encoding=UTF-8',
+        'x-api-key': _apiKey,
+      },
+    );
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
       ),
     );
+
+    return dio;
   }
 
   /// Fetches detailed bibliographic information for a given biblionumber
@@ -40,22 +61,6 @@ class BibliosDetailsService {
     }
 
     final dio = _createDio();
-
-    dio.interceptors.add(
-      RetryInterceptor(
-        dio: dio,
-        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
-        retries: 3,
-        retryDelays: const [
-          Duration(seconds: 1),
-          Duration(seconds: 2),
-          Duration(seconds: 3),
-        ],
-        retryEvaluator: (error, _) {
-          return error.type == DioExceptionType.receiveTimeout;
-        },
-      ),
-    );
 
     try {
       //debugPrint('Requesting biblio $biblioNumber from ${dio.options.baseUrl}');
@@ -158,22 +163,6 @@ class BibliosDetailsService {
     }
 
     final dio = _createDio(responseType: ResponseType.plain);
-
-    dio.interceptors.add(
-      RetryInterceptor(
-        dio: dio,
-        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
-        retries: 3,
-        retryDelays: const [
-          Duration(seconds: 1),
-          Duration(seconds: 2),
-          Duration(seconds: 3),
-        ],
-        retryEvaluator: (error, _) {
-          return error.type == DioExceptionType.receiveTimeout;
-        },
-      ),
-    );
 
     try {
       // Example of how to make the request
