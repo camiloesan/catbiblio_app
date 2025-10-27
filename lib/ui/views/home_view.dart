@@ -542,7 +542,7 @@ class CarouselBookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color.fromARGB(255, 40, 173, 86),
+      color: Color.fromARGB(255, 0, 153, 50),
       margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
@@ -624,7 +624,8 @@ class BooksCarouselSliderWidget extends StatelessWidget {
         onPageChanged: (index, reason) {
           final state = context.findAncestorStateOfType<_HomeViewState>();
           if (state != null) {
-              state.currentBiblionumber = state._bookSelections[index].biblionumber;
+            state.currentBiblionumber =
+                state._bookSelections[index].biblionumber;
           }
         },
         disableCenter: true,
