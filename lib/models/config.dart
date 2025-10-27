@@ -1,13 +1,11 @@
 class Config {
   final List<BookSelection> bookSelections;
-  final List<LibraryCode> enabledLibrariesHome;
   final List<LibraryServices> librariesServices;
   final List<String> bookFinderLibraries;
   final bool selectionsSectionState;
 
   Config({
     required this.bookSelections,
-    required this.enabledLibrariesHome,
     required this.librariesServices,
     required this.bookFinderLibraries,
     required this.selectionsSectionState,
@@ -18,10 +16,6 @@ class Config {
       bookSelections: (json['book_selections'] as List<dynamic>? ?? [])
           .map((e) => BookSelection.fromJson(e))
           .toList(),
-      enabledLibrariesHome:
-          (json['enabled_libraries_home'] as List<dynamic>? ?? [])
-              .map((e) => LibraryCode.fromJson(e))
-              .toList(),
       librariesServices: (json['libraries_services'] as List<dynamic>? ?? [])
           .map((e) => LibraryServices.fromJson(e))
           .toList(),
@@ -61,13 +55,15 @@ class LibraryCode {
 
 class LibraryServices {
   final String libraryCode;
+  final String libraryName;
   final List<Service> services;
 
-  LibraryServices({required this.libraryCode, required this.services});
+  LibraryServices({required this.libraryCode, required this.libraryName, required this.services});
 
   factory LibraryServices.fromJson(Map<String, dynamic> json) {
     return LibraryServices(
       libraryCode: json['library_code'] ?? '',
+      libraryName: json['library_name'] ?? '',
       services: (json['services'] as List<dynamic>? ?? [])
           .map((e) => Service.fromJson(e))
           .toList(),

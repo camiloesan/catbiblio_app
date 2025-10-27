@@ -61,7 +61,6 @@ class ConfigService {
       return Config(
         bookSelections: [],
         librariesServices: [],
-        enabledLibrariesHome: [],
         bookFinderLibraries: [],
         selectionsSectionState: false,
       );
@@ -70,7 +69,6 @@ class ConfigService {
       return Config(
         bookSelections: [],
         librariesServices: [],
-        enabledLibrariesHome: [],
         bookFinderLibraries: [],
         selectionsSectionState: false,
       );
