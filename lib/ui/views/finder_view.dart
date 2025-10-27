@@ -94,7 +94,7 @@ class _FinderViewState extends FinderController {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 4.0),
+                      const SizedBox(height: 16.0),
                       IntrinsicHeight(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,7 +190,6 @@ class _FinderViewState extends FinderController {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 4.0),
                       InteractiveViewer(
                         panEnabled: true,
                         minScale: 0.5,
