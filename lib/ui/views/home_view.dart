@@ -142,7 +142,7 @@ class _HomeViewState extends HomeController {
                             : (MediaQuery.of(context).size.width / 3) * 2,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.only(top: 16.0),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -219,7 +219,7 @@ class _HomeViewState extends HomeController {
                               DropdownLibrariesServicesWidget(
                                 libraryServicesController:
                                     _libraryServicesController,
-                                libraryEntries: _libraryEntries,
+                                libraryEntries: _enabledHomeLibrariesEntries,
                                 enabledHomeLibrariesEntries:
                                     _enabledHomeLibrariesEntries,
                                 maxWidth: constraints.maxWidth,
@@ -370,9 +370,6 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
             ),
           )
           .toList(),
-      initialSelection: _enabledHomeLibrariesEntries.isNotEmpty
-          ? _enabledHomeLibrariesEntries[0].value
-          : null,
       enableSearch: false,
       enableFilter: false,
       requestFocusOnTap: false,
@@ -546,7 +543,7 @@ class CarouselBookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: primaryColor,
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
