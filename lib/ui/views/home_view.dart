@@ -240,6 +240,7 @@ class _HomeViewState extends HomeController {
                                   lib.libraryCode == selectedLibraryServices,
                               orElse: () => LibraryServices(
                                 libraryCode: 'USBI-X',
+                                libraryName: 'USBI Xalapa',
                                 services: [],
                               ),
                             )

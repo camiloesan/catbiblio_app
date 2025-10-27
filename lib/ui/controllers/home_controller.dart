@@ -139,14 +139,14 @@ abstract class HomeController extends State<HomeView> {
         currentBookName = _bookSelections[0].bookName;
         currentBiblionumber = _bookSelections[0].biblionumber;
         isSelectionsEnabled = config.selectionsSectionState;
-        _enabledHomeLibrariesEntries = config.enabledLibrariesHome.map((
-          library,
-        ) {
-          return DropdownMenuEntry(
-            value: library.libraryCode,
-            label: library.libraryCode,
-          );
-        }).toList();
+        _enabledHomeLibrariesEntries = _librariesServices
+            .map(
+              (service) => DropdownMenuEntry(
+                value: service.libraryName,
+                label: service.libraryCode,
+              ),
+            )
+            .toList();
         _libraryServicesController.text =
             _enabledHomeLibrariesEntries.isNotEmpty
             ? _enabledHomeLibrariesEntries[0].value
