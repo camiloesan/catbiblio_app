@@ -143,14 +143,14 @@ abstract class HomeController extends State<HomeView> {
         _enabledHomeLibrariesEntries = _librariesServices
             .map(
               (service) => DropdownMenuEntry(
-                value: service.libraryName,
-                label: service.libraryCode,
+                value: service.libraryCode,
+                label: service.libraryName,
               ),
             )
             .toList();
         _libraryServicesController.text =
             _enabledHomeLibrariesEntries.isNotEmpty
-            ? _enabledHomeLibrariesEntries[0].value
+            ? _enabledHomeLibrariesEntries[0].label
             : '';
       });
     } catch (e) {
