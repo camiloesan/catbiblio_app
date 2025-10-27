@@ -19,7 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 part '../controllers/home_controller.dart';
 
-const Color primaryColor = Color(0xFF003466);
+const Color primaryColor = Color.fromARGB(255, 24, 82, 157);
 
 class HomeView extends StatefulWidget {
   final Function(Locale locale) onLocaleChange;
@@ -132,7 +132,7 @@ class _HomeViewState extends HomeController {
           if (isSelectionsEnabled)
             SliverToBoxAdapter(
               child: Container(
-                color: primaryUVColor,
+                color: primaryColor,
                 child: Column(
                   children: [
                     ConstrainedBox(
@@ -542,7 +542,7 @@ class CarouselBookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: primaryColor,
+      color: Color.fromARGB(255, 40, 173, 86),
       margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
@@ -621,6 +621,12 @@ class BooksCarouselSliderWidget extends StatelessWidget {
       items: _items,
       carouselController: _booksCarouselSliderController,
       options: CarouselOptions(
+        onPageChanged: (index, reason) {
+          final state = context.findAncestorStateOfType<_HomeViewState>();
+          if (state != null) {
+              state.currentBiblionumber = state._bookSelections[index].biblionumber;
+          }
+        },
         disableCenter: true,
         height: 400.0,
         enlargeCenterPage: true,

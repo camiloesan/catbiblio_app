@@ -23,6 +23,7 @@ abstract class HomeController extends State<HomeView> {
   bool isConfigLoading = true;
   String currentBookName = '';
   String currentBiblionumber = '';
+  int currentBookIndex = 0;
 
   List<DropdownMenuEntry<String>> get _filterEntries {
     return [
