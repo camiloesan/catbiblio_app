@@ -45,15 +45,36 @@ class SearchService {
   );
 
   static Dio _createDio() {
-    return Dio(
-      BaseOptions(
-        baseUrl: _baseUrl,
-        responseType: ResponseType.plain,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {'x-api-key': _apiKey},
+    Dio dio = Dio();
+
+    dio.options = BaseOptions(
+      baseUrl: _baseUrl,
+      responseType: ResponseType.plain,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Accept': 'application/json;encoding=UTF-8',
+        'x-api-key': _apiKey,
+      },
+    );
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
       ),
     );
+
+    return dio;
   }
 
   /// MARC and SRU namespaces
@@ -98,22 +119,6 @@ class SearchService {
   static Future<SearchResult> searchBooks(QueryParams params) async {
     final dio = _createDio();
     final queryParameters = buildQueryParameters(params);
-
-    dio.interceptors.add(
-      RetryInterceptor(
-        dio: dio,
-        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
-        retries: 3,
-        retryDelays: const [
-          Duration(seconds: 1),
-          Duration(seconds: 2),
-          Duration(seconds: 3),
-        ],
-        retryEvaluator: (error, _) {
-          return error.type == DioExceptionType.receiveTimeout;
-        },
-      ),
-    );
 
     if (params.searchQuery.isEmpty) {
       return SearchResult(books: [], totalRecords: 0);

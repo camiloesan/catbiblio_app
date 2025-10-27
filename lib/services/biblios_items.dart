@@ -10,27 +10,18 @@ final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class BibliosItemsService {
   static Dio _createDio() {
-    return Dio(
-      BaseOptions(
-        baseUrl: _baseUrl,
-        responseType: ResponseType.plain,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {
-          'Accept': 'application/json;encoding=UTF-8',
-          'x-api-key': _apiKey,
-        },
-      ),
-    );
-  }
+    Dio dio = Dio();
 
-  /// Fetches the list of items for a given title by its biblionumber from a Koha-based service
-  ///
-  /// Returns a `List<BiblioItem>` containing the items for the specified [biblioNumber].
-  ///
-  /// Returns an empty list if no items are found or in case of an error
-  static Future<List<BiblioItem>> getBiblioItems(int biblioNumber) async {
-    final dio = _createDio();
+    dio.options = BaseOptions(
+      baseUrl: _baseUrl,
+      responseType: ResponseType.plain,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Accept': 'application/json;encoding=UTF-8',
+        'x-api-key': _apiKey,
+      },
+    );
 
     dio.interceptors.add(
       RetryInterceptor(
@@ -47,6 +38,17 @@ class BibliosItemsService {
         },
       ),
     );
+
+    return dio;
+  }
+
+  /// Fetches the list of items for a given title by its biblionumber from a Koha-based service
+  ///
+  /// Returns a `List<BiblioItem>` containing the items for the specified [biblioNumber].
+  ///
+  /// Returns an empty list if no items are found or in case of an error
+  static Future<List<BiblioItem>> getBiblioItems(int biblioNumber) async {
+    final dio = _createDio();
 
     if (biblioNumber <= 0) {
       debugPrint('Invalid biblionumber: $biblioNumber');

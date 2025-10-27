@@ -10,27 +10,18 @@ final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class ItemTypesService {
   static Dio _createDio() {
-    return Dio(
-      BaseOptions(
-        baseUrl: _baseUrl,
-        responseType: ResponseType.plain,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {
-          'Accept': 'application/json;encoding=UTF-8',
-          'x-api-key': _apiKey,
-        },
-      ),
-    );
-  }
+    Dio dio = Dio();
 
-  /// Fetches the list of item types from a Koha-based service
-  ///
-  /// Returns a `List<ItemType>` containing all available item types.
-  ///
-  /// Returns an empty list if no item types are found or in case of an error
-  static Future<List<ItemType>> getItemTypes() async {
-    final dio = _createDio();
+    dio.options = BaseOptions(
+      baseUrl: _baseUrl,
+      responseType: ResponseType.plain,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Accept': 'application/json;encoding=UTF-8',
+        'x-api-key': _apiKey,
+      },
+    );
 
     dio.interceptors.add(
       RetryInterceptor(
@@ -47,6 +38,17 @@ class ItemTypesService {
         },
       ),
     );
+
+    return dio;
+  }
+
+  /// Fetches the list of item types from a Koha-based service
+  ///
+  /// Returns a `List<ItemType>` containing all available item types.
+  ///
+  /// Returns an empty list if no item types are found or in case of an error
+  static Future<List<ItemType>> getItemTypes() async {
+    final dio = _createDio();
 
     try {
       final response = await dio.get('/item_types');
