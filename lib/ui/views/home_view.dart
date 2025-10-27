@@ -40,7 +40,7 @@ class _HomeViewState extends HomeController {
           height: 40,
         ),
       ),
-      drawer: navigationDrawer(context),
+      drawer: AppNavigationDrawer(onLocaleChange: widget.onLocaleChange, openLink: openLink, isLibrariesLoading: isLibrariesLoading, librariesFuture: _librariesFuture),
       drawerEnableOpenDragGesture: true,
       body: CustomScrollView(
         slivers: [
@@ -260,8 +260,18 @@ class _HomeViewState extends HomeController {
       ),
     );
   }
+}
 
-  NavigationDrawer navigationDrawer(BuildContext context) {
+class AppNavigationDrawer extends StatelessWidget {
+  const AppNavigationDrawer({super.key, required this.onLocaleChange, required this.openLink, required this.isLibrariesLoading, required this.librariesFuture});
+
+  final ValueChanged<Locale> onLocaleChange;
+  final Future<void> Function(String url) openLink;
+  final bool isLibrariesLoading;
+  final Future<List<Library>> librariesFuture;
+
+  @override
+  Widget build(BuildContext context) {
     return NavigationDrawer(
       children: [
         DrawerHeader(child: Image.asset('assets/images/head.png')),
@@ -281,7 +291,7 @@ class _HomeViewState extends HomeController {
           leading: const Icon(Icons.language, color: primaryColor),
           title: Text(AppLocalizations.of(context)!.language),
           onTap: () {
-            widget.onLocaleChange(
+            onLocaleChange(
               AppLocalizations.of(context)!.localeName == 'es'
                   ? const Locale('en')
                   : const Locale('es'),
@@ -302,7 +312,7 @@ class _HomeViewState extends HomeController {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => LibrariesView(libraries: _librariesFuture),
+              builder: (_) => LibrariesView(libraries: librariesFuture),
             ),
           ), // navigate to LibrariesView()
         ),
