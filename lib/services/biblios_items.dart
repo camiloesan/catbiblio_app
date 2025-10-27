@@ -51,9 +51,16 @@ class BibliosItemsService {
           .toList();
     } on DioException catch (e) {
       // Log the error for debugging
-      debugPrint('DioException in getBiblioItems: ${e.message}');
-      debugPrint('Response data: ${e.response?.data}');
+      //debugPrint('DioException in getBiblioItems: ${e.message}');
+      //debugPrint('Response data: ${e.response?.data}');
       debugPrint('Status code: ${e.response?.statusCode}');
+
+      if (e.response?.statusCode == 404) {
+        // debugPrint(
+        //   'BibliosDetails not found (404) for biblionumber $biblioNumber',
+        // );
+        return [];
+      }
 
       // Handle specific error types
       switch (e.type) {
