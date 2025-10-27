@@ -1,5 +1,6 @@
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -39,6 +40,22 @@ class BibliosDetailsService {
     }
 
     final dio = _createDio();
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
+      ),
+    );
 
     try {
       //debugPrint('Requesting biblio $biblioNumber from ${dio.options.baseUrl}');
@@ -142,6 +159,22 @@ class BibliosDetailsService {
 
     final dio = _createDio(responseType: ResponseType.plain);
 
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
+      ),
+    );
+
     try {
       // Example of how to make the request
       final response = await dio.get(
@@ -152,20 +185,21 @@ class BibliosDetailsService {
       // Return the plain text MARC record
       return response.data as String;
     } on DioException catch (e) {
-      //debugPrint('DioException in getBibliosMarcPlainText: ${e.message}');
-
       // Handle specific error types
       if (e.response?.statusCode == 404) {
         // debugPrint(
         //   'BibliosDetails not found (404) for biblionumber $biblioNumber',
         // );
+        // Return an empty string for not found items
         return null;
       }
 
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
+          debugPrint('Connection timeout: Check your internet connection');
+          break;
         case DioExceptionType.receiveTimeout:
-          debugPrint('Timeout error: Check network connection');
+          debugPrint('Receive timeout: Check network connection');
           break;
         case DioExceptionType.badResponse:
           debugPrint('Server error: ${e.response?.statusCode}');

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'dart:convert';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,22 @@ class LibrariesService {
   static Future<List<Library>> getLibraries() async {
     final dio = _createDio();
 
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
+      ),
+    );
+
     try {
       final response = await dio.get('/libraries');
 
@@ -42,14 +59,16 @@ class LibrariesService {
     } on DioException catch (e) {
       // Log the error for debugging
       debugPrint('DioException in getLibraries: ${e.message}');
-      debugPrint('Response data: ${e.response?.data}');
+      //debugPrint('Response data: ${e.response?.data}');
       debugPrint('Status code: ${e.response?.statusCode}');
 
       // Handle specific error types
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
+          debugPrint('Connection timeout: Check your internet connection');
+          break;
         case DioExceptionType.receiveTimeout:
-          debugPrint('Timeout error: Check network connection');
+          debugPrint('Receive timeout error: Check network connection');
           break;
         case DioExceptionType.badResponse:
           debugPrint('Server error: ${e.response?.statusCode}');

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:catbiblio_app/models/biblio_item.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -30,6 +31,22 @@ class BibliosItemsService {
   /// Returns an empty list if no items are found or in case of an error
   static Future<List<BiblioItem>> getBiblioItems(int biblioNumber) async {
     final dio = _createDio();
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
+      ),
+    );
 
     if (biblioNumber <= 0) {
       debugPrint('Invalid biblionumber: $biblioNumber');
@@ -65,8 +82,10 @@ class BibliosItemsService {
       // Handle specific error types
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
+          debugPrint('Connection timeout: Check your internet connection');
+          break;
         case DioExceptionType.receiveTimeout:
-          debugPrint('Timeout error: Check network connection');
+          debugPrint('Receive timeout: Check network connection');
           break;
         case DioExceptionType.badResponse:
           debugPrint('Server error: ${e.response?.statusCode}');
