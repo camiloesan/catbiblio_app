@@ -142,7 +142,7 @@ class _HomeViewState extends HomeController {
                             : (MediaQuery.of(context).size.width / 3) * 2,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
+                        padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
