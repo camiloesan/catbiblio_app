@@ -269,4 +269,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookSelections => 'Selections';
+
+  @override
+  String get about => 'About';
 }

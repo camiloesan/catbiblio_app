@@ -86,5 +86,6 @@
     "errorLoadingBookDetails": "Error al cargar los detalles del libro",
     "searchSectionTitle": "Buscar en el Catálogo Bibliotecario UV",
     "libraryServices": "Servicios de la Biblioteca",
-    "bookSelections": "Selecciones"
+    "bookSelections": "Selecciones",
+    "about": "Acerca de"
 }

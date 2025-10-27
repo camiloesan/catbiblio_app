@@ -271,4 +271,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get bookSelections => 'Selecciones';
+
+  @override
+  String get about => 'Acerca de';
 }

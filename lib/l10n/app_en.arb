@@ -347,5 +347,9 @@
   "bookSelections": "Selections",
   "@bookSelections": {
     "description": "Book selections section title"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About section title"
   }
 }
