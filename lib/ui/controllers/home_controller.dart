@@ -60,6 +60,7 @@ abstract class HomeController extends State<HomeView> {
     _booksCarouselSliderController = CarouselSliderController();
     _libraryServicesController = TextEditingController();
     _servicesCarouselSliderController = CarouselSliderController();
+    _librariesFuture = Future.value([]);
 
     fetchData();
   }
