@@ -10,7 +10,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 part '../controllers/search_controller.dart';
 
-const Color primaryUVColor = Color(0xFF003466);
+const Color primaryUVColor = Color.fromARGB(255, 24, 82, 157);
 
 class SearchView extends StatefulWidget {
   final ControllersData controllersData;
