@@ -3,6 +3,7 @@ import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
+import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/search.dart';
 import 'package:catbiblio_app/services/images.dart';
@@ -30,10 +31,9 @@ class _SearchViewState extends SearchController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Image.asset(  
-        'assets/images/head-icon.png',
-        height: 40,
-      )),
+      appBar: AppBar(
+        title: Image.asset('assets/images/head-icon.png', height: 40),
+      ),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -70,13 +70,18 @@ class _SearchViewState extends SearchController {
                           widget: widget,
                         ),
                         const SizedBox(height: 12),
-                        textFieldSearch(context),
+                        TextFieldSearchWidget(
+                          searchController: _searchController,
+                          isSearchable: true,
+                          onSubmitted: onSubmitAction,
+                          clearSearchController: clearSearchController,
+                        ),
                       ],
                     ),
                   ),
 
                   const SizedBox(height: 12),
-                  buildPaginationButtonRow(),
+                  PaginationButtonRow(paginationBehavior: paginationBehavior, setLowerLimit: setLowerLimit, setUpperLimit: setUpperLimit, totalPages: totalPages, currentPage: currentPage, setMiddleSpace: setMiddleSpace, scrollController: _scrollController),
                   const SizedBox(height: 8),
                   if (isInitialRequestLoading)
                     const Center(child: LinearProgressIndicator()),
@@ -121,31 +126,50 @@ class _SearchViewState extends SearchController {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 16),
-                child: buildPaginationButtonRow(),
+                child: PaginationButtonRow(
+                  paginationBehavior: paginationBehavior,
+                  setLowerLimit: setLowerLimit,
+                  setUpperLimit: setUpperLimit,
+                  totalPages: totalPages,
+                  currentPage: currentPage,
+                  setMiddleSpace: setMiddleSpace,
+                  scrollController: _scrollController,
+                ),
               ),
             ),
         ],
       ),
     );
   }
+}
 
-  TextField textFieldSearch(BuildContext context) {
-    return TextField(
-      controller: _searchController,
-      onSubmitted: (value) => onSubmitAction(value),
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search, color: primaryUVColor),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () => _searchController.clear(),
-        ),
-        labelText: AppLocalizations.of(context)!.search,
-        border: const OutlineInputBorder(),
-      ),
-    );
-  }
+class PaginationButtonRow extends StatelessWidget {
+  const PaginationButtonRow({
+    super.key,
+    required paginationBehavior,
+    required setLowerLimit,
+    required setUpperLimit,
+    required totalPages,
+    required currentPage,
+    required setMiddleSpace,
+    required ScrollController scrollController,
+  }) : _paginationBehavior = paginationBehavior,
+       _setLowerLimit = setLowerLimit,
+       _setUpperLimit = setUpperLimit,
+       _totalPages = totalPages,
+       _currentPage = currentPage,
+       _setMiddleSpace = setMiddleSpace,
+       _scrollController = scrollController;
+  final Function(int) _paginationBehavior;
+  final int _setLowerLimit;
+  final int _setUpperLimit;
+  final int _totalPages;
+  final int _currentPage;
+  final int _setMiddleSpace;
+  final ScrollController _scrollController;
 
-  Widget buildPaginationButtonRow() {
+  @override
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -155,21 +179,20 @@ class _SearchViewState extends SearchController {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             for (
-              int i = setLowerLimit;
-              i <= setUpperLimit && i <= totalPages && totalPages > 1;
+              int i = _setLowerLimit;
+              i <= _setUpperLimit && i <= _totalPages && _totalPages > 1;
               i++
             )
               OutlinedButton(
                 onPressed: () {
-                  paginationBehavior(i);
-                  // optional: scroll to top when bottom pagination is pressed
+                  _paginationBehavior(i);
                   _scrollController.animateTo(
                     0,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeInOut,
                   );
                 },
-                style: i == currentPage
+                style: i == _currentPage
                     ? OutlinedButton.styleFrom(
                         backgroundColor: primaryUVColor,
                         foregroundColor: Colors.white,
@@ -181,9 +204,9 @@ class _SearchViewState extends SearchController {
                         minimumSize: const Size(36, 36),
                         padding: EdgeInsets.zero,
                       ),
-                child: i == setUpperLimit
+                child: i == _setUpperLimit
                     ? const Icon(Icons.arrow_forward)
-                    : i == setLowerLimit && i > setMiddleSpace
+                    : i == _setLowerLimit && i > _setMiddleSpace
                     ? const Icon(Icons.arrow_back)
                     : Text('$i'),
               ),
@@ -349,6 +372,43 @@ class BookList extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class TextFieldSearchWidget extends StatelessWidget {
+  const TextFieldSearchWidget({
+    super.key,
+    required TextEditingController searchController,
+    required bool isSearchable,
+    required Function(String) onSubmitted,
+    required VoidCallback clearSearchController,
+  }) : _searchController = searchController,
+       _isSearchable = isSearchable,
+       _onSubmitted = onSubmitted,
+       _clearSearchController = clearSearchController;
+
+  final TextEditingController _searchController;
+  final bool _isSearchable;
+  final Function(String) _onSubmitted;
+  final VoidCallback _clearSearchController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _searchController,
+      onSubmitted: (value) => _onSubmitted(value),
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search, color: primaryColor),
+        suffixIcon: _isSearchable
+            ? IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () => _clearSearchController(),
+              )
+            : null,
+        labelText: AppLocalizations.of(context)!.search,
+        border: OutlineInputBorder(),
+      ),
     );
   }
 }

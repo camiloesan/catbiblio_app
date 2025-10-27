@@ -80,8 +80,13 @@ abstract class SearchController extends State<SearchView> {
         });
   }
 
+  void clearSearchController() {
+    _searchController.clear();
+  }
+
   @override
   void dispose() {
+    _searchController.dispose();
     super.dispose();
   }
 
