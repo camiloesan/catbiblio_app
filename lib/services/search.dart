@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:collection/collection.dart';
@@ -97,6 +98,22 @@ class SearchService {
   static Future<SearchResult> searchBooks(QueryParams params) async {
     final dio = _createDio();
     final queryParameters = buildQueryParameters(params);
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
+      ),
+    );
 
     if (params.searchQuery.isEmpty) {
       return SearchResult(books: [], totalRecords: 0);

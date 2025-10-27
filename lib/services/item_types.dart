@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
@@ -31,6 +32,22 @@ class ItemTypesService {
   static Future<List<ItemType>> getItemTypes() async {
     final dio = _createDio();
 
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
+      ),
+    );
+
     try {
       final response = await dio.get('/item_types');
 
@@ -48,8 +65,10 @@ class ItemTypesService {
       // Handle specific error types
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
+          debugPrint('Connection timeout: Check your internet connection');
+          break;
         case DioExceptionType.receiveTimeout:
-          debugPrint('Timeout error: Check network connection');
+          debugPrint('Receive timeout: Check network connection');
           break;
         case DioExceptionType.badResponse:
           if (e.response?.statusCode == 404) {
