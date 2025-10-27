@@ -40,7 +40,12 @@ class _HomeViewState extends HomeController {
           height: 40,
         ),
       ),
-      drawer: AppNavigationDrawer(onLocaleChange: widget.onLocaleChange, openLink: openLink, isLibrariesLoading: isLibrariesLoading, librariesFuture: _librariesFuture),
+      drawer: AppNavigationDrawer(
+        onLocaleChange: widget.onLocaleChange,
+        openLink: openLink,
+        isLibrariesLoading: isLibrariesLoading,
+        librariesFuture: _librariesFuture,
+      ),
       drawerEnableOpenDragGesture: true,
       body: CustomScrollView(
         slivers: [
@@ -142,7 +147,11 @@ class _HomeViewState extends HomeController {
                             : (MediaQuery.of(context).size.width / 3) * 2,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                        padding: const EdgeInsets.only(
+                          top: 16.0,
+                          left: 16.0,
+                          right: 16.0,
+                        ),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -263,7 +272,13 @@ class _HomeViewState extends HomeController {
 }
 
 class AppNavigationDrawer extends StatelessWidget {
-  const AppNavigationDrawer({super.key, required this.onLocaleChange, required this.openLink, required this.isLibrariesLoading, required this.librariesFuture});
+  const AppNavigationDrawer({
+    super.key,
+    required this.onLocaleChange,
+    required this.openLink,
+    required this.isLibrariesLoading,
+    required this.librariesFuture,
+  });
 
   final ValueChanged<Locale> onLocaleChange;
   final Future<void> Function(String url) openLink;
@@ -275,36 +290,6 @@ class AppNavigationDrawer extends StatelessWidget {
     return NavigationDrawer(
       children: [
         DrawerHeader(child: Image.asset('assets/images/head.png')),
-        ListTile(
-          leading: const Icon(Icons.home, color: primaryColor),
-          title: Text(AppLocalizations.of(context)!.home),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.history, color: primaryColor),
-          title: Text(AppLocalizations.of(context)!.searchHistory),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.language, color: primaryColor),
-          title: Text(AppLocalizations.of(context)!.language),
-          onTap: () {
-            onLocaleChange(
-              AppLocalizations.of(context)!.localeName == 'es'
-                  ? const Locale('en')
-                  : const Locale('es'),
-            );
-            Navigator.pop(context);
-            SnackBar snackBar = SnackBar(
-              content: Text(AppLocalizations.of(context)!.languageChanged),
-              duration: const Duration(seconds: 2),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          },
-        ),
-        const Divider(),
         ListTile(
           leading: const Icon(Icons.map, color: primaryColor),
           title: Text(AppLocalizations.of(context)!.libraryDirectory),
@@ -345,6 +330,36 @@ class AppNavigationDrawer extends StatelessWidget {
           onTap: () => openLink(
             'https://catbiblio.uv.mx/avisos/aviso-privacidad-integral-sib.pdf',
           ),
+        ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.language, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.language),
+          onTap: () {
+            onLocaleChange(
+              AppLocalizations.of(context)!.localeName == 'es'
+                  ? const Locale('en')
+                  : const Locale('es'),
+            );
+            Navigator.pop(context);
+            SnackBar snackBar = SnackBar(
+              content: Text(AppLocalizations.of(context)!.languageChanged),
+              duration: const Duration(seconds: 2),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.info, color: primaryColor),
+          title: Text(AppLocalizations.of(context)!.about),
+          onTap: () {
+            showAboutDialog(
+              context: context,
+              applicationName: 'Catálogo Bibliotecario UV',
+              applicationVersion: '1.0.0',
+              applicationLegalese: '© 2025 Sistema Integral Bibliotecario UV',
+            );
+          },
         ),
       ],
     );
