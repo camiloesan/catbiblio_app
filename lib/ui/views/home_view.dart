@@ -228,7 +228,6 @@ class _HomeViewState extends HomeController {
                               DropdownLibrariesServicesWidget(
                                 libraryServicesController:
                                     _libraryServicesController,
-                                libraryEntries: _enabledHomeLibrariesEntries,
                                 enabledHomeLibrariesEntries:
                                     _enabledHomeLibrariesEntries,
                                 maxWidth: constraints.maxWidth,
@@ -370,16 +369,13 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
   const DropdownLibrariesServicesWidget({
     super.key,
     required TextEditingController libraryServicesController,
-    required List<DropdownMenuEntry<String>> libraryEntries,
     required List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries,
     required double maxWidth,
   }) : _libraryServicesController = libraryServicesController,
-       _libraryEntries = libraryEntries,
        _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries,
        _maxWidth = maxWidth;
 
   final TextEditingController _libraryServicesController;
-  final List<DropdownMenuEntry<String>> _libraryEntries;
   final List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries;
   final double _maxWidth;
 
@@ -389,13 +385,7 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
       width: _maxWidth,
       controller: _libraryServicesController,
       inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),
-      dropdownMenuEntries: _libraryEntries
-          .where(
-            (entry) => _enabledHomeLibrariesEntries.any(
-              (enabled) => enabled.value == entry.value,
-            ),
-          )
-          .toList(),
+      dropdownMenuEntries: _enabledHomeLibrariesEntries,
       enableSearch: false,
       enableFilter: false,
       requestFocusOnTap: false,
