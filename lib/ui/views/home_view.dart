@@ -120,7 +120,6 @@ class _HomeViewState extends HomeController {
                           const SizedBox(height: 12),
                           TextFieldSearchWidget(
                             searchController: _searchController,
-                            isSearchable: isSearchable,
                             onSubmitted: (value) => onSubmitAction(),
                             clearSearchController: () =>
                                 clearSearchController(),
@@ -433,16 +432,13 @@ class TextFieldSearchWidget extends StatelessWidget {
   const TextFieldSearchWidget({
     super.key,
     required TextEditingController searchController,
-    required bool isSearchable,
     required Function(String) onSubmitted,
     required VoidCallback clearSearchController,
   }) : _searchController = searchController,
-       _isSearchable = isSearchable,
        _onSubmitted = onSubmitted,
        _clearSearchController = clearSearchController;
 
   final TextEditingController _searchController;
-  final bool _isSearchable;
   final Function(String) _onSubmitted;
   final VoidCallback _clearSearchController;
 
@@ -453,12 +449,10 @@ class TextFieldSearchWidget extends StatelessWidget {
       onSubmitted: (value) => _onSubmitted(value),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search, color: primaryColor),
-        suffixIcon: _isSearchable
-            ? IconButton(
+        suffixIcon: IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () => _clearSearchController(),
-              )
-            : null,
+              ),
         labelText: AppLocalizations.of(context)!.search,
         border: OutlineInputBorder(),
       ),
