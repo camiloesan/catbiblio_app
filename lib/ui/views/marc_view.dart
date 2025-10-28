@@ -49,7 +49,7 @@ class _MarcViewState extends MarcController {
                               MarcController.formatAltMarcStyle(marcData) ??
                               marcData ??
                               AppLocalizations.of(context)!.noMarcDataAvailable,
-                          style: const TextStyle(fontFamily: 'monospace'),
+                          style: const TextStyle(fontFamily: 'Roboto Mono'),
                         ),
                       ),
                     ),

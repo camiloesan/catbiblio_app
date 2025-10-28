@@ -37,6 +37,10 @@ flutter:
     - assets/images/
     - .env
   fonts:
+  - family: Roboto Mono
+    fonts:
+      - asset: assets/fonts/RobotoMono-VariableFont_wght.ttf
+      - asset: assets/fonts/RobotoMono-Italic-VariableFont_wght.ttf
   - family: Inter
     fonts:
       - asset: assets/fonts/Inter_24pt-Regular.ttf
