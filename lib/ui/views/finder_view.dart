@@ -5,6 +5,7 @@ import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/services/locations.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 part '../controllers/finder_controller.dart';
 
@@ -191,6 +192,7 @@ class _FinderViewState extends FinderController {
                         ),
                       ),
                       InteractiveViewer(
+                        scaleEnabled: kIsWeb ? false : true,
                         panEnabled: true,
                         minScale: 0.5,
                         maxScale: 4,
