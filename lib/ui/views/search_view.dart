@@ -32,7 +32,9 @@ class _SearchViewState extends SearchController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset('assets/images/head-icon.png', height: 40),
+        title: Center(
+          child: Image.asset('assets/images/head-icon.png', height: 40),
+        ),
       ),
       body: CustomScrollView(
         controller: _scrollController,
@@ -97,7 +99,15 @@ class _SearchViewState extends SearchController {
                   ),
 
                   const SizedBox(height: 12),
-                  PaginationButtonRow(paginationBehavior: paginationBehavior, setLowerLimit: setLowerLimit, setUpperLimit: setUpperLimit, totalPages: totalPages, currentPage: currentPage, setMiddleSpace: setMiddleSpace, scrollController: _scrollController),
+                  PaginationButtonRow(
+                    paginationBehavior: paginationBehavior,
+                    setLowerLimit: setLowerLimit,
+                    setUpperLimit: setUpperLimit,
+                    totalPages: totalPages,
+                    currentPage: currentPage,
+                    setMiddleSpace: setMiddleSpace,
+                    scrollController: _scrollController,
+                  ),
                   const SizedBox(height: 8),
                   if (isInitialRequestLoading)
                     const Center(child: LinearProgressIndicator()),

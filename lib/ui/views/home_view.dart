@@ -35,9 +35,11 @@ class _HomeViewState extends HomeController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image(
-          image: const AssetImage('assets/images/head.png'),
-          height: 40,
+        title: Center(
+          child: Image(
+            image: const AssetImage('assets/images/head.png'),
+            height: 40,
+          ),
         ),
       ),
       drawer: AppNavigationDrawer(
