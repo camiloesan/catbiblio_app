@@ -32,9 +32,8 @@ class _SearchViewState extends SearchController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Image.asset('assets/images/head-icon.png', height: 40),
-        ),
+        centerTitle: true,
+        title: Image.asset('assets/images/head-icon.png', height: 40),
       ),
       body: CustomScrollView(
         controller: _scrollController,
