@@ -1,7 +1,6 @@
 part of '../views/search_view.dart';
 
 abstract class SearchController extends State<SearchView> {
-  late TextEditingController _libraryController;
   late TextEditingController _filterController;
   late TextEditingController _searchController;
   late final TextEditingController _itemTypeController = widget.controllersData.itemTypeController;
@@ -22,9 +21,7 @@ abstract class SearchController extends State<SearchView> {
   @override
   void initState() {
     super.initState();
-
     _filterController = widget.controllersData.filterController;
-    _libraryController = widget.controllersData.libraryController;
     _searchController = TextEditingController();
     _filterEntries = widget.controllersData.filterEntries;
     _searchController.text = widget.queryParams.searchQuery;
