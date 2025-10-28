@@ -17,7 +17,6 @@ abstract class HomeController extends State<HomeView> {
   final QueryParams _queryParams = QueryParams();
   String selectedLibraryServices = 'USBI-X';
   bool isSelectionsEnabled = false;
-  bool isSearchable = false;
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
   bool isConfigLoading = true;
