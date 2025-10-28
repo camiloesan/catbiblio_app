@@ -681,7 +681,7 @@ class CarouselServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: primaryColor,
-      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 32.0),
+      margin: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 32.0, top: 8.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
