@@ -4,9 +4,10 @@ abstract class SearchController extends State<SearchView> {
   late TextEditingController _libraryController;
   late TextEditingController _filterController;
   late TextEditingController _searchController;
-  late TextEditingController _itemTypeController;
+  late final TextEditingController _itemTypeController = widget.controllersData.itemTypeController;
   late ScrollController _scrollController;
   late List<BookPreview> books = [];
+  late final List<DropdownMenuEntry<String>> _filterEntries;
   static const int initialUpperLimit = 8;
   int currentPage = 1;
   int totalPages = 0;
@@ -18,43 +19,18 @@ abstract class SearchController extends State<SearchView> {
   bool isPageLoading = false;
   bool isError = false;
 
-  List<DropdownMenuEntry<String>> get _filterEntries {
-    return [
-      DropdownMenuEntry(
-        value: 'title',
-        label: AppLocalizations.of(context)!.titleEntry,
-      ),
-      DropdownMenuEntry(
-        value: 'author',
-        label: AppLocalizations.of(context)!.authorEntry,
-      ),
-      DropdownMenuEntry(
-        value: 'subject',
-        label: AppLocalizations.of(context)!.subjectEntry,
-      ),
-      DropdownMenuEntry(
-        value: 'isbn',
-        label: AppLocalizations.of(context)!.isbnEntry,
-      ),
-      DropdownMenuEntry(
-        value: 'issn',
-        label: AppLocalizations.of(context)!.issnEntry,
-      ),
-    ];
-  }
-
   @override
   void initState() {
     super.initState();
+
     _filterController = widget.controllersData.filterController;
     _libraryController = widget.controllersData.libraryController;
     _searchController = TextEditingController();
+    _filterEntries = widget.controllersData.filterEntries;
     _searchController.text = widget.queryParams.searchQuery;
     _scrollController = ScrollController();
-    _itemTypeController = widget.controllersData.itemTypeController;
     setMiddleSpace = setUpperLimit - 2;
 
-    if (widget.queryParams.searchQuery.isEmpty) return;
     loadSearch();
   }
 

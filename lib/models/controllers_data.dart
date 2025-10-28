@@ -6,6 +6,7 @@ class ControllersData {
   List<DropdownMenuEntry<String>> libraryEntries;
   List<DropdownMenuEntry<String>> itemTypeEntries;
   TextEditingController itemTypeController;
+  List<DropdownMenuEntry<String>> filterEntries;
 
   ControllersData({
     required this.filterController,
@@ -13,5 +14,6 @@ class ControllersData {
     required this.libraryEntries,
     required this.itemTypeController,
     required this.itemTypeEntries,
+    required this.filterEntries,
   });
 }

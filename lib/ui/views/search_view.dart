@@ -60,7 +60,8 @@ class _SearchViewState extends SearchController {
                         ),
                         const SizedBox(height: 12),
                         DropdownLibraries(
-                          libraryController: _libraryController,
+                          libraryEntries:
+                              widget.controllersData.libraryEntries,
                           widget: widget,
                         ),
                         const SizedBox(height: 12),
@@ -416,17 +417,16 @@ class TextFieldSearchWidget extends StatelessWidget {
 class DropdownLibraries extends StatelessWidget {
   const DropdownLibraries({
     super.key,
-    required TextEditingController libraryController,
+    required this.libraryEntries,
     required this.widget,
-  }) : _libraryController = libraryController;
+  });
 
-  final TextEditingController _libraryController;
+  final List<DropdownMenuEntry<String>> libraryEntries;
   final SearchView widget;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      controller: _libraryController,
       label: Text(AppLocalizations.of(context)!.library),
       leadingIcon: const Icon(Icons.location_city, color: primaryUVColor),
       dropdownMenuEntries: [
@@ -434,7 +434,7 @@ class DropdownLibraries extends StatelessWidget {
           value: 'all',
           label: AppLocalizations.of(context)!.allLibraries,
         ),
-        ...widget.controllersData.libraryEntries,
+        ...libraryEntries,
       ],
       menuHeight: 300,
       onSelected: (value) => widget.queryParams.library = value!,
