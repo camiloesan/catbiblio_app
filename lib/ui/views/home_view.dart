@@ -197,6 +197,7 @@ class _HomeViewState extends HomeController {
                           ),
                       ],
                     ),
+                    SizedBox(height: 32.0),
                   ],
                 ),
               ),
@@ -561,7 +562,7 @@ class CarouselBookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Color.fromARGB(255, 0, 153, 50),
-      margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
+      margin: EdgeInsets.symmetric(vertical: 32.0, horizontal: 4.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
@@ -680,7 +681,7 @@ class CarouselServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: primaryColor,
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
@@ -758,7 +759,7 @@ class ServicesCarouselSliderWidget extends StatelessWidget {
       items: _items,
       carouselController: _servicesCarouselSliderController,
       options: CarouselOptions(
-        height: 320,
+        height: 500.0,
         enlargeCenterPage: true,
         autoPlay: true,
         enableInfiniteScroll: false,

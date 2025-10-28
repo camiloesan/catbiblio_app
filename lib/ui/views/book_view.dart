@@ -284,7 +284,13 @@ class _BookViewState extends BookController {
                               ),
                             ),
 
-                          buildLibrariesList(isLoadingBiblioItems),
+                          // buildLibrariesList(isLoadingBiblioItems),
+                          ListViewLibrariesWidget(
+                            holdingLibraries: holdingLibraries,
+                            groupedItems: groupedItems,
+                            navigateToFinderView: navigateToFinderView,
+                            isLoadingBiblioItems: isLoadingBiblioItems,
+                          ),
                         ],
                       ),
                     ),
@@ -297,8 +303,30 @@ class _BookViewState extends BookController {
       ),
     );
   }
+}
 
-  ListView buildLibrariesList(bool isLoadingBiblioItems) {
+class ListViewLibrariesWidget extends StatelessWidget {
+  const ListViewLibrariesWidget({
+    super.key,
+    required this.holdingLibraries,
+    required this.groupedItems,
+    required this.navigateToFinderView,
+    required this.isLoadingBiblioItems,
+  });
+
+  final List<String> holdingLibraries;
+  final Map<String, List<BiblioItem>> groupedItems;
+  final Function(
+    String callNumber,
+    String collection,
+    String collectionCode,
+    String holdingLibrary,
+  )
+  navigateToFinderView;
+  final bool isLoadingBiblioItems;
+
+  @override
+  Widget build(BuildContext context) {
     if (isLoadingBiblioItems) {
       return ListView.builder(
         shrinkWrap: true,
