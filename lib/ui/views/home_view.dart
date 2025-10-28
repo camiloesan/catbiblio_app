@@ -197,7 +197,7 @@ class _HomeViewState extends HomeController {
                           ),
                       ],
                     ),
-                    SizedBox(height: 32.0),
+                    SizedBox(height: 16.0),
                   ],
                 ),
               ),
