@@ -185,6 +185,7 @@ abstract class HomeController extends State<HomeView> {
       libraryEntries: _libraryEntries,
       itemTypeController: _itemTypeController,
       itemTypeEntries: _itemTypeEntries,
+      filterEntries: _filterEntries,
     );
     _queryParams.startRecord = 1;
     _queryParams.searchQuery = _searchController.text;
