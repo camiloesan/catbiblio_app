@@ -52,23 +52,38 @@ class _SearchViewState extends SearchController {
                     ),
                     child: Column(
                       children: [
-                        DropdownItemType(
-                          itemTypeController: _itemTypeController,
-                          itemTypeEntries:
-                              widget.controllersData.itemTypeEntries,
-                          queryParams: widget.queryParams,
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return DropdownItemType(
+                              itemTypeController: _itemTypeController,
+                              itemTypeEntries:
+                                  widget.controllersData.itemTypeEntries,
+                              queryParams: widget.queryParams,
+                              maxWidth: constraints.maxWidth,
+                            );
+                          },
                         ),
                         const SizedBox(height: 12),
-                        DropdownLibraries(
-                          libraryEntries:
-                              widget.controllersData.libraryEntries,
-                          widget: widget,
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return DropdownLibraries(
+                              libraryEntries:
+                                  widget.controllersData.libraryEntries,
+                              widget: widget,
+                              maxWidth: constraints.maxWidth,
+                            );
+                          },
                         ),
                         const SizedBox(height: 12),
-                        DropdownFilter(
-                          filterController: _filterController,
-                          filterEntries: _filterEntries,
-                          widget: widget,
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return DropdownFilter(
+                              filterController: _filterController,
+                              filterEntries: _filterEntries,
+                              widget: widget,
+                              maxWidth: constraints.maxWidth,
+                            );
+                          },
                         ),
                         const SizedBox(height: 12),
                         TextFieldSearchWidget(
@@ -419,16 +434,19 @@ class DropdownLibraries extends StatelessWidget {
     super.key,
     required this.libraryEntries,
     required this.widget,
-  });
+    required double maxWidth,
+  }) : _maxWidth = maxWidth;
 
   final List<DropdownMenuEntry<String>> libraryEntries;
   final SearchView widget;
+  final double _maxWidth;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
       label: Text(AppLocalizations.of(context)!.library),
       leadingIcon: const Icon(Icons.location_city, color: primaryUVColor),
+      initialSelection: widget.queryParams.library,
       dropdownMenuEntries: [
         DropdownMenuEntry(
           value: 'all',
@@ -438,7 +456,7 @@ class DropdownLibraries extends StatelessWidget {
       ],
       menuHeight: 300,
       onSelected: (value) => widget.queryParams.library = value!,
-      width: double.infinity,
+      width: _maxWidth,
     );
   }
 }
@@ -449,12 +467,15 @@ class DropdownFilter extends StatelessWidget {
     required TextEditingController filterController,
     required List<DropdownMenuEntry<String>> filterEntries,
     required this.widget,
+    required double maxWidth,
   }) : _filterController = filterController,
-       _filterEntries = filterEntries;
+       _filterEntries = filterEntries,
+       _maxWidth = maxWidth;
 
   final TextEditingController _filterController;
   final List<DropdownMenuEntry<String>> _filterEntries;
   final SearchView widget;
+  final double _maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -466,7 +487,7 @@ class DropdownFilter extends StatelessWidget {
       onSelected: (value) => widget.queryParams.searchBy = value!,
       enableFilter: false,
       requestFocusOnTap: false,
-      width: double.infinity,
+      width: _maxWidth,
     );
   }
 }
@@ -477,13 +498,16 @@ class DropdownItemType extends StatelessWidget {
     required TextEditingController itemTypeController,
     required List<DropdownMenuEntry<String>> itemTypeEntries,
     required QueryParams queryParams,
+    required double maxWidth,
   }) : _itemTypeController = itemTypeController,
        _itemTypeEntries = itemTypeEntries,
-       _queryParams = queryParams;
+       _queryParams = queryParams,
+       _maxWidth = maxWidth;
 
   final TextEditingController _itemTypeController;
   final List<DropdownMenuEntry<String>> _itemTypeEntries;
   final QueryParams _queryParams;
+  final double _maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -502,7 +526,7 @@ class DropdownItemType extends StatelessWidget {
       ],
       initialSelection: _queryParams.itemType,
       onSelected: (value) => _queryParams.itemType = value!,
-      width: double.infinity,
+      width: _maxWidth,
     );
   }
 }
