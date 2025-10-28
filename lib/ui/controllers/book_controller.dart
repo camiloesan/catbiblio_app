@@ -128,7 +128,7 @@ abstract class BookController extends State<BookView> {
     );
   }
 
-  _shareOnWhatsApp(BuildContext context, String message) async {
+  Future<void> _shareOnWhatsApp(BuildContext context, String message) async {
     final Uri whatsappUrl = Uri.parse(
       "https://wa.me/?text=${Uri.encodeComponent(message)}",
     );
@@ -166,7 +166,7 @@ abstract class BookController extends State<BookView> {
     );
   }
 
-  _shareViaEmail(BuildContext context, String message) async {
+  Future<void> _shareViaEmail(BuildContext context, String message) async {
     final Uri emailUri = Uri.parse(
       'mailto:?subject=&body=${Uri.encodeComponent(message)}',
     );
