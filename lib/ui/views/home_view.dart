@@ -449,9 +449,9 @@ class TextFieldSearchWidget extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search, color: primaryColor),
         suffixIcon: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => _clearSearchController(),
-              ),
+          icon: Icon(Icons.clear),
+          onPressed: () => _clearSearchController(),
+        ),
         labelText: AppLocalizations.of(context)!.search,
         border: OutlineInputBorder(),
       ),
@@ -755,7 +755,7 @@ class ServicesCarouselSliderWidget extends StatelessWidget {
         height: 500.0,
         enlargeCenterPage: true,
         autoPlay: true,
-        enableInfiniteScroll: false,
+        enableInfiniteScroll: true,
         autoPlayInterval: const Duration(seconds: 6),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
