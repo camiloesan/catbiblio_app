@@ -211,7 +211,7 @@ class _HomeViewState extends HomeController {
                             child: CarouselBookCard(
                               title: book.bookName,
                               imageUrl:
-                                  'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblionumber}',
+                                  'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
                               fit: BoxFit.cover,
                             ),
                           ),

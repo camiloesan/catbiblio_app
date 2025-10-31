@@ -93,41 +93,53 @@ class _BookViewState extends BookController {
                                       ),
                                     )
                                   else
-                                    FutureBuilder<Image?>(
-                                      future: ImageService.fetchImageUrl(
-                                        widget.biblioNumber,
-                                      ),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError ||
-                                            snapshot.data == null) {
-                                          // If there was an error or no image, show a placeholder.
-                                          // A small placeholder must be shown after loading. To avoid breaking the layout, we use a reduced placeholder.
-                                          return SizedBox(
-                                            width: 120,
-                                            height: 160,
-                                            child: Container(
-                                              color: Colors.white24,
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.broken_image,
-                                                  size: 36,
-                                                  color: Colors.white70,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          return Row(
-                                            children: [
-                                              SizedBox(
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showImageDialog(
+                                          context,
+                                          'biblioImage',
+                                          'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${widget.biblioNumber}',
+                                        );
+                                      },
+                                      child: Hero(
+                                        tag: 'biblioImage',
+                                        child: FutureBuilder<Image?>(
+                                          future: ImageService.fetchThumbnailImageUrl(
+                                            widget.biblioNumber,
+                                          ),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasError ||
+                                                snapshot.data == null) {
+                                              // If there was an error or no image, show a placeholder.
+                                              // A small placeholder must be shown after loading. To avoid breaking the layout, we use a reduced placeholder.
+                                              return SizedBox(
                                                 width: 120,
                                                 height: 160,
-                                                child: snapshot.data!,
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                      },
+                                                child: Container(
+                                                  color: Colors.white24,
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.broken_image,
+                                                      size: 36,
+                                                      color: Colors.white70,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            } else {
+                                              return Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 120,
+                                                    height: 160,
+                                                    child: snapshot.data!,
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   const SizedBox(width: 16.0),
                                   Expanded(

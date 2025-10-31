@@ -78,6 +78,33 @@ abstract class BookController extends State<BookView> {
     });
   }
 
+  void _showImageDialog(BuildContext context, String tag, String imageUrl) {
+  showDialog(
+    context: context,
+    barrierColor: Colors.white.withValues(alpha: 0.7),
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        insetPadding: EdgeInsets.all(16.0),
+
+        child: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Hero(
+            tag: tag,
+            child: InteractiveViewer(
+              child: Image.network(
+                imageUrl, 
+                scale: 1.2,
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
   void showShareDialog(
     BuildContext context,
     String title,

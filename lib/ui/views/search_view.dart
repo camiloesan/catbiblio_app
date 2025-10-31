@@ -335,7 +335,7 @@ class BookList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FutureBuilder<Image?>(
-                      future: ImageService.fetchImageUrl(book.biblioNumber),
+                      future: ImageService.fetchThumbnailImageUrl(book.biblioNumber),
                       builder: (context, snapshot) {
                         if (snapshot.hasError || snapshot.data == null) {
                           return const SizedBox.shrink();
