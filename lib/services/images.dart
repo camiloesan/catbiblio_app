@@ -15,7 +15,7 @@ class ImageService {
 
   /// Fetches an image from the server using the provided [biblionumber].
   /// Returns an [Image] widget if the image is found and valid, otherwise returns null.
-  static Future<Image?> fetchImageUrl(String biblionumber) async {
+  static Future<Image?> fetchThumbnailImageUrl(String biblionumber) async {
     final dio = _createDio();
 
     try {
@@ -29,7 +29,7 @@ class ImageService {
               .contains('image/png') &&
           response.statusCode == 200) {
         final bytes = response.data;
-        return Image.memory(bytes, width: 100, fit: BoxFit.fitHeight);
+        return Image.memory(bytes, fit: BoxFit.fitHeight);
       } else {
         return null;
       }

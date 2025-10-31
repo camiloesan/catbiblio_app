@@ -40,7 +40,7 @@ class _FinderViewState extends FinderController {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FutureBuilder<Image?>(
-                        future: ImageService.fetchImageUrl(
+                        future: ImageService.fetchThumbnailImageUrl(
                           widget.params.biblioNumber,
                         ),
                         builder: (context, snapshot) {
