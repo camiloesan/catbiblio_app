@@ -828,7 +828,7 @@ class ServicesCarouselSliderWidget extends StatelessWidget {
       carouselController: _servicesCarouselSliderController,
       options: CarouselOptions(
         height: 500.0,
-        enlargeCenterPage: false,
+        enlargeCenterPage: true,
         scrollPhysics: kIsWeb
             ? NeverScrollableScrollPhysics()
             : AlwaysScrollableScrollPhysics(),
