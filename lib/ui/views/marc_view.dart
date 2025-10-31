@@ -2,6 +2,7 @@ import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/services/biblios_details.dart';
 import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 part '../controllers/marc_controller.dart';
 
@@ -32,7 +33,8 @@ class _MarcViewState extends MarcController {
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                    maxWidth:
+                        MediaQuery.of(context).size.width < screenSizeLimit
                         ? MediaQuery.of(context).size.width
                         : (MediaQuery.of(context).size.width / 3) * 2.2,
                   ),
@@ -42,6 +44,7 @@ class _MarcViewState extends MarcController {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: InteractiveViewer(
+                      scaleEnabled: kIsWeb ? false : true,
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -49,7 +52,10 @@ class _MarcViewState extends MarcController {
                               MarcController.formatAltMarcStyle(marcData) ??
                               marcData ??
                               AppLocalizations.of(context)!.noMarcDataAvailable,
-                          style: const TextStyle(fontFamily: 'Roboto Mono'),
+                          style: const TextStyle(
+                            fontFamily: 'Roboto Mono',
+                            fontSize: 16.0,
+                          ),
                         ),
                       ),
                     ),
