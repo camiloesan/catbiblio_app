@@ -13,6 +13,7 @@ import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -197,6 +198,12 @@ class _HomeViewState extends HomeController {
                               if (currentBiblionumber != book.biblionumber) {
                                 _booksCarouselSliderController.animateToPage(
                                   _bookSelections.indexOf(book),
+                                );
+                                return;
+                              }
+                              if (kIsWeb) {
+                                context.go(
+                                  '/book-details/${book.biblionumber}',
                                 );
                                 return;
                               }

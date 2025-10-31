@@ -95,6 +95,7 @@ class _BookViewState extends BookController {
                                   else
                                     GestureDetector(
                                       onTap: () {
+                                        if (!hasImage) return;
                                         _showImageDialog(
                                           context,
                                           'biblioImage',
@@ -110,6 +111,7 @@ class _BookViewState extends BookController {
                                           builder: (context, snapshot) {
                                             if (snapshot.hasError ||
                                                 snapshot.data == null) {
+                                              hasImage = false;
                                               // If there was an error or no image, show a placeholder.
                                               // A small placeholder must be shown after loading. To avoid breaking the layout, we use a reduced placeholder.
                                               return SizedBox(
@@ -127,6 +129,7 @@ class _BookViewState extends BookController {
                                                 ),
                                               );
                                             } else {
+                                              hasImage = true;
                                               return Row(
                                                 children: [
                                                   SizedBox(

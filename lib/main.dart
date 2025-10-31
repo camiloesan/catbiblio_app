@@ -1,12 +1,18 @@
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/global_provider.dart';
+import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'url_strategy_nonweb.dart'
+    if (dart.library.html) 'url_strategy_web.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configureAppUrlStrategy();
   await dotenv.load();
   runApp(
     MultiProvider(
@@ -32,9 +38,35 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = GoRouter(
+      initialLocation: '/',
+      routes: <RouteBase>[
+        GoRoute(
+          path: '/',
+          builder: (BuildContext context, GoRouterState state) {
+            return HomeView(onLocaleChange: setLocale);
+          },
+        ),
+        GoRoute(
+          path: '/book-details/:biblionumber',
+          builder: (BuildContext context, GoRouterState state) {
+            final String biblioNumber =
+                state.pathParameters['biblionumber'] ?? 'No ID Found';
+            return BookView(biblioNumber: biblioNumber);
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Catálogo Bibliotecario UV',
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -54,7 +86,7 @@ class _MainAppState extends State<MainApp> {
         scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
       ),
-      home: HomeView(onLocaleChange: setLocale),
+      routerConfig: _router,
     );
   }
 }
