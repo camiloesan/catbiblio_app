@@ -66,6 +66,7 @@ class _HomeViewState extends HomeController {
                         top: 8.0,
                         left: 16.0,
                         right: 16.0,
+                        bottom: 8.0,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -607,7 +608,7 @@ class CarouselBookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Color.fromARGB(255, 0, 153, 50),
-      margin: EdgeInsets.symmetric(vertical: 32.0, horizontal: 4.0),
+      margin: EdgeInsets.only(bottom: 32.0, left: 4.0, right: 4.0, top: 16.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
