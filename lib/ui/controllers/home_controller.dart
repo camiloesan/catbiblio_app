@@ -21,6 +21,7 @@ abstract class HomeController extends State<HomeView> {
   bool isLibrariesLoading = true;
   bool isConfigLoading = true;
   bool isConfigError = false;
+  final int screenSizeLimit = 800;
   String currentBookName = '';
   String currentBiblionumber = '';
 

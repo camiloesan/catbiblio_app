@@ -2,6 +2,7 @@ part of '../views/finder_view.dart';
 
 abstract class FinderController extends State<FinderView> {
   late BookLocation bookLocation = BookLocation(level: '', room: '');
+  final int screenSizeLimit = 800;
 
   @override
   void initState() {

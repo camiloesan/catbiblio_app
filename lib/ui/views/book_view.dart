@@ -37,7 +37,7 @@ class _BookViewState extends BookController {
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: MediaQuery.of(context).size.height,
-                  maxWidth: MediaQuery.of(context).size.width < 600
+                  maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
                       ? MediaQuery.of(context).size.width
                       : (MediaQuery.of(context).size.width / 3) * 2,
                 ),

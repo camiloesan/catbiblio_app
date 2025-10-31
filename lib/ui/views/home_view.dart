@@ -55,7 +55,7 @@ class _HomeViewState extends HomeController {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width < 600
+                  maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
                       ? MediaQuery.of(context).size.width
                       : (MediaQuery.of(context).size.width / 3) * 2,
                 ),
@@ -143,7 +143,7 @@ class _HomeViewState extends HomeController {
                   children: [
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width < 600
+                        maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
                             ? MediaQuery.of(context).size.width
                             : (MediaQuery.of(context).size.width / 3) * 2,
                       ),
@@ -167,6 +167,7 @@ class _HomeViewState extends HomeController {
                       ),
                     ),
                     BooksCarouselSliderWidget(
+                      screenSizeLimit: screenSizeLimit,
                       booksCarouselSliderController:
                           _booksCarouselSliderController,
                       items: [
@@ -225,7 +226,7 @@ class _HomeViewState extends HomeController {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width < 600
+                      maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
                           ? MediaQuery.of(context).size.width
                           : (MediaQuery.of(context).size.width / 3) * 2,
                     ),
@@ -672,11 +673,14 @@ class BooksCarouselSliderWidget extends StatelessWidget {
     super.key,
     required CarouselSliderController booksCarouselSliderController,
     required List<Widget> items,
+    required int screenSizeLimit,
   }) : _booksCarouselSliderController = booksCarouselSliderController,
-       _items = items;
+       _items = items,
+       _screenSizeLimit = screenSizeLimit;
 
   final CarouselSliderController _booksCarouselSliderController;
   final List<Widget> _items;
+  final int _screenSizeLimit;
 
   @override
   Widget build(BuildContext context) {
@@ -702,7 +706,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeFactor: 0.3,
         aspectRatio: 3 / 4,
-        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.60 : 0.20,
+        viewportFraction: MediaQuery.of(context).size.width < _screenSizeLimit ? 0.60 : 0.20,
       ),
     );
   }

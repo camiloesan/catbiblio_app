@@ -17,6 +17,7 @@ abstract class SearchController extends State<SearchView> {
   bool isInitialRequestLoading = false;
   bool isPageLoading = false;
   bool isError = false;
+  final int screenSizeLimit = 800;
 
   @override
   void initState() {

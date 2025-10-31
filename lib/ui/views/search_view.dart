@@ -47,7 +47,7 @@ class _SearchViewState extends SearchController {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width < 600
+                      maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
                           ? MediaQuery.of(context).size.width
                           : (MediaQuery.of(context).size.width / 3) * 2,
                     ),

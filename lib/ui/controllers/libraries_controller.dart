@@ -3,6 +3,7 @@ part of '../views/libraries_view.dart';
 abstract class LibrariesController extends State<LibrariesView> {
   late List<Library> libraries;
   final List<String> regionsList = regions.values.toList();
+  final int screenSizeLimit = 800;
 
   /// Opens a URL in the default external application.
   /// If the URL cannot be opened, shows a SnackBar with an error message.
