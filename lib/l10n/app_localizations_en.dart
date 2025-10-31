@@ -272,4 +272,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about => 'About';
+
+  @override
+  String get couldntLoadBookSelections =>
+      'Couldn\'t load book selections, check your internet connection, or try again later.';
+
+  @override
+  String get couldntLoadHomeLibrariesServices =>
+      'Couldn\'t load libraries services, check your internet connection, or try again later.';
 }
