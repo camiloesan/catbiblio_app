@@ -5,6 +5,7 @@ abstract class MarcController extends State<MarcView> {
   String? formattedMarcData;
   bool isLoading = true;
   bool isError = false;
+  final int screenSizeLimit = 800;
 
   @override
   void initState() {
