@@ -34,6 +34,21 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends HomeController {
   @override
   Widget build(BuildContext context) {
+    final libraryEntriesPlusAll = [
+      DropdownMenuEntry(
+        value: 'all',
+        label: AppLocalizations.of(context)!.allLibraries,
+      ),
+      ..._libraryEntries,
+    ];
+    final itemTypeEntriesPlusAll = [
+      DropdownMenuEntry(
+        value: 'all',
+        label: AppLocalizations.of(context)!.allItemTypes,
+      ),
+      ..._itemTypeEntries,
+    ];
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -86,7 +101,7 @@ class _HomeViewState extends HomeController {
                               builder: (context, constraints) {
                                 return DropdownItemTypesWidget(
                                   itemTypeController: _itemTypeController,
-                                  itemTypeEntries: _itemTypeEntries,
+                                  itemTypeEntries: itemTypeEntriesPlusAll,
                                   queryParams: _queryParams,
                                   maxWidth: constraints.maxWidth,
                                 );
@@ -100,7 +115,7 @@ class _HomeViewState extends HomeController {
                               builder: (context, constraints) {
                                 return DropdownLibrariesWidget(
                                   libraryController: _libraryController,
-                                  libraryEntries: _libraryEntries,
+                                  libraryEntries: libraryEntriesPlusAll,
                                   queryParams: _queryParams,
                                   maxWidth: constraints.maxWidth,
                                 );
@@ -136,7 +151,10 @@ class _HomeViewState extends HomeController {
               ),
             ),
           ),
-          if (isConfigLoading == false && isConfigError == false && isSelectionsEnabled && _bookSelections.isNotEmpty)
+          if (isConfigLoading == false &&
+              isConfigError == false &&
+              isSelectionsEnabled &&
+              _bookSelections.isNotEmpty)
             SliverToBoxAdapter(
               child: Container(
                 color: primaryColor,
@@ -144,7 +162,8 @@ class _HomeViewState extends HomeController {
                   children: [
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                        maxWidth:
+                            MediaQuery.of(context).size.width < screenSizeLimit
                             ? MediaQuery.of(context).size.width
                             : (MediaQuery.of(context).size.width / 3) * 2,
                       ),
@@ -227,7 +246,8 @@ class _HomeViewState extends HomeController {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                      maxWidth:
+                          MediaQuery.of(context).size.width < screenSizeLimit
                           ? MediaQuery.of(context).size.width
                           : (MediaQuery.of(context).size.width / 3) * 2,
                     ),
@@ -312,7 +332,9 @@ class _HomeViewState extends HomeController {
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Text(
-                    AppLocalizations.of(context)!.couldntLoadHomeLibrariesServices,
+                    AppLocalizations.of(
+                      context,
+                    )!.couldntLoadHomeLibrariesServices,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -395,11 +417,15 @@ class AppNavigationDrawer extends StatelessWidget {
                   : const Locale('es'),
             );
             Navigator.pop(context);
-            SnackBar snackBar = SnackBar(
-              content: Text(AppLocalizations.of(context)!.languageChanged),
-              duration: const Duration(seconds: 2),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            Future.delayed(Duration.zero, () {
+              if (context.mounted) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(AppLocalizations.of(context)!.languageChanged),
+                  duration: const Duration(seconds: 2),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            });
           },
         ),
         ListTile(
@@ -537,13 +563,7 @@ class DropdownLibrariesWidget extends StatelessWidget {
       leadingIcon: const Icon(Icons.location_city, color: primaryColor),
       initialSelection: _queryParams.library,
       width: _maxWidth,
-      dropdownMenuEntries: [
-        DropdownMenuEntry(
-          value: 'all',
-          label: AppLocalizations.of(context)!.allLibraries,
-        ),
-        ..._libraryEntries,
-      ],
+      dropdownMenuEntries: _libraryEntries,
       onSelected: (value) {
         _queryParams.library = value!;
       },
@@ -575,13 +595,7 @@ class DropdownItemTypesWidget extends StatelessWidget {
       menuHeight: 300,
       leadingIcon: const Icon(Icons.category, color: primaryColor),
       initialSelection: _queryParams.itemType,
-      dropdownMenuEntries: [
-        DropdownMenuEntry(
-          value: 'all',
-          label: AppLocalizations.of(context)!.allLibraries,
-        ),
-        ..._itemTypeEntries,
-      ],
+      dropdownMenuEntries: _itemTypeEntries,
       width: _maxWidth,
       onSelected: (value) {
         _queryParams.itemType = value!;
@@ -696,7 +710,9 @@ class BooksCarouselSliderWidget extends StatelessWidget {
                 state._bookSelections[index].biblionumber;
           }
         },
-        scrollPhysics: kIsWeb ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+        scrollPhysics: kIsWeb
+            ? NeverScrollableScrollPhysics()
+            : AlwaysScrollableScrollPhysics(),
         disableCenter: true,
         height: 400.0,
         enlargeCenterPage: true,
@@ -707,7 +723,9 @@ class BooksCarouselSliderWidget extends StatelessWidget {
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeFactor: 0.3,
         aspectRatio: 3 / 4,
-        viewportFraction: MediaQuery.of(context).size.width < _screenSizeLimit ? 0.60 : 0.20,
+        viewportFraction: MediaQuery.of(context).size.width < _screenSizeLimit
+            ? 0.60
+            : 0.20,
       ),
     );
   }
@@ -811,7 +829,9 @@ class ServicesCarouselSliderWidget extends StatelessWidget {
       options: CarouselOptions(
         height: 500.0,
         enlargeCenterPage: false,
-        scrollPhysics: kIsWeb ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+        scrollPhysics: kIsWeb
+            ? NeverScrollableScrollPhysics()
+            : AlwaysScrollableScrollPhysics(),
         autoPlay: true,
         enableInfiniteScroll: true,
         autoPlayInterval: const Duration(seconds: 6),

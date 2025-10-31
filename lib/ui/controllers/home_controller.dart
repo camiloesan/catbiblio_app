@@ -175,6 +175,14 @@ abstract class HomeController extends State<HomeView> {
     _searchController.clear();
   }
 
+  void changeLocale(Locale locale) {
+    widget.onLocaleChange(locale);
+    setState(() {
+      _itemTypeController.clear();
+      _libraryController.clear();
+    });
+  }
+
   void onSubmitAction() {
     if (_searchController.text.isEmpty ||
         _searchController.text.trim().isEmpty ||
