@@ -96,10 +96,7 @@ class _LibrariesViewState extends LibrariesController {
                                             builder: (context) {
                                               return AlertDialog(
                                                 title: Text(library.name),
-                                                content: buildDialogFields(
-                                                  library,
-                                                  context,
-                                                ),
+                                                content: LibraryDialogBody(library: library, context: context),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () =>
@@ -132,6 +129,137 @@ class _LibrariesViewState extends LibrariesController {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Widget to display the body of the library details dialog.
+/// It shows various fields of the library
+/// such as area, address, postal code, city, state, country, email, and URL,
+/// only if they are not empty.
+/// This widget is used in the buildLibraryDialog method of LibrariesController.
+class LibraryDialogBody extends StatelessWidget {
+  final Library library;
+  final BuildContext context;
+
+  const LibraryDialogBody({super.key, required this.library, required this.context});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (library.area.isNotEmpty)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 8.0),
+              child: Chip(label: Text(library.area)),
+            ),
+          ),
+        if (library.address.isNotEmpty)
+          LibraryField(
+            fieldName: AppLocalizations.of(context)!.address,
+            value: library.address,
+          ),
+        if (library.postalCode.isNotEmpty)
+          LibraryField(
+            fieldName: AppLocalizations.of(context)!.postalCode,
+            value: library.postalCode,
+          ),
+        if (library.city.isNotEmpty)
+          LibraryField(
+            fieldName: AppLocalizations.of(context)!.city,
+            value: library.city,
+          ),
+        if (library.state.isNotEmpty)
+          LibraryField(
+            fieldName: AppLocalizations.of(context)!.state,
+            value: library.state,
+          ),
+        if (library.country.isNotEmpty)
+          LibraryField(
+            fieldName: AppLocalizations.of(context)!.country,
+            value: library.country,
+          ),
+        if (library.email.isNotEmpty)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Wrap(
+              children: [
+                Text(
+                  '${AppLocalizations.of(context)!.email}: ',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    final Uri emailLaunchUri = Uri(
+                      scheme: 'mailto',
+                      path: library.email,
+                    );
+                    await launchUrl(emailLaunchUri);
+                  },
+                  child: Text(
+                    library.email,
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (library.url.isNotEmpty)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              margin: const EdgeInsets.only(top: 8.0),
+              child: Chip(
+                label: GestureDetector(
+                  onTap: () => launchUrl(Uri.parse(library.url)),
+                  child: Text(
+                    library.url,
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Widget to display a field in the library details dialog
+/// with the field name in bold followed by its value.
+///
+/// For example: "Address: 123 Main St"
+///
+/// This widget is used in the buildLibraryDialog method of LibrariesController.
+class LibraryField extends StatelessWidget {
+  final String fieldName;
+  final String value;
+
+  const LibraryField({super.key, required this.fieldName, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+        children: [
+          Text(
+            '$fieldName: ',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(value),
+        ],
       ),
     );
   }
