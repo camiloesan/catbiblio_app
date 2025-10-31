@@ -11,6 +11,7 @@ import 'package:catbiblio_app/services/libraries.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -134,7 +135,7 @@ class _HomeViewState extends HomeController {
               ),
             ),
           ),
-          if (isSelectionsEnabled && isConfigLoading == false && isConfigError == false)
+          if (isConfigLoading == false && isConfigError == false && isSelectionsEnabled && _bookSelections.isNotEmpty)
             SliverToBoxAdapter(
               child: Container(
                 color: primaryColor,
@@ -273,10 +274,29 @@ class _HomeViewState extends HomeController {
                                 ),
                               )
                               .services)
-                        CarouselServiceCard(
-                          title: service.name,
-                          imageUrl: service.imageUrl,
-                          fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: () {
+                            _servicesCarouselSliderController.animateToPage(
+                              _librariesServices
+                                  .firstWhere(
+                                    (lib) =>
+                                        lib.libraryCode ==
+                                        selectedLibraryServices,
+                                    orElse: () => LibraryServices(
+                                      libraryCode: 'USBI-X',
+                                      libraryName: 'USBI Xalapa',
+                                      services: [],
+                                    ),
+                                  )
+                                  .services
+                                  .indexOf(service),
+                            );
+                          },
+                          child: CarouselServiceCard(
+                            title: service.name,
+                            imageUrl: service.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                     ],
                   ),
@@ -671,6 +691,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
                 state._bookSelections[index].biblionumber;
           }
         },
+        scrollPhysics: kIsWeb ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
         disableCenter: true,
         height: 400.0,
         enlargeCenterPage: true,
@@ -705,7 +726,7 @@ class CarouselServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: primaryColor,
-      margin: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 32.0, top: 8.0),
+      margin: EdgeInsets.only(left: 4.0, right: 4.0, bottom: 32.0, top: 8.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
@@ -784,14 +805,15 @@ class ServicesCarouselSliderWidget extends StatelessWidget {
       carouselController: _servicesCarouselSliderController,
       options: CarouselOptions(
         height: 500.0,
-        enlargeCenterPage: true,
+        enlargeCenterPage: false,
+        scrollPhysics: kIsWeb ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
         autoPlay: true,
         enableInfiniteScroll: true,
         autoPlayInterval: const Duration(seconds: 6),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
         aspectRatio: 16 / 9,
-        viewportFraction: MediaQuery.of(context).size.width < 600 ? 0.8 : 0.4,
+        viewportFraction: 0.8,
       ),
     );
   }
