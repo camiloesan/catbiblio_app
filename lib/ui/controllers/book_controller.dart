@@ -83,24 +83,7 @@ abstract class BookController extends State<BookView> {
     context: context,
     barrierColor: Colors.white.withValues(alpha: 0.7),
     builder: (BuildContext context) {
-      return Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        insetPadding: EdgeInsets.all(16.0),
-
-        child: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Hero(
-            tag: tag,
-            child: InteractiveViewer(
-              child: Image.network(
-                imageUrl, 
-                scale: 1.2,
-              ),
-            ),
-          ),
-        ),
-      );
+      return ImageDialog(tag: tag, imageUrl: imageUrl);
     },
   );
 }
@@ -209,5 +192,38 @@ abstract class BookController extends State<BookView> {
         ),
       );
     }
+  }
+}
+
+class ImageDialog extends StatelessWidget {
+  const ImageDialog({
+    required this.tag,
+    required this.imageUrl,
+    super.key,
+  });
+
+  final String tag;
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      insetPadding: EdgeInsets.all(16.0),
+    
+      child: GestureDetector(
+        onTap: () => Navigator.pop(context),
+        child: Hero(
+          tag: tag,
+          child: InteractiveViewer(
+            child: Image.network(
+              imageUrl, 
+              scale: 1.2,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

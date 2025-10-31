@@ -222,7 +222,16 @@ class _HomeViewState extends HomeController {
                 ),
               ),
             ),
-          if (isConfigError)
+          if (isConfigLoading)
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: CircularProgressIndicator(color: primaryColor),
+                ),
+              ),
+            ),
+          if (isConfigError && !isConfigLoading)
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -239,7 +248,6 @@ class _HomeViewState extends HomeController {
                 ],
               ),
             ),
-
           if (isConfigLoading == false && isConfigError == false)
             SliverToBoxAdapter(
               child: Column(
@@ -326,7 +334,7 @@ class _HomeViewState extends HomeController {
                 ],
               ),
             ),
-          if (isConfigError || _enabledHomeLibrariesEntries.isEmpty)
+          if (isConfigError && !isConfigLoading)
             SliverToBoxAdapter(
               child: Center(
                 child: Padding(
