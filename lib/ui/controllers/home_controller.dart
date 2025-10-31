@@ -20,6 +20,7 @@ abstract class HomeController extends State<HomeView> {
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
   bool isConfigLoading = true;
+  bool isConfigError = false;
   String currentBookName = '';
   String currentBiblionumber = '';
   int currentBookIndex = 0;
@@ -154,6 +155,9 @@ abstract class HomeController extends State<HomeView> {
       });
     } catch (e) {
       debugPrint('Error fetching config: $e');
+      setState(() {
+        isConfigError = true;
+      });
     }
   }
 

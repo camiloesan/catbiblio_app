@@ -351,5 +351,13 @@
   "about": "About",
   "@about": {
     "description": "About section title"
+  },
+  "couldntLoadBookSelections": "Couldn't load book selections, check your internet connection, or try again later.",
+  "@couldntLoadBookSelections": {
+    "description": "Message shown when book selections could not be loaded"
+  },
+  "couldntLoadHomeLibrariesServices": "Couldn't load libraries services, check your internet connection, or try again later.",
+  "@couldntLoadHomeLibrariesServices": {
+    "description": "Message shown when home libraries services could not be loaded"
   }
 }

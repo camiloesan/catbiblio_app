@@ -625,6 +625,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get about;
+
+  /// Message shown when book selections could not be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load book selections, check your internet connection, or try again later.'**
+  String get couldntLoadBookSelections;
+
+  /// Message shown when home libraries services could not be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load libraries services, check your internet connection, or try again later.'**
+  String get couldntLoadHomeLibrariesServices;
 }
 
 class _AppLocalizationsDelegate

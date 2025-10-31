@@ -134,7 +134,7 @@ class _HomeViewState extends HomeController {
               ),
             ),
           ),
-          if (isSelectionsEnabled)
+          if (isSelectionsEnabled && isConfigLoading == false && isConfigError == false)
             SliverToBoxAdapter(
               child: Container(
                 color: primaryColor,
@@ -200,71 +200,102 @@ class _HomeViewState extends HomeController {
                 ),
               ),
             ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width < 600
-                        ? MediaQuery.of(context).size.width
-                        : (MediaQuery.of(context).size.width / 3) * 2,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            AppLocalizations.of(context)!.libraryServices,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        LayoutBuilder(
-                          builder: (context, constraints) =>
-                              DropdownLibrariesServicesWidget(
-                                libraryServicesController:
-                                    _libraryServicesController,
-                                enabledHomeLibrariesEntries:
-                                    _enabledHomeLibrariesEntries,
-                                maxWidth: constraints.maxWidth,
-                              ),
-                        ),
-                      ],
+          if (isConfigError)
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Text(
+                        AppLocalizations.of(context)!.couldntLoadBookSelections,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                ServicesCarouselSliderWidget(
-                  servicesCarouselSliderController:
-                      _servicesCarouselSliderController,
-                  items: [
-                    for (var service
-                        in _librariesServices
-                            .firstWhere(
-                              (lib) =>
-                                  lib.libraryCode == selectedLibraryServices,
-                              orElse: () => LibraryServices(
-                                libraryCode: 'USBI-X',
-                                libraryName: 'USBI Xalapa',
-                                services: [],
-                              ),
-                            )
-                            .services)
-                      CarouselServiceCard(
-                        title: service.name,
-                        imageUrl: service.imageUrl,
-                        fit: BoxFit.cover,
-                      ),
-                  ],
-                ),
-                SizedBox(height: 32.0),
-              ],
+                  Divider(),
+                ],
+              ),
             ),
-          ),
+
+          if (isConfigLoading == false && isConfigError == false)
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width < 600
+                          ? MediaQuery.of(context).size.width
+                          : (MediaQuery.of(context).size.width / 3) * 2,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppLocalizations.of(context)!.libraryServices,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          LayoutBuilder(
+                            builder: (context, constraints) =>
+                                DropdownLibrariesServicesWidget(
+                                  libraryServicesController:
+                                      _libraryServicesController,
+                                  enabledHomeLibrariesEntries:
+                                      _enabledHomeLibrariesEntries,
+                                  maxWidth: constraints.maxWidth,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  ServicesCarouselSliderWidget(
+                    servicesCarouselSliderController:
+                        _servicesCarouselSliderController,
+                    items: [
+                      for (var service
+                          in _librariesServices
+                              .firstWhere(
+                                (lib) =>
+                                    lib.libraryCode == selectedLibraryServices,
+                                orElse: () => LibraryServices(
+                                  libraryCode: 'USBI-X',
+                                  libraryName: 'USBI Xalapa',
+                                  services: [],
+                                ),
+                              )
+                              .services)
+                        CarouselServiceCard(
+                          title: service.name,
+                          imageUrl: service.imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: 32.0),
+                ],
+              ),
+            ),
+          if (isConfigError || _enabledHomeLibrariesEntries.isEmpty)
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Text(
+                    AppLocalizations.of(context)!.couldntLoadHomeLibrariesServices,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

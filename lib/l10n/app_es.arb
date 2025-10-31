@@ -87,5 +87,7 @@
     "searchSectionTitle": "Buscar en el Catálogo Bibliotecario UV",
     "libraryServices": "Servicios de la Biblioteca",
     "bookSelections": "Selecciones",
-    "about": "Acerca de"
+    "about": "Acerca de",
+    "couldntLoadBookSelections": "No se pudieron cargar las selecciones de libros, verifique su conexión a Internet o inténtelo de nuevo más tarde.",
+    "couldntLoadHomeLibrariesServices": "No se pudieron cargar los servicios de las bibliotecas, verifique su conexión a Internet o inténtelo de nuevo más tarde."
 }
