@@ -10,6 +10,7 @@ abstract class BookController extends State<BookView> {
   final Map<String, List<BiblioItem>> groupedItems = {};
   final List<String> holdingLibraries = [];
   final int screenSizeLimit = 800;
+  bool hasImage = false;
 
   final mockTitle =
       'Título de ejemplo para mostrar en la interfaz de usuario mientras se cargan los datos reales del libro.';
