@@ -4,15 +4,14 @@ import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'url_strategy_nonweb.dart'
-    if (dart.library.html) 'url_strategy_web.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureAppUrlStrategy();
+  setUrlStrategy(HashUrlStrategy());
   await dotenv.load();
   runApp(
     MultiProvider(
