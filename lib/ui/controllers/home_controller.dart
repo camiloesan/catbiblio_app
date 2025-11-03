@@ -124,7 +124,7 @@ abstract class HomeController extends State<HomeView> {
     }
 
     try {
-      final config = await ConfigService.getConfig();
+      final config = await ConfigService.getAppConfig();
       isConfigLoading = false;
 
       if (mounted) {
