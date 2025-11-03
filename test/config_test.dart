@@ -10,7 +10,7 @@ void main() {
 
   group('ConfigService requests', () {
     test('getConfig returns if selection section is enabled', () async {
-      final config = await ConfigService.getConfig();
+      final config = await ConfigService.getAppConfig();
 
       expect(config, isA<Config>());
       expect(config.selectionsSectionState, isTrue);

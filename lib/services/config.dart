@@ -42,7 +42,7 @@ class ConfigService {
     return dio;
   }
 
-  static Future<Config> getConfig() async {
+  static Future<Config> getAppConfig() async {
     final dio = _createDio();
 
     try {
