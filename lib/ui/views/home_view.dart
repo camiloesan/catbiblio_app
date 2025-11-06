@@ -67,6 +67,7 @@ class _HomeViewState extends HomeController {
       drawerEnableOpenDragGesture: true,
       body: CustomScrollView(
         slivers: [
+          // search section
           SliverToBoxAdapter(
             child: Center(
               child: ConstrainedBox(
@@ -156,6 +157,7 @@ class _HomeViewState extends HomeController {
               isConfigError == false &&
               isSelectionsEnabled &&
               _bookSelections.isNotEmpty)
+            // Book selections section
             SliverToBoxAdapter(
               child: Container(
                 color: primaryColor,
@@ -245,6 +247,7 @@ class _HomeViewState extends HomeController {
               ),
             ),
           if (isConfigError && !isConfigLoading)
+            // Book selections error message
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -262,6 +265,7 @@ class _HomeViewState extends HomeController {
               ),
             ),
           if (isConfigLoading == false && isConfigError == false)
+            // Library services section
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -348,6 +352,7 @@ class _HomeViewState extends HomeController {
               ),
             ),
           if (isConfigError && !isConfigLoading)
+            // Library services error message
             SliverToBoxAdapter(
               child: Center(
                 child: Padding(
