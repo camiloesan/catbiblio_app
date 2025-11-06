@@ -10,6 +10,7 @@ class BiblioItem {
   String holdingLibraryId;
   String holdingLibrary;
   String homeLibraryId;
+  String homeLibrary;
   String collectionCode;
   String collection;
   String callNumber;
@@ -31,6 +32,7 @@ class BiblioItem {
     required this.holdingLibraryId,
     required this.holdingLibrary,
     required this.homeLibraryId,
+    required this.homeLibrary,
     required this.collectionCode,
     required this.collection,
     required this.callNumber,
@@ -56,6 +58,7 @@ class BiblioItem {
       holdingLibraryId: json['holding_library_id'],
       holdingLibrary: json['holding_library'],
       homeLibraryId: json['home_library_id'],
+      homeLibrary: json['home_library'],
       collectionCode: json['collection_code'],
       collection: json['collection'],
       callNumber: json['callnumber'],
@@ -69,6 +72,6 @@ class BiblioItem {
 
   @override
   String toString() {
-    return 'BiblioItem(itemTypeId: $itemTypeId, itemType: $itemType, holdingLibraryId: $holdingLibraryId, holdingLibrary: $holdingLibrary, collectionCode: $collectionCode, collection: $collection, callNumber: $callNumber, callNumberSort: $callNumberSort, copyNumber: $copyNumber, notForLoanStatus: $notForLoanStatus, checkedOutDate: $checkedOutDate, borrowedStatus: $borrowedStatus, overAllStatus: $overAllStatus)';
+    return 'BiblioItem(itemTypeId: $itemTypeId, itemType: $itemType, holdingLibraryId: $holdingLibraryId, holdingLibrary: $holdingLibrary, homeLibraryId: $homeLibraryId, homeLibrary: $homeLibrary, collectionCode: $collectionCode, collection: $collection, callNumber: $callNumber, callNumberSort: $callNumberSort, copyNumber: $copyNumber, notForLoanStatus: $notForLoanStatus, checkedOutDate: $checkedOutDate, borrowedStatus: $borrowedStatus, overAllStatus: $overAllStatus)';
   }
 }

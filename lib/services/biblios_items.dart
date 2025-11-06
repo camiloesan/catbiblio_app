@@ -61,8 +61,6 @@ class BibliosItemsService {
         queryParameters: {'biblio_number': biblioNumber},
       );
 
-      debugPrint('Request URL: ${response.realUri}');
-
       final List<dynamic> itemsJson = json.decode(response.data);
 
       return itemsJson
