@@ -348,7 +348,8 @@ class ListViewLibrariesWidget extends StatelessWidget {
     String collection,
     String collectionCode,
     String holdingLibrary,
-  ) navigateToFinderView;
+  )
+  navigateToFinderView;
   final bool isLoadingBiblioItems;
 
   @override
@@ -397,7 +398,7 @@ class ListViewLibrariesWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}, ${biblioItem.holdingLibraryId}, ${finderlibraries.length}',
+                            '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
                           ),
                         ),
                         finderlibraries.contains(biblioItem.holdingLibraryId) &&
