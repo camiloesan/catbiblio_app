@@ -189,6 +189,12 @@ class _HomeViewState extends HomeController {
                     ),
                     BooksCarouselSliderWidget(
                       screenSizeLimit: screenSizeLimit,
+                      onPressedCallback: (index) {
+                        setState(() {
+                          currentBiblionumber =
+                              _bookSelections[index].biblionumber;
+                        });
+                      },
                       booksCarouselSliderController:
                           _booksCarouselSliderController,
                       items: [
@@ -704,6 +710,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
     required CarouselSliderController booksCarouselSliderController,
     required List<Widget> items,
     required int screenSizeLimit,
+    required this.onPressedCallback,
   }) : _booksCarouselSliderController = booksCarouselSliderController,
        _items = items,
        _screenSizeLimit = screenSizeLimit;
@@ -711,6 +718,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
   final CarouselSliderController _booksCarouselSliderController;
   final List<Widget> _items;
   final int _screenSizeLimit;
+  final Function(int) onPressedCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -719,11 +727,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
       carouselController: _booksCarouselSliderController,
       options: CarouselOptions(
         onPageChanged: (index, reason) {
-          final state = context.findAncestorStateOfType<_HomeViewState>();
-          if (state != null) {
-            state.currentBiblionumber =
-                state._bookSelections[index].biblionumber;
-          }
+          onPressedCallback(index);
         },
         scrollPhysics: kIsWeb
             ? NeverScrollableScrollPhysics()
@@ -737,7 +741,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeFactor: 0.3,
-        aspectRatio: 3 / 4,
+        aspectRatio: 2 / 4,
         viewportFraction: MediaQuery.of(context).size.width < _screenSizeLimit
             ? 0.60
             : 0.20,

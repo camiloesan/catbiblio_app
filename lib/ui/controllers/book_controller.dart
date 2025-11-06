@@ -3,6 +3,7 @@ part of '../views/book_view.dart';
 abstract class BookController extends State<BookView> {
   late BibliosDetails bibliosDetails = BibliosDetails(title: '', author: '');
   late List<BiblioItem> biblioItems = [];
+  late List<String> _finderLibraries = [];
   bool isLoadingDetails = true;
   bool isErrorLoadingDetails = false;
   bool isLoadingBiblioItems = true;
@@ -38,6 +39,7 @@ abstract class BookController extends State<BookView> {
 
     BibliosDetails? details;
     List<BiblioItem> items = [];
+    List<String> finderLibraries = [];
 
     bool detailsError = false;
     bool itemsError = false;
@@ -56,6 +58,12 @@ abstract class BookController extends State<BookView> {
       itemsError = true;
     }
 
+    try {
+      finderLibraries = await FinderLibrariesService.getFinderLibraries();
+    } catch (error) {
+      debugPrint('Error loading finder libraries: $error');
+    }
+
     if (!mounted) return;
 
     final grouped = <String, List<BiblioItem>>{};
@@ -66,6 +74,7 @@ abstract class BookController extends State<BookView> {
     setState(() {
       bibliosDetails = details ?? bibliosDetails;
       biblioItems = items;
+      _finderLibraries = finderLibraries;
       groupedItems.clear();
       groupedItems.addAll(grouped);
       holdingLibraries
@@ -171,6 +180,18 @@ abstract class BookController extends State<BookView> {
       collectionCode: collectionCode,
       holdingLibrary: holdingLibrary,
     );
+
+    if (kIsWeb) {
+      String queryParameters = '?biblionumber=${Uri.encodeComponent(params.biblioNumber)}'
+          '&title=${Uri.encodeComponent(params.title)}'
+          '&classification=${Uri.encodeComponent(params.classification)}'
+          '&collection=${Uri.encodeComponent(params.collection)}'
+          '&collectionCode=${Uri.encodeComponent(params.collectionCode)}'
+          '&holdingLibrary=${Uri.encodeComponent(params.holdingLibrary)}';
+
+      context.go('/finder/$queryParameters');
+      return;
+    }
 
     Navigator.push(
       context,

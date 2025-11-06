@@ -4,9 +4,11 @@ import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:catbiblio_app/ui/views/home_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/search.dart';
 import 'package:catbiblio_app/services/images.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 part '../controllers/search_controller.dart';
@@ -319,6 +321,9 @@ class BookList extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
+                if (kIsWeb) {
+                  context.go('/book-details/${book.biblioNumber}');
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(

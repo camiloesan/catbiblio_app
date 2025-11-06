@@ -205,6 +205,16 @@ abstract class HomeController extends State<HomeView> {
   }
 
   void navigateToSearchView(ControllersData controllersData) {
+    if (kIsWeb) {
+      String queryParameters = '?query=${Uri.encodeComponent(_queryParams.searchQuery)}'
+          '&libraryid=${Uri.encodeComponent(_queryParams.library)}'
+          '&filter=${Uri.encodeComponent(_queryParams.searchBy)}'
+          '&itemtype=${Uri.encodeComponent(_queryParams.itemType)}';
+
+      context.go('/search$queryParameters', extra: controllersData);
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(

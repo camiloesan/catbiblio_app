@@ -2,15 +2,16 @@ import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/models/finder_params.dart';
-import 'package:catbiblio_app/models/global_provider.dart';
 import 'package:catbiblio_app/services/biblios_items.dart';
+import 'package:catbiblio_app/services/finder_libraries.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/ui/views/finder_view.dart';
 import 'package:catbiblio_app/ui/views/marc_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/biblios_details.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -105,9 +106,10 @@ class _BookViewState extends BookController {
                                       child: Hero(
                                         tag: 'biblioImage',
                                         child: FutureBuilder<Image?>(
-                                          future: ImageService.fetchThumbnailImageUrl(
-                                            widget.biblioNumber,
-                                          ),
+                                          future:
+                                              ImageService.fetchThumbnailImageUrl(
+                                                widget.biblioNumber,
+                                              ),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasError ||
                                                 snapshot.data == null) {
@@ -227,6 +229,13 @@ class _BookViewState extends BookController {
                               children: [
                                 OutlinedButton.icon(
                                   onPressed: () {
+                                    if (kIsWeb) {
+                                      context.go(
+                                        '/marc-view/${Uri.encodeComponent(widget.biblioNumber)}',
+                                      );
+                                      return;
+                                    }
+
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -301,6 +310,7 @@ class _BookViewState extends BookController {
 
                           // buildLibrariesList(isLoadingBiblioItems),
                           ListViewLibrariesWidget(
+                            finderlibraries: _finderLibraries,
                             holdingLibraries: holdingLibraries,
                             groupedItems: groupedItems,
                             navigateToFinderView: navigateToFinderView,
@@ -327,17 +337,18 @@ class ListViewLibrariesWidget extends StatelessWidget {
     required this.groupedItems,
     required this.navigateToFinderView,
     required this.isLoadingBiblioItems,
+    required this.finderlibraries,
   });
 
   final List<String> holdingLibraries;
   final Map<String, List<BiblioItem>> groupedItems;
+  final List<String> finderlibraries;
   final Function(
     String callNumber,
     String collection,
     String collectionCode,
     String holdingLibrary,
-  )
-  navigateToFinderView;
+  ) navigateToFinderView;
   final bool isLoadingBiblioItems;
 
   @override
@@ -386,12 +397,10 @@ class ListViewLibrariesWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}',
+                            '${AppLocalizations.of(context)!.classification}:\n${biblioItem.callNumber}, ${biblioItem.holdingLibraryId}, ${finderlibraries.length}',
                           ),
                         ),
-                        Provider.of<GlobalProvider>(context)
-                                    .globalEnabledLibrariesEntries
-                                    .contains(biblioItem.holdingLibraryId) &&
+                        finderlibraries.contains(biblioItem.holdingLibraryId) &&
                                 biblioItem.homeLibraryId ==
                                     biblioItem.holdingLibraryId &&
                                 biblioItem.notForLoanStatus ==
