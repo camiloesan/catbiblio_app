@@ -80,14 +80,12 @@ class ConfigService {
       return Config(
         bookSelections: [],
         librariesServices: [],
-        selectionsSectionState: false,
       );
     } catch (e) {
       debugPrint('Unexpected error in getConfig: $e');
       return Config(
         bookSelections: [],
         librariesServices: [],
-        selectionsSectionState: false,
       );
     } finally {
       dio.close();

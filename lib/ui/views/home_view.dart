@@ -156,7 +156,6 @@ class _HomeViewState extends HomeController {
           ),
           if (isConfigLoading == false &&
               isConfigError == false &&
-              isSelectionsEnabled &&
               _bookSelections.isNotEmpty)
             // Book selections section
             SliverToBoxAdapter(

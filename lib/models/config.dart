@@ -1,12 +1,10 @@
 class Config {
   final List<BookSelection> bookSelections;
   final List<LibraryServices> librariesServices;
-  final bool selectionsSectionState;
 
   Config({
     required this.bookSelections,
     required this.librariesServices,
-    required this.selectionsSectionState,
   });
 
   factory Config.fromJson(Map<String, dynamic> json) {
@@ -17,8 +15,6 @@ class Config {
       librariesServices: (json['libraries_services'] as List<dynamic>? ?? [])
           .map((e) => LibraryServices.fromJson(e))
           .toList(),
-      selectionsSectionState:
-          json['is_selections_section_enabled'] as bool? ?? false,
     );
   }
 }
