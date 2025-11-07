@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/book_preview.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
@@ -7,7 +10,6 @@ import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/search.dart';
-import 'package:catbiblio_app/services/images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -49,7 +51,8 @@ class _SearchViewState extends SearchController {
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                      maxWidth:
+                          MediaQuery.of(context).size.width < screenSizeLimit
                           ? MediaQuery.of(context).size.width
                           : (MediaQuery.of(context).size.width / 3) * 2,
                     ),
@@ -140,7 +143,6 @@ class _SearchViewState extends SearchController {
             ),
           ),
 
-          // Book list (only rendered if not page loading)
           BookList(
             books: books,
             isPageLoading: isPageLoading,
@@ -339,17 +341,53 @@ class BookList extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FutureBuilder<Image?>(
-                      future: ImageService.fetchThumbnailImageUrl(book.biblioNumber),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError || snapshot.data == null) {
-                          return const SizedBox.shrink();
-                        } else {
-                          return SizedBox(child: snapshot.data!);
-                        }
-                      },
+                    Stack(
+                      children: [
+                        SizedBox(
+                          width: 60,
+                          height: 90,
+                          child: Container(
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: Icon(
+                                Icons.book,
+                                size: 36,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                        CachedNetworkImage(
+                          imageUrl:
+                              "http://148.226.6.25/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblioNumber}",
+                          imageBuilder: (context, imageProvider) => Image(
+                            image: imageProvider,
+                            width: 60,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                          placeholder: (context, url) => Container(
+                            width: 60,
+                            height: 90,
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          // This shows if the URL fails to load (404, wrong content-type, etc.)
+                          errorWidget: (context, url, error) => Container(
+                            width: 60,
+                            height: 90,
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.broken_image,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,9 +465,9 @@ class TextFieldSearchWidget extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search, color: primaryColor),
         suffixIcon: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () => _clearSearchController(),
-              ),
+          icon: Icon(Icons.clear),
+          onPressed: () => _clearSearchController(),
+        ),
         labelText: AppLocalizations.of(context)!.search,
         border: OutlineInputBorder(),
       ),

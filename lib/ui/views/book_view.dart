@@ -123,7 +123,7 @@ class _BookViewState extends BookController {
                                                   color: Colors.white24,
                                                   child: const Center(
                                                     child: Icon(
-                                                      Icons.broken_image,
+                                                      Icons.book,
                                                       size: 36,
                                                       color: Colors.white70,
                                                     ),
