@@ -1,13 +1,13 @@
+import 'dart:collection';
+
 class Config {
   final List<BookSelection> bookSelections;
   final List<LibraryServices> librariesServices;
-  final List<String> bookFinderLibraries;
   final bool selectionsSectionState;
 
   Config({
     required this.bookSelections,
     required this.librariesServices,
-    required this.bookFinderLibraries,
     required this.selectionsSectionState,
   });
 
@@ -19,10 +19,6 @@ class Config {
       librariesServices: (json['libraries_services'] as List<dynamic>? ?? [])
           .map((e) => LibraryServices.fromJson(e))
           .toList(),
-      bookFinderLibraries:
-          (json['book_finder_libraries'] as List<dynamic>? ?? [])
-              .map((e) => e['library_code'] as String? ?? '')
-              .toList(),
       selectionsSectionState:
           json['is_selections_section_enabled'] as bool? ?? false,
     );

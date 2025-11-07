@@ -127,13 +127,6 @@ abstract class HomeController extends State<HomeView> {
       final config = await ConfigService.getAppConfig();
       isConfigLoading = false;
 
-      if (mounted) {
-        Provider.of<GlobalProvider>(
-          context,
-          listen: false,
-        ).setGlobalEnabledLibrariesEntries(config.bookFinderLibraries.toSet());
-      }
-
       setState(() {
         _librariesServices = config.librariesServices;
         _bookSelections = config.bookSelections;

@@ -80,7 +80,6 @@ class ConfigService {
       return Config(
         bookSelections: [],
         librariesServices: [],
-        bookFinderLibraries: [],
         selectionsSectionState: false,
       );
     } catch (e) {
@@ -88,7 +87,6 @@ class ConfigService {
       return Config(
         bookSelections: [],
         librariesServices: [],
-        bookFinderLibraries: [],
         selectionsSectionState: false,
       );
     } finally {

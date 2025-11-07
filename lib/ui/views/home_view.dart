@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -661,27 +662,14 @@ class CarouselBookCard extends StatelessWidget {
                 topLeft: Radius.circular(12.0),
                 topRight: Radius.circular(12.0),
               ),
-              child: Image.network(
-                _imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: _imageUrl,
                 fit: _fit,
                 width: double.infinity,
-                loadingBuilder:
-                    (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                errorBuilder: (context, error, stackTrace) => const Center(
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.error_outline,
                     color: Colors.white,
@@ -786,27 +774,14 @@ class CarouselServiceCard extends StatelessWidget {
                 topLeft: Radius.circular(12.0),
                 topRight: Radius.circular(12.0),
               ),
-              child: Image.network(
-                _imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: _imageUrl,
                 fit: _fit,
                 width: double.infinity,
-                loadingBuilder:
-                    (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                errorBuilder: (context, error, stackTrace) => const Center(
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.error_outline,
                     color: Colors.white,
