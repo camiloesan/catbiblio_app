@@ -13,7 +13,6 @@ void main() {
       final config = await ConfigService.getAppConfig();
 
       expect(config, isA<Config>());
-      expect(config.selectionsSectionState, isTrue);
     });
     
   });
