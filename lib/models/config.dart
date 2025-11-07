@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 class Config {
   final List<BookSelection> bookSelections;
   final List<LibraryServices> librariesServices;
