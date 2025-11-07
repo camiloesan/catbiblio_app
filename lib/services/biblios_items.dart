@@ -58,7 +58,7 @@ class BibliosItemsService {
     try {
       final response = await dio.get(
         '/biblios_items',
-        queryParameters: {'biblio_number': biblioNumber},
+        queryParameters: {'biblionumber': biblioNumber},
       );
 
       final List<dynamic> itemsJson = json.decode(response.data);
