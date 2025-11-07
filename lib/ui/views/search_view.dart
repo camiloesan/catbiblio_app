@@ -364,14 +364,6 @@ class BookList extends StatelessWidget {
                             height: 90,
                             fit: BoxFit.cover,
                           ),
-                          placeholder: (context, url) => Container(
-                            width: 60,
-                            height: 90,
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
                           // This shows if the URL fails to load (404, wrong content-type, etc.)
                           errorWidget: (context, url, error) => Container(
                             width: 60,
