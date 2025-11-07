@@ -3,6 +3,7 @@ import 'package:catbiblio_app/models/biblio_item.dart';
 import 'package:catbiblio_app/models/biblios_details.dart';
 import 'package:catbiblio_app/models/finder_params.dart';
 import 'package:catbiblio_app/services/biblios_items.dart';
+import 'package:catbiblio_app/services/book_finder_libraries.dart';
 import 'package:catbiblio_app/services/finder_libraries.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/ui/views/finder_view.dart';
@@ -342,7 +343,7 @@ class ListViewLibrariesWidget extends StatelessWidget {
 
   final List<String> holdingLibraries;
   final Map<String, List<BiblioItem>> groupedItems;
-  final List<String> finderlibraries;
+  final Set<String> finderlibraries;
   final Function(
     String callNumber,
     String collection,

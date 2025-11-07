@@ -1,34 +1,15 @@
 class Config {
-  final List<BookSelection> bookSelections;
   final List<LibraryServices> librariesServices;
 
   Config({
-    required this.bookSelections,
     required this.librariesServices,
   });
 
   factory Config.fromJson(Map<String, dynamic> json) {
     return Config(
-      bookSelections: (json['book_selections'] as List<dynamic>? ?? [])
-          .map((e) => BookSelection.fromJson(e))
-          .toList(),
       librariesServices: (json['libraries_services'] as List<dynamic>? ?? [])
           .map((e) => LibraryServices.fromJson(e))
           .toList(),
-    );
-  }
-}
-
-class BookSelection {
-  final String bookName;
-  final String biblionumber;
-
-  BookSelection({required this.bookName, required this.biblionumber});
-
-  factory BookSelection.fromJson(Map<String, dynamic> json) {
-    return BookSelection(
-      bookName: json['book_name'] ?? '',
-      biblionumber: json['biblionumber'] ?? '',
     );
   }
 }

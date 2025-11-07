@@ -16,7 +16,6 @@ abstract class HomeController extends State<HomeView> {
   late List<BookSelection> _bookSelections = [];
   final QueryParams _queryParams = QueryParams();
   String selectedLibraryServices = 'USBI-X';
-  bool isSelectionsEnabled = false;
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
   bool isConfigLoading = true;
@@ -66,6 +65,8 @@ abstract class HomeController extends State<HomeView> {
   }
 
   Future<void> fetchData() async {
+    fetchBookSelections();
+
     try {
       final libraries = await LibrariesService.getLibraries();
       isLibrariesLoading = false;
@@ -129,9 +130,6 @@ abstract class HomeController extends State<HomeView> {
 
       setState(() {
         _librariesServices = config.librariesServices;
-        _bookSelections = config.bookSelections;
-        currentBookName = _bookSelections[0].bookName;
-        currentBiblionumber = _bookSelections[0].biblionumber;
         _enabledHomeLibrariesEntries = _librariesServices
             .map(
               (service) => DropdownMenuEntry(
@@ -198,7 +196,8 @@ abstract class HomeController extends State<HomeView> {
 
   void navigateToSearchView(ControllersData controllersData) {
     if (kIsWeb) {
-      String queryParameters = '?query=${Uri.encodeComponent(_queryParams.searchQuery)}'
+      String queryParameters =
+          '?query=${Uri.encodeComponent(_queryParams.searchQuery)}'
           '&libraryid=${Uri.encodeComponent(_queryParams.library)}'
           '&filter=${Uri.encodeComponent(_queryParams.searchBy)}'
           '&itemtype=${Uri.encodeComponent(_queryParams.itemType)}';
@@ -231,5 +230,17 @@ abstract class HomeController extends State<HomeView> {
         );
       }
     }
+  }
+
+  void fetchBookSelections() async {
+    try {
+      _bookSelections = await BookSelectionsService.getBookSelections();
+    } catch (e) {
+      debugPrint('Error fetching book selections: $e');
+    }
+    currentBiblionumber = _bookSelections.isNotEmpty
+        ? _bookSelections[0].biblionumber
+        : '';
+    currentBookName = _bookSelections.isNotEmpty ? _bookSelections[0].name : '';
   }
 }

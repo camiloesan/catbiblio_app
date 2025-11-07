@@ -3,7 +3,7 @@ part of '../views/book_view.dart';
 abstract class BookController extends State<BookView> {
   late BibliosDetails bibliosDetails = BibliosDetails(title: '', author: '');
   late List<BiblioItem> biblioItems = [];
-  late List<String> _finderLibraries = [];
+  late Set<String> _finderLibraries = {};
   bool isLoadingDetails = true;
   bool isErrorLoadingDetails = false;
   bool isLoadingBiblioItems = true;
@@ -39,7 +39,7 @@ abstract class BookController extends State<BookView> {
 
     BibliosDetails? details;
     List<BiblioItem> items = [];
-    List<String> finderLibraries = [];
+    Set<String> finderLibraries = {};
 
     bool detailsError = false;
     bool itemsError = false;
@@ -58,11 +58,7 @@ abstract class BookController extends State<BookView> {
       itemsError = true;
     }
 
-    try {
-      finderLibraries = await FinderLibrariesService.getFinderLibraries();
-    } catch (error) {
-      debugPrint('Error loading finder libraries: $error');
-    }
+    finderLibraries = await loadBookFinderLibraries();
 
     if (!mounted) return;
 
@@ -89,14 +85,14 @@ abstract class BookController extends State<BookView> {
   }
 
   void _showImageDialog(BuildContext context, String tag, String imageUrl) {
-  showDialog(
-    context: context,
-    barrierColor: Colors.white.withValues(alpha: 0.7),
-    builder: (BuildContext context) {
-      return ImageDialog(tag: tag, imageUrl: imageUrl);
-    },
-  );
-}
+    showDialog(
+      context: context,
+      barrierColor: Colors.white.withValues(alpha: 0.7),
+      builder: (BuildContext context) {
+        return ImageDialog(tag: tag, imageUrl: imageUrl);
+      },
+    );
+  }
 
   void showShareDialog(
     BuildContext context,
@@ -182,7 +178,8 @@ abstract class BookController extends State<BookView> {
     );
 
     if (kIsWeb) {
-      String queryParameters = '?biblionumber=${Uri.encodeComponent(params.biblioNumber)}'
+      String queryParameters =
+          '?biblionumber=${Uri.encodeComponent(params.biblioNumber)}'
           '&title=${Uri.encodeComponent(params.title)}'
           '&classification=${Uri.encodeComponent(params.classification)}'
           '&collection=${Uri.encodeComponent(params.collection)}'
@@ -215,14 +212,20 @@ abstract class BookController extends State<BookView> {
       );
     }
   }
+
+  Future<Set<String>> loadBookFinderLibraries() async {
+    Set<String> bookFinderLibraries = {};
+    try {
+      bookFinderLibraries = await BookFinderLibraries.getBookFinderLibrariesSet();
+    } catch (error) {
+      debugPrint('Error loading finder libraries: $error');
+    }
+    return bookFinderLibraries;
+  }
 }
 
 class ImageDialog extends StatelessWidget {
-  const ImageDialog({
-    required this.tag,
-    required this.imageUrl,
-    super.key,
-  });
+  const ImageDialog({required this.tag, required this.imageUrl, super.key});
 
   final String tag;
   final String imageUrl;
@@ -233,17 +236,12 @@ class ImageDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       insetPadding: EdgeInsets.all(16.0),
-    
+
       child: GestureDetector(
         onTap: () => Navigator.pop(context),
         child: Hero(
           tag: tag,
-          child: InteractiveViewer(
-            child: Image.network(
-              imageUrl, 
-              scale: 1.2,
-            ),
-          ),
+          child: InteractiveViewer(child: Image.network(imageUrl, scale: 1.2)),
         ),
       ),
     );

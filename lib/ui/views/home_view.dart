@@ -5,6 +5,7 @@ import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/global_provider.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
+import 'package:catbiblio_app/services/book_selections.dart';
 import 'package:catbiblio_app/services/config.dart';
 import 'package:catbiblio_app/services/item_types.dart';
 import 'package:catbiblio_app/services/libraries.dart';
@@ -224,7 +225,7 @@ class _HomeViewState extends HomeController {
                               );
                             },
                             child: CarouselBookCard(
-                              title: book.bookName,
+                              title: book.name,
                               imageUrl:
                                   'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
                               fit: BoxFit.cover,
@@ -665,9 +666,8 @@ class CarouselBookCard extends StatelessWidget {
                 imageUrl: _imageUrl,
                 fit: _fit,
                 width: double.infinity,
-                placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(),
-                ),
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.error_outline,
@@ -777,9 +777,8 @@ class CarouselServiceCard extends StatelessWidget {
                 imageUrl: _imageUrl,
                 fit: _fit,
                 width: double.infinity,
-                placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(),
-                ),
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.error_outline,
