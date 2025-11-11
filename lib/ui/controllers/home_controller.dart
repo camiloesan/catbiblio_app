@@ -18,8 +18,10 @@ abstract class HomeController extends State<HomeView> {
   String selectedLibraryServices = 'USBI-X';
   bool isItemTypesLoading = true;
   bool isLibrariesLoading = true;
-  bool isConfigLoading = true;
-  bool isConfigError = false;
+  bool isLibraryServicesLoading = true;
+  bool isBookSelectionsLoading = true;
+  bool isLibraryServicesError = false;
+  bool isBookSelectionsError = false;
   final int screenSizeLimit = 800;
   String currentBookName = '';
   String currentBiblionumber = '';
@@ -65,7 +67,6 @@ abstract class HomeController extends State<HomeView> {
   }
 
   Future<void> fetchData() async {
-
     fetchBookSelections();
 
     try {
@@ -127,7 +128,7 @@ abstract class HomeController extends State<HomeView> {
 
     try {
       final libraryServices = await LibraryServices.getLibraryCodeServicesMap();
-      isConfigLoading = false;
+      isLibraryServicesLoading = false;
 
       setState(() {
         _librariesServices = libraryServices;
@@ -135,7 +136,7 @@ abstract class HomeController extends State<HomeView> {
     } catch (e) {
       debugPrint('Error fetching config: $e');
       setState(() {
-        isConfigError = true;
+        isLibraryServicesError = true;
       });
     }
 
@@ -231,8 +232,10 @@ abstract class HomeController extends State<HomeView> {
   void fetchBookSelections() async {
     try {
       _bookSelections = await BookSelectionsService.getBookSelections();
+      isBookSelectionsLoading = false;
     } catch (e) {
       debugPrint('Error fetching book selections: $e');
+      isBookSelectionsError = true;
     }
     currentBiblionumber = _bookSelections.isNotEmpty
         ? _bookSelections[0].biblionumber

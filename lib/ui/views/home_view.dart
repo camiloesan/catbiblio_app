@@ -157,90 +157,85 @@ class _HomeViewState extends HomeController {
               ),
             ),
           ),
-          if (isConfigLoading == false &&
-              isConfigError == false &&
-              _bookSelections.isNotEmpty)
-            // Book selections section
-            SliverToBoxAdapter(
-              child: Container(
-                color: primaryColor,
-                child: Column(
-                  children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth:
-                            MediaQuery.of(context).size.width < screenSizeLimit
-                            ? MediaQuery.of(context).size.width
-                            : (MediaQuery.of(context).size.width / 3) * 2,
+          // Book selections section
+          SliverToBoxAdapter(
+            child: Container(
+              color: primaryColor,
+              child: Column(
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth:
+                          MediaQuery.of(context).size.width < screenSizeLimit
+                          ? MediaQuery.of(context).size.width
+                          : (MediaQuery.of(context).size.width / 3) * 2,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 16.0,
+                        left: 16.0,
+                        right: 16.0,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16.0,
-                          left: 16.0,
-                          right: 16.0,
-                        ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            AppLocalizations.of(context)!.bookSelections,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          AppLocalizations.of(context)!.bookSelections,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
-                    BooksCarouselSliderWidget(
-                      screenSizeLimit: screenSizeLimit,
-                      onPressedCallback: (index) {
-                        setState(() {
-                          currentBiblionumber =
-                              _bookSelections[index].biblionumber;
-                        });
-                      },
-                      booksCarouselSliderController:
-                          _booksCarouselSliderController,
-                      items: [
-                        for (var book in _bookSelections)
-                          GestureDetector(
-                            onTap: () {
-                              if (currentBiblionumber != book.biblionumber) {
-                                _booksCarouselSliderController.animateToPage(
-                                  _bookSelections.indexOf(book),
-                                );
-                                return;
-                              }
-                              if (kIsWeb) {
-                                context.go(
-                                  '/book-details/${book.biblionumber}',
-                                );
-                                return;
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      BookView(biblioNumber: book.biblionumber),
-                                ),
+                  ),
+                  BooksCarouselSliderWidget(
+                    screenSizeLimit: screenSizeLimit,
+                    onPressedCallback: (index) {
+                      setState(() {
+                        currentBiblionumber =
+                            _bookSelections[index].biblionumber;
+                      });
+                    },
+                    booksCarouselSliderController:
+                        _booksCarouselSliderController,
+                    items: [
+                      for (var book in _bookSelections)
+                        GestureDetector(
+                          onTap: () {
+                            if (currentBiblionumber != book.biblionumber) {
+                              _booksCarouselSliderController.animateToPage(
+                                _bookSelections.indexOf(book),
                               );
-                            },
-                            child: CarouselBookCard(
-                              title: book.name,
-                              imageUrl:
-                                  'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
-                              fit: BoxFit.cover,
-                            ),
+                              return;
+                            }
+                            if (kIsWeb) {
+                              context.go('/book-details/${book.biblionumber}');
+                              return;
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BookView(biblioNumber: book.biblionumber),
+                              ),
+                            );
+                          },
+                          child: CarouselBookCard(
+                            title: book.name,
+                            imageUrl:
+                                'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
+                            fit: BoxFit.cover,
                           ),
-                      ],
-                    ),
-                    SizedBox(height: 16.0),
-                  ],
-                ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: 16.0),
+                ],
               ),
             ),
-          if (isConfigLoading)
+          ),
+          if (isLibraryServicesLoading)
             SliverToBoxAdapter(
               child: Center(
                 child: Padding(
@@ -249,7 +244,7 @@ class _HomeViewState extends HomeController {
                 ),
               ),
             ),
-          if (isConfigError && !isConfigLoading)
+          if (isLibraryServicesError && !isLibraryServicesLoading)
             // Book selections error message
             SliverToBoxAdapter(
               child: Column(
@@ -267,7 +262,8 @@ class _HomeViewState extends HomeController {
                 ],
               ),
             ),
-          if (isConfigLoading == false && isConfigError == false)
+          if (isLibraryServicesLoading == false &&
+              isLibraryServicesError == false)
             // Library services section
             SliverToBoxAdapter(
               child: Column(
@@ -333,7 +329,7 @@ class _HomeViewState extends HomeController {
                 ],
               ),
             ),
-          if (isConfigError && !isConfigLoading)
+          if (isLibraryServicesError && !isLibraryServicesLoading)
             // Library services error message
             SliverToBoxAdapter(
               child: Center(
