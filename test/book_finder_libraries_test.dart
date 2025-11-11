@@ -10,7 +10,6 @@ void main() {
   group('BookFinderLibraries requests', () {
     test('getBookFinderLibrariesSet returns a set of library codes', () async {
       final libraries = await BookFinderLibraries.getBookFinderLibrariesSet();
-      print(libraries);
 
       expect(libraries, isA<Set<String>>());
     });

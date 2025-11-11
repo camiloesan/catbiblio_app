@@ -12,7 +12,6 @@ void main() {
   group('HomeLibraries requests', () {
     test('getHomeLibraries returns a map of library codes to names', () async {
       final libraries = await HomeLibraries.getHomeLibrariesHashMap();
-      print(libraries);
 
       expect(libraries, isA<HashMap<String, String>>());
     });
