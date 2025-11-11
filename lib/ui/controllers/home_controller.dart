@@ -65,6 +65,7 @@ abstract class HomeController extends State<HomeView> {
   }
 
   Future<void> fetchData() async {
+
     fetchBookSelections();
 
     try {

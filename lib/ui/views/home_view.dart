@@ -98,6 +98,7 @@ class _HomeViewState extends HomeController {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // Item types dropdown
                           Skeletonizer(
                             enabled: isItemTypesLoading,
                             child: LayoutBuilder(
@@ -112,6 +113,7 @@ class _HomeViewState extends HomeController {
                             ),
                           ),
                           const SizedBox(height: 12),
+                          // Libraries dropdown
                           Skeletonizer(
                             enabled: isLibrariesLoading,
                             child: LayoutBuilder(
@@ -126,6 +128,7 @@ class _HomeViewState extends HomeController {
                             ),
                           ),
                           const SizedBox(height: 12),
+                          // Search filters dropdown
                           LayoutBuilder(
                             builder: (context, constraints) {
                               return DropdownFilters(
