@@ -308,7 +308,6 @@ class _BookViewState extends BookController {
                               ),
                             ),
 
-                          // buildLibrariesList(isLoadingBiblioItems),
                           ListViewLibrariesWidget(
                             finderlibraries: _finderLibraries,
                             holdingLibraries: holdingLibraries,
