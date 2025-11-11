@@ -1,14 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:catbiblio_app/l10n/app_localizations.dart';
-import 'package:catbiblio_app/models/config.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/global_provider.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/book_selections.dart';
-import 'package:catbiblio_app/services/config.dart';
 import 'package:catbiblio_app/services/item_types.dart';
 import 'package:catbiblio_app/services/libraries.dart';
+import 'package:catbiblio_app/services/library_services.dart';
 import 'package:catbiblio_app/ui/views/book_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:catbiblio_app/ui/views/libraries_view.dart';
@@ -311,32 +310,11 @@ class _HomeViewState extends HomeController {
                         _servicesCarouselSliderController,
                     items: [
                       for (var service
-                          in _librariesServices
-                              .firstWhere(
-                                (lib) =>
-                                    lib.libraryCode == selectedLibraryServices,
-                                orElse: () => LibraryServices(
-                                  libraryCode: 'USBI-X',
-                                  libraryName: 'USBI Xalapa',
-                                  services: [],
-                                ),
-                              )
-                              .services)
+                          in _librariesServices[selectedLibraryServices] ?? [])
                         GestureDetector(
                           onTap: () {
                             _servicesCarouselSliderController.animateToPage(
-                              _librariesServices
-                                  .firstWhere(
-                                    (lib) =>
-                                        lib.libraryCode ==
-                                        selectedLibraryServices,
-                                    orElse: () => LibraryServices(
-                                      libraryCode: 'USBI-X',
-                                      libraryName: 'USBI Xalapa',
-                                      services: [],
-                                    ),
-                                  )
-                                  .services
+                              _librariesServices[selectedLibraryServices]!
                                   .indexOf(service),
                             );
                           },

@@ -12,7 +12,7 @@ abstract class HomeController extends State<HomeView> {
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   late List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries = [];
-  late List<LibraryServices> _librariesServices = [];
+  late Map<String, List<LibraryService>> _librariesServices = {};
   late List<BookSelection> _bookSelections = [];
   final QueryParams _queryParams = QueryParams();
   String selectedLibraryServices = 'USBI-X';
@@ -125,23 +125,11 @@ abstract class HomeController extends State<HomeView> {
     }
 
     try {
-      final config = await ConfigService.getAppConfig();
+      final libraryServices = await LibraryServices.getLibraryCodeServicesMap();
       isConfigLoading = false;
 
       setState(() {
-        _librariesServices = config.librariesServices;
-        _enabledHomeLibrariesEntries = _librariesServices
-            .map(
-              (service) => DropdownMenuEntry(
-                value: service.libraryCode,
-                label: service.libraryName,
-              ),
-            )
-            .toList();
-        _libraryServicesController.text =
-            _enabledHomeLibrariesEntries.isNotEmpty
-            ? _enabledHomeLibrariesEntries[0].label
-            : '';
+        _librariesServices = libraryServices;
       });
     } catch (e) {
       debugPrint('Error fetching config: $e');
@@ -149,6 +137,13 @@ abstract class HomeController extends State<HomeView> {
         isConfigError = true;
       });
     }
+
+    _enabledHomeLibrariesEntries = _libraryEntries
+        .where((entry) => _librariesServices.containsKey(entry.value))
+        .toList();
+    _libraryServicesController.text = _enabledHomeLibrariesEntries.isNotEmpty
+        ? _enabledHomeLibrariesEntries[0].label
+        : '';
   }
 
   @override
