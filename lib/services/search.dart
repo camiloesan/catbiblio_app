@@ -217,6 +217,8 @@ class SearchService {
         publishingDetails: publishingDetails,
         locatedInLibraries: locatedInLibraries,
         totalRecords: 0,
+        isbn: '',
+        normalizedIsbn: '',
       );
     } catch (e) {
       debugPrint("Error parsing book record: ${e.toString()}");
@@ -382,6 +384,8 @@ class SearchService {
           publishingDetails: '',
           locatedInLibraries: 0,
           totalRecords: 0,
+          isbn: '',
+          normalizedIsbn: '',
         );
 
         book.author = getSubfield(datafield100, "a") ?? "";
