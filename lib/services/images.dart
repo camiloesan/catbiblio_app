@@ -9,7 +9,10 @@ final String _openLibraryBaseUrl = 'https://covers.openlibrary.org';
 
 /// Represents a fetched thumbnail together with its source.
 class ThumbnailResult {
+  /// The fetched image widget.
   final Image image;
+
+  /// The source of the image (e.g., 'local' or 'openlibrary').
   final String source;
   ThumbnailResult(this.image, this.source);
 }
@@ -30,6 +33,13 @@ class ImageService {
   static const String sourceLocal = 'local';
   static const String sourceOpenLibrary = 'openlibrary';
 
+  /// Fetches a book thumbnail, trying local source first, then OpenLibrary.
+  ///
+  /// Returns a [ThumbnailResult] containing the image and its source if found,
+  /// otherwise returns null.
+  ///
+  /// [biblionumber] is used to fetch from the local Koha instance.
+  /// [isbn] is used as fallback to fetch from OpenLibrary if local fails.
   static Future<ThumbnailResult?> fetchThumbnail(
     String biblionumber,
     String isbn,
@@ -76,6 +86,8 @@ class ImageService {
     }
   }
 
+  /// Fetches an image from OpenLibrary using the provided [isbn].
+  /// Returns an [Image] widget if the image is found and valid, otherwise returns null.
   static Future<Image?> fetchThumbnailOpenLibrary(String isbn) async {
     final dio = _createDio();
 
