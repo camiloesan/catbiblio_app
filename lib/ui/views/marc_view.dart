@@ -45,16 +45,18 @@ class _MarcViewState extends MarcController {
                     ),
                     child: InteractiveViewer(
                       scaleEnabled: kIsWeb ? false : true,
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          formattedMarcData =
-                              MarcController.formatAltMarcStyle(marcData) ??
-                              marcData ??
-                              AppLocalizations.of(context)!.noMarcDataAvailable,
-                          style: const TextStyle(
-                            fontFamily: 'Roboto Mono',
-                            fontSize: 16.0,
+                      child: SelectionArea(
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            formattedMarcData =
+                                MarcController.formatAltMarcStyle(marcData) ??
+                                marcData ??
+                                AppLocalizations.of(context)!.noMarcDataAvailable,
+                            style: const TextStyle(
+                              fontFamily: 'Roboto Mono',
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                       ),

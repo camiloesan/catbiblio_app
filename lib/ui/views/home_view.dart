@@ -293,6 +293,7 @@ class _HomeViewState extends HomeController {
                           LayoutBuilder(
                             builder: (context, constraints) =>
                                 DropdownLibrariesServicesWidget(
+                                  onSelected: onSelectLibraryService,
                                   libraryServicesController:
                                       _libraryServicesController,
                                   enabledHomeLibrariesEntries:
@@ -455,17 +456,21 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
     required TextEditingController libraryServicesController,
     required List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries,
     required double maxWidth,
+    required void Function(String) onSelected,
   }) : _libraryServicesController = libraryServicesController,
        _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries,
-       _maxWidth = maxWidth;
+       _maxWidth = maxWidth,
+       _onSelected = onSelected;
 
   final TextEditingController _libraryServicesController;
   final List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries;
   final double _maxWidth;
+  final void Function(String) _onSelected;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
+      onSelected: (value) => _onSelected(value!),
       width: _maxWidth,
       controller: _libraryServicesController,
       inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),

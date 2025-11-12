@@ -153,14 +153,16 @@ class _BookViewState extends BookController {
                                           CrossAxisAlignment.start,
                                       children: [
                                         // Texto mock mientras carga, título real cuando esté disponible.
-                                        Text(
-                                          isLoadingDetails
-                                              ? mockTitle
-                                              : bibliosDetails.title,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white,
+                                        SelectionArea(
+                                          child: Text(
+                                            isLoadingDetails
+                                                ? mockTitle
+                                                : bibliosDetails.title,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -199,10 +201,12 @@ class _BookViewState extends BookController {
                                         left: 8.0,
                                         right: 8.0,
                                       ),
-                                      child: BibliographicDetails(
-                                        bibliosDetails: bibliosDetails,
-                                        languageMap: languageMap,
-                                        isLoadingDetails: isLoadingDetails,
+                                      child: SelectionArea(
+                                        child: BibliographicDetails(
+                                          bibliosDetails: bibliosDetails,
+                                          languageMap: languageMap,
+                                          isLoadingDetails: isLoadingDetails,
+                                        ),
                                       ),
                                     ),
                                   ],

@@ -143,9 +143,7 @@ abstract class HomeController extends State<HomeView> {
     _enabledHomeLibrariesEntries = _libraryEntries
         .where((entry) => _librariesServices.containsKey(entry.value))
         .toList();
-    _libraryServicesController.text = _enabledHomeLibrariesEntries.isNotEmpty
-        ? _enabledHomeLibrariesEntries[0].label
-        : '';
+    _libraryServicesController.text = 'Unidad de Servicios Bibliotecarios y de Información Xalapa';
   }
 
   @override
@@ -241,5 +239,11 @@ abstract class HomeController extends State<HomeView> {
         ? _bookSelections[0].biblionumber
         : '';
     currentBookName = _bookSelections.isNotEmpty ? _bookSelections[0].name : '';
+  }
+
+  void onSelectLibraryService(String value) {
+    setState(() {
+      selectedLibraryServices = value;
+    });
   }
 }
