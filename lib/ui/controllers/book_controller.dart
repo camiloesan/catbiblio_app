@@ -13,6 +13,10 @@ abstract class BookController extends State<BookView> {
   final int screenSizeLimit = 800;
   bool hasImage = false;
 
+  final String _baseUrl =
+      dotenv.env['KOHA_BASE_URL'] ?? 'https://catbiblio.uv.mx';
+  final String _openLibraryBaseUrl = 'https://covers.openlibrary.org';
+
   final mockTitle =
       'Título de ejemplo para mostrar en la interfaz de usuario mientras se cargan los datos reales del libro.';
 
@@ -216,7 +220,8 @@ abstract class BookController extends State<BookView> {
   Future<Set<String>> loadBookFinderLibraries() async {
     Set<String> bookFinderLibraries = {};
     try {
-      bookFinderLibraries = await BookFinderLibraries.getBookFinderLibrariesSet();
+      bookFinderLibraries =
+          await BookFinderLibraries.getBookFinderLibrariesSet();
     } catch (error) {
       debugPrint('Error loading finder libraries: $error');
     }

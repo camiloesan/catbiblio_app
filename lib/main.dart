@@ -15,7 +15,6 @@ import 'package:go_router/go_router.dart';
 import 'url_strategy_nonweb.dart'
     if (dart.library.html) 'url_strategy_web.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureAppUrlStrategy();
@@ -105,14 +104,25 @@ class _MainAppState extends State<MainApp> {
         GoRoute(
           path: '/finder',
           builder: (BuildContext context, GoRouterState state) {
-            String biblionumber = state.uri.queryParameters['biblionumber'] ?? '';
+            String biblionumber =
+                state.uri.queryParameters['biblionumber'] ?? '';
             String title = state.uri.queryParameters['title'] ?? '';
-            String classification = state.uri.queryParameters['classification'] ?? '';
+            String classification =
+                state.uri.queryParameters['classification'] ?? '';
             String collection = state.uri.queryParameters['collection'] ?? '';
-            String collectionCode = state.uri.queryParameters['collectionCode'] ?? '';
-            String holdingLibrary = state.uri.queryParameters['holdingLibrary'] ?? '';
+            String collectionCode =
+                state.uri.queryParameters['collectionCode'] ?? '';
+            String holdingLibrary =
+                state.uri.queryParameters['holdingLibrary'] ?? '';
 
-            FinderParams finderParams = FinderParams(biblioNumber: biblionumber, title: title, classification: classification, collection: collection, collectionCode: collectionCode, holdingLibrary: holdingLibrary);
+            FinderParams finderParams = FinderParams(
+              biblioNumber: biblionumber,
+              title: title,
+              classification: classification,
+              collection: collection,
+              collectionCode: collectionCode,
+              holdingLibrary: holdingLibrary,
+            );
             return FinderView(params: finderParams);
           },
         ),

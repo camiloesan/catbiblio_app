@@ -282,4 +282,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get couldntLoadHomeLibrariesServices =>
       'No se pudieron cargar los servicios de las bibliotecas, verifique su conexión a Internet o inténtelo de nuevo más tarde.';
+
+  @override
+  String get openLibraryCoverIMGAlt => 'Imagen de Open Library';
+
+  @override
+  String get localCoverIMGAlt => 'Imagen de cubierta local';
 }

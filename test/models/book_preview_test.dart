@@ -223,11 +223,13 @@ void main() {
         publishingDetails: 'New York Test Publisher 2020',
         totalRecords: 2,
         locatedInLibraries: 6,
+        isbn: '978-3-16-148410-0',
+        normalizedIsbn: '9783161484100',
       );
 
       expect(
         bookPreview.toString(),
-        'BookPreview(title: Test Book, author: John Doe, coverUrl: http://example.com/cover.jpg, biblioNumber: 12345, publishingDetails: New York Test Publisher 2020, locatedInLibraries: 6, totalRecords: 2)',
+        'BookPreview(title: Test Book, author: John Doe, coverUrl: http://example.com/cover.jpg, biblioNumber: 12345, publishingDetails: New York Test Publisher 2020, locatedInLibraries: 6, totalRecords: 2, isbn: 978-3-16-148410-0, normalizedIsbn: 9783161484100)',
       );
     });
   });

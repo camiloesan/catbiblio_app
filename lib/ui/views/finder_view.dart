@@ -28,14 +28,8 @@ class _FinderViewState extends FinderController {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  TitleSection(
-                    widget: widget,
-                    bookLocation: bookLocation,
-                  ),
-                  MapSection(
-                    widget: widget,
-                    bookLocation: bookLocation,
-                  ),
+                  TitleSection(widget: widget, bookLocation: bookLocation),
+                  MapSection(widget: widget, bookLocation: bookLocation),
                 ],
               ),
             );
@@ -44,7 +38,8 @@ class _FinderViewState extends FinderController {
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                    maxWidth:
+                        MediaQuery.of(context).size.width < screenSizeLimit
                         ? MediaQuery.of(context).size.width
                         : (MediaQuery.of(context).size.width / 4) * 3.5,
                   ),
@@ -89,7 +84,7 @@ class MapSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 0.0, 
+        top: 0.0,
         left: 16.0,
         right: 16.0,
         bottom: 16.0,
@@ -132,7 +127,7 @@ class TitleSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FutureBuilder<Image?>(
-                future: ImageService.fetchThumbnailImageUrl(
+                future: ImageService.fetchThumbnailLocal(
                   widget.params.biblioNumber,
                 ),
                 builder: (context, snapshot) {
@@ -177,14 +172,14 @@ class TitleSection extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8.0,),
+              const SizedBox(height: 8.0),
               Wrap(
                 children: [
                   Icon(
                     Icons.location_city,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  const SizedBox(width: 8.0,),
+                  const SizedBox(width: 8.0),
                   Text(
                     widget.params.holdingLibrary,
                     style: const TextStyle(

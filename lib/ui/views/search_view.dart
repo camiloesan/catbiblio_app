@@ -8,6 +8,7 @@ import 'package:catbiblio_app/ui/views/home_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/search.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -255,6 +256,9 @@ class BookList extends StatelessWidget {
   final bool isPageLoading;
   final bool isInitialRequestLoading;
 
+  static final String _baseUrl =
+      dotenv.env['KOHA_BASE_URL'] ?? 'https://catbiblio.uv.mx';
+
   @override
   Widget build(BuildContext context) {
     if (isPageLoading || isInitialRequestLoading) {
@@ -356,8 +360,28 @@ class BookList extends StatelessWidget {
                           ),
                         ),
                         CachedNetworkImage(
+                          imageUrl: book.coverUrl,
+                          imageBuilder: (context, imageProvider) => Image(
+                            image: imageProvider,
+                            width: 60,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                          // This shows if the URL fails to load (404, wrong content-type, etc.)
+                          errorWidget: (context, url, error) => Container(
+                            width: 60,
+                            height: 90,
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.book,
+                              size: 36,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        CachedNetworkImage(
                           imageUrl:
-                              "http://148.226.6.25/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblioNumber}",
+                              "$_baseUrl/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=${book.biblioNumber}",
                           imageBuilder: (context, imageProvider) => Image(
                             image: imageProvider,
                             width: 60,

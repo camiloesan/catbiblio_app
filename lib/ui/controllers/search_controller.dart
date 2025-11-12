@@ -3,7 +3,8 @@ part of '../views/search_view.dart';
 abstract class SearchController extends State<SearchView> {
   late TextEditingController _filterController;
   late TextEditingController _searchController;
-  late final TextEditingController _itemTypeController = widget.controllersData.itemTypeController;
+  late final TextEditingController _itemTypeController =
+      widget.controllersData.itemTypeController;
   late ScrollController _scrollController;
   late List<BookPreview> books = [];
   late final List<DropdownMenuEntry<String>> _filterEntries;
