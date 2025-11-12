@@ -280,4 +280,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get couldntLoadHomeLibrariesServices =>
       'Couldn\'t load libraries services, check your internet connection, or try again later.';
+
+  @override
+  String get openLibraryCoverIMGAlt => 'Book cover from Open Library';
+
+  @override
+  String get localCoverIMGAlt => 'Local book cover image';
 }

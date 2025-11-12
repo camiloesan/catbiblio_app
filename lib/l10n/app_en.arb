@@ -359,5 +359,13 @@
   "couldntLoadHomeLibrariesServices": "Couldn't load libraries services, check your internet connection, or try again later.",
   "@couldntLoadHomeLibrariesServices": {
     "description": "Message shown when home libraries services could not be loaded"
+  },
+  "openLibraryCoverIMGAlt": "Book cover from Open Library",
+  "@openLibraryCoverIMGAlt": {
+    "description": "Alt text for book cover images fetched from Open Library" 
+  },
+  "localCoverIMGAlt": "Local book cover image",
+  "@localCoverIMGAlt": {
+    "description": "Alt text for book cover images fetched from Local Library"
   }
 }

@@ -637,6 +637,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load libraries services, check your internet connection, or try again later.'**
   String get couldntLoadHomeLibrariesServices;
+
+  /// Alt text for book cover images fetched from Open Library
+  ///
+  /// In en, this message translates to:
+  /// **'Book cover from Open Library'**
+  String get openLibraryCoverIMGAlt;
+
+  /// Alt text for book cover images fetched from Local Library
+  ///
+  /// In en, this message translates to:
+  /// **'Local book cover image'**
+  String get localCoverIMGAlt;
 }
 
 class _AppLocalizationsDelegate
