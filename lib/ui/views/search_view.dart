@@ -392,11 +392,7 @@ class BookList extends StatelessWidget {
                           errorWidget: (context, url, error) => Container(
                             width: 60,
                             height: 90,
-                            color: Colors.grey[200],
-                            child: const Icon(
-                              Icons.broken_image,
-                              color: Colors.grey,
-                            ),
+                            color: Colors.transparent,
                           ),
                         ),
                       ],
