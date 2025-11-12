@@ -61,7 +61,7 @@ class _HomeViewState extends HomeController {
       ),
       drawer: AppNavigationDrawer(
         onLocaleChange: widget.onLocaleChange,
-        openLink: openLink,
+        openLink: openExternalLink,
         isLibrariesLoading: isLibrariesLoading,
         librariesFuture: _librariesFuture,
       ),
