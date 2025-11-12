@@ -11,6 +11,7 @@ import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:catbiblio_app/services/biblios_details.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -94,57 +95,90 @@ class _BookViewState extends BookController {
                                       ),
                                     )
                                   else
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (!hasImage) return;
-                                        _showImageDialog(
-                                          context,
-                                          'biblioImage',
-                                          'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${widget.biblioNumber}',
-                                        );
-                                      },
-                                      child: Hero(
-                                        tag: 'biblioImage',
-                                        child: FutureBuilder<Image?>(
-                                          future:
-                                              ImageService.fetchThumbnailImageUrl(
-                                                widget.biblioNumber,
-                                              ),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasError ||
-                                                snapshot.data == null) {
-                                              hasImage = false;
-                                              // If there was an error or no image, show a placeholder.
-                                              // A small placeholder must be shown after loading. To avoid breaking the layout, we use a reduced placeholder.
-                                              return SizedBox(
-                                                width: 120,
-                                                height: 160,
-                                                child: Container(
-                                                  color: Colors.white24,
-                                                  child: const Center(
-                                                    child: Icon(
-                                                      Icons.book,
-                                                      size: 36,
-                                                      color: Colors.white70,
-                                                    ),
+                                    FutureBuilder<ThumbnailResult?>(
+                                      future: ImageService.fetchThumbnail(
+                                        widget.biblioNumber,
+                                        bibliosDetails.isbn,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Error or no image found: show placeholder
+                                        if (snapshot.hasError ||
+                                            snapshot.data == null) {
+                                          hasImage = false;
+                                          return Hero(
+                                            tag: 'biblioImage',
+                                            child: SizedBox(
+                                              width: 120,
+                                              height: 160,
+                                              child: Container(
+                                                color: Colors.white24,
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.book,
+                                                    size: 36,
+                                                    color: Colors.white70,
                                                   ),
                                                 ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        // We have an image and know its source now
+                                        hasImage = true;
+                                        final source = snapshot.data!.source;
+                                        final imageWidget =
+                                            snapshot.data!.image;
+
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (source ==
+                                                ImageService.sourceLocal) {
+                                              _showImageDialog(
+                                                context,
+                                                'biblioImage',
+                                                '$_baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${widget.biblioNumber}',
                                               );
                                             } else {
-                                              hasImage = true;
-                                              return Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 120,
-                                                    height: 160,
-                                                    child: snapshot.data!,
-                                                  ),
-                                                ],
+                                              _showImageDialog(
+                                                context,
+                                                'biblioImage',
+                                                '$_openLibraryBaseUrl/b/isbn/${bibliosDetails.isbn}-L.jpg',
                                               );
                                             }
                                           },
-                                        ),
-                                      ),
+                                          child: Hero(
+                                            tag: 'biblioImage',
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  width: 120,
+                                                  height: 160,
+                                                  child: imageWidget,
+                                                ),
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: Text(
+                                                    source ==
+                                                            ImageService
+                                                                .sourceLocal
+                                                        ? AppLocalizations.of(
+                                                            context,
+                                                          )!.localCoverIMGAlt
+                                                        : AppLocalizations.of(
+                                                            context,
+                                                          )!.openLibraryCoverIMGAlt,
+                                                    style: const TextStyle(
+                                                      color: Colors.white70,
+                                                      fontSize: 12,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   const SizedBox(width: 16.0),
                                   Expanded(
