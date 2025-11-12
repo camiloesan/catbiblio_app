@@ -30,7 +30,19 @@ class _BookViewState extends BookController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.detailsTitle)),
+      appBar: AppBar(
+        title: kIsWeb
+            ? TextButton(
+                onPressed: () {
+                  context.go('/');
+                },
+                child: Image(
+                  image: const AssetImage('assets/images/head.png'),
+                  height: 40,
+                ),
+              )
+            : Text(AppLocalizations.of(context)!.detailsTitle)
+      ),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
