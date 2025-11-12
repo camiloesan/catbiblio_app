@@ -325,9 +325,9 @@ class BookList extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                if (kIsWeb) {
-                  context.go('/book-details/${book.biblioNumber}');
-                }
+                // if (kIsWeb) {
+                //   context.go('/book-details/${book.biblioNumber}');
+                // }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
