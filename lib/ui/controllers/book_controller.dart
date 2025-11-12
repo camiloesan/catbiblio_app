@@ -100,7 +100,7 @@ abstract class BookController extends State<BookView> {
     String biblioNumber,
   ) {
     final String message =
-        'Catálogo Bibliotecario de la Universidad Veracruzana:\n"$title":\nhttps://catbiblio.uv.mx/cgi-bin/koha/opac-detail.pl?biblionumber=$biblioNumber';
+        'Catálogo Bibliotecario de la Universidad Veracruzana:\n"$title":\nhttps://catbiblio.uv.mx/cgi-bin/koha/opac-detail.pl?biblionumber=$biblioNumber\n\nO disponible en la aplicación móvil en https://catbiblio.uv.mx/app/#/book-details/$biblioNumber';
 
     showDialog(
       context: context,
