@@ -42,7 +42,7 @@ class _BookViewState extends BookController {
                   height: 40,
                 ),
               )
-            : Text(AppLocalizations.of(context)!.detailsTitle)
+            : Text(AppLocalizations.of(context)!.detailsTitle),
       ),
       body: CustomScrollView(
         slivers: [
@@ -279,13 +279,12 @@ class _BookViewState extends BookController {
                               children: [
                                 OutlinedButton.icon(
                                   onPressed: () {
-                                    if (kIsWeb) {
-                                      context.go(
-                                        '/marc-view/${Uri.encodeComponent(widget.biblioNumber)}',
-                                      );
-                                      return;
-                                    }
-
+                                    // if (kIsWeb) {
+                                    //   context.go(
+                                    //     '/marc-view/${Uri.encodeComponent(widget.biblioNumber)}',
+                                    //   );
+                                    //   return;
+                                    // }
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
