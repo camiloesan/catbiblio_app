@@ -17,6 +17,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,6 +35,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends HomeController {
+  static final String _baseUrl =
+      dotenv.env['KOHA_BASE_URL'] ?? 'https://catbiblio.uv.mx';
+
   @override
   Widget build(BuildContext context) {
     final libraryEntriesPlusAll = [
@@ -224,7 +228,7 @@ class _HomeViewState extends HomeController {
                           child: CarouselBookCard(
                             title: book.name,
                             imageUrl:
-                                'https://catbiblio.uv.mx/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
+                                '$_baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
                             fit: BoxFit.cover,
                           ),
                         ),
