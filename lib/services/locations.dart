@@ -32,7 +32,7 @@ class LocationsService {
         queryParameters: {
           'lcc': lcc,
           'coleccion': collection,
-          'library_code': libraryCode,
+          'homebranch': libraryCode,
         },
       );
 
