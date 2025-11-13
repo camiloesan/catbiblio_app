@@ -396,6 +396,7 @@ class ListViewLibrariesWidget extends StatelessWidget {
     String collection,
     String collectionCode,
     String holdingLibrary,
+    String libraryCode,
   )
   navigateToFinderView;
   final bool isLoadingBiblioItems;
@@ -460,6 +461,7 @@ class ListViewLibrariesWidget extends StatelessWidget {
                                   biblioItem.collection,
                                   biblioItem.collectionCode,
                                   biblioItem.holdingLibrary,
+                                  biblioItem.holdingLibraryId,
                                 ),
                                 icon: const Icon(Icons.map),
                               )

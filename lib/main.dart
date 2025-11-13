@@ -114,6 +114,8 @@ class _MainAppState extends State<MainApp> {
                 state.uri.queryParameters['collectionCode'] ?? '';
             String holdingLibrary =
                 state.uri.queryParameters['holdingLibrary'] ?? '';
+            String libraryCode =
+                state.uri.queryParameters['libraryCode'] ?? '';
 
             FinderParams finderParams = FinderParams(
               biblioNumber: biblionumber,
@@ -122,6 +124,7 @@ class _MainAppState extends State<MainApp> {
               collection: collection,
               collectionCode: collectionCode,
               holdingLibrary: holdingLibrary,
+              libraryCode: libraryCode,
             );
             return FinderView(params: finderParams);
           },

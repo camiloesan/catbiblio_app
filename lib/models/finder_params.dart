@@ -5,6 +5,7 @@ class FinderParams {
   final String collection;
   final String collectionCode;
   final String holdingLibrary;
+  final String libraryCode;
 
   FinderParams({
     required this.biblioNumber,
@@ -13,5 +14,6 @@ class FinderParams {
     required this.collection,
     required this.collectionCode,
     required this.holdingLibrary,
+    required this.libraryCode,
   });
 }

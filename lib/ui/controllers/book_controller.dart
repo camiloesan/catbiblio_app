@@ -171,6 +171,7 @@ abstract class BookController extends State<BookView> {
     String collection,
     String collectionCode,
     String holdingLibrary,
+    String libraryCode,
   ) {
     FinderParams params = FinderParams(
       biblioNumber: widget.biblioNumber,
@@ -179,6 +180,7 @@ abstract class BookController extends State<BookView> {
       collection: collection,
       collectionCode: collectionCode,
       holdingLibrary: holdingLibrary,
+      libraryCode: libraryCode,
     );
 
     if (kIsWeb) {

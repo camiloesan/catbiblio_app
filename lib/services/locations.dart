@@ -23,7 +23,7 @@ class LocationsService {
     );
   }
 
-  static Future<BookLocation> getBookLocation(String lcc, String collection) async {
+  static Future<BookLocation> getBookLocation(String lcc, String collection, String libraryCode) async {
     final dio = _createDio();
 
     try {
@@ -32,6 +32,7 @@ class LocationsService {
         queryParameters: {
           'lcc': lcc,
           'coleccion': collection,
+          'library_code': libraryCode,
         },
       );
 
