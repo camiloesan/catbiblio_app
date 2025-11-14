@@ -40,6 +40,7 @@ class _HomeViewState extends HomeController {
 
   @override
   Widget build(BuildContext context) {
+    // Pre-calculate dropdown entries to avoid repeated calculations
     final libraryEntriesPlusAll = [
       DropdownMenuEntry(
         value: 'all',
@@ -58,8 +59,8 @@ class _HomeViewState extends HomeController {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Image(
-          image: const AssetImage('assets/images/head.png'),
+        title: const Image(
+          image: AssetImage('assets/images/head.png'),
           height: 40,
         ),
       ),
@@ -74,176 +75,59 @@ class _HomeViewState extends HomeController {
         slivers: [
           // search section
           SliverToBoxAdapter(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
-                      ? MediaQuery.of(context).size.width
-                      : (MediaQuery.of(context).size.width / 3) * 2,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.searchSectionTitle,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          // Item types dropdown
-                          Skeletonizer(
-                            enabled: isItemTypesLoading,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                return DropdownItemTypesWidget(
-                                  itemTypeController: _itemTypeController,
-                                  itemTypeEntries: itemTypeEntriesPlusAll,
-                                  queryParams: _queryParams,
-                                  maxWidth: constraints.maxWidth,
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          // Libraries dropdown
-                          Skeletonizer(
-                            enabled: isLibrariesLoading,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                return DropdownLibrariesWidget(
-                                  libraryController: _libraryController,
-                                  libraryEntries: libraryEntriesPlusAll,
-                                  queryParams: _queryParams,
-                                  maxWidth: constraints.maxWidth,
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          // Search filters dropdown
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              return DropdownFilters(
-                                searchFilterController: _searchFilterController,
-                                filterEntries: _filterEntries,
-                                queryParams: _queryParams,
-                                maxWidth: constraints.maxWidth,
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          TextFieldSearchWidget(
-                            searchController: _searchController,
-                            onSubmitted: (value) => onSubmitAction(),
-                            clearSearchController: () =>
-                                clearSearchController(),
-                          ),
-                          // Divider(),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 4.0),
-                  ],
-                ),
-              ),
+            child: SearchSection(
+              screenSizeLimit: screenSizeLimit,
+              itemTypeController: _itemTypeController,
+              itemTypeEntries: itemTypeEntriesPlusAll,
+              isItemTypesLoading: isItemTypesLoading,
+              libraryController: _libraryController,
+              libraryEntries: libraryEntriesPlusAll,
+              isLibrariesLoading: isLibrariesLoading,
+              searchFilterController: _searchFilterController,
+              filterEntries: _filterEntries,
+              queryParams: _queryParams,
+              searchController: _searchController,
+              onSubmitted: (value) => onSubmitAction(),
+              clearSearchController: () => clearSearchController(),
             ),
           ),
           // Book selections section
-          SliverToBoxAdapter(
-            child: Container(
-              color: primaryColor,
-              child: Column(
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth:
-                          MediaQuery.of(context).size.width < screenSizeLimit
-                          ? MediaQuery.of(context).size.width
-                          : (MediaQuery.of(context).size.width / 3) * 2,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 16.0,
-                        left: 16.0,
-                        right: 16.0,
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          AppLocalizations.of(context)!.bookSelections,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  BooksCarouselSliderWidget(
-                    screenSizeLimit: screenSizeLimit,
-                    onPressedCallback: (index) {
-                      setState(() {
-                        currentBiblionumber =
-                            _bookSelections[index].biblionumber;
-                      });
-                    },
-                    booksCarouselSliderController:
-                        _booksCarouselSliderController,
-                    items: [
-                      for (var book in _bookSelections)
-                        GestureDetector(
-                          onTap: () {
-                            if (currentBiblionumber != book.biblionumber) {
-                              _booksCarouselSliderController.animateToPage(
-                                _bookSelections.indexOf(book),
-                              );
-                              return;
-                            }
-                            if (kIsWeb) {
-                              context.go('/book-details/${book.biblionumber}');
-                              return;
-                            }
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    BookView(biblioNumber: book.biblionumber),
-                              ),
-                            );
-                          },
-                          child: CarouselBookCard(
-                            title: book.name,
-                            imageUrl:
-                                '$_baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
-                ],
-              ),
-            ),
+          BookSelectionsSection(
+            screenSizeLimit: screenSizeLimit,
+            bookSelections: _bookSelections,
+            currentBiblionumber: currentBiblionumber,
+            booksCarouselSliderController: _booksCarouselSliderController,
+            baseUrl: _baseUrl,
+            onBookTap: (book) {
+              if (currentBiblionumber != book.biblionumber) {
+                _booksCarouselSliderController.animateToPage(
+                  _bookSelections.indexOf(book),
+                );
+                return;
+              }
+              if (kIsWeb) {
+                context.go('/book-details/${book.biblionumber}');
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      BookView(biblioNumber: book.biblionumber),
+                ),
+              );
+            },
+            onPageChanged: (index) {
+              setState(() {
+                currentBiblionumber = _bookSelections[index].biblionumber;
+              });
+            },
           ),
           if (isLibraryServicesLoading)
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(32.0),
+                  padding: EdgeInsets.all(32.0),
                   child: CircularProgressIndicator(color: primaryColor),
                 ),
               ),
@@ -262,77 +146,21 @@ class _HomeViewState extends HomeController {
                       ),
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                 ],
               ),
             ),
           if (isLibraryServicesLoading == false &&
               isLibraryServicesError == false)
             // Library services section
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth:
-                          MediaQuery.of(context).size.width < screenSizeLimit
-                          ? MediaQuery.of(context).size.width
-                          : (MediaQuery.of(context).size.width / 3) * 2,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppLocalizations.of(context)!.libraryServices,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          LayoutBuilder(
-                            builder: (context, constraints) =>
-                                DropdownLibrariesServicesWidget(
-                                  onSelected: onSelectLibraryService,
-                                  libraryServicesController:
-                                      _libraryServicesController,
-                                  enabledHomeLibrariesEntries:
-                                      _enabledHomeLibrariesEntries,
-                                  maxWidth: constraints.maxWidth,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ServicesCarouselSliderWidget(
-                    servicesCarouselSliderController:
-                        _servicesCarouselSliderController,
-                    items: [
-                      for (var service
-                          in _librariesServices[selectedLibraryServices] ?? [])
-                        GestureDetector(
-                          onTap: () {
-                            _servicesCarouselSliderController.animateToPage(
-                              _librariesServices[selectedLibraryServices]!
-                                  .indexOf(service),
-                            );
-                          },
-                          child: CarouselServiceCard(
-                            title: service.name,
-                            imageUrl: service.imageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                    ],
-                  ),
-                  SizedBox(height: 32.0),
-                ],
-              ),
+            LibraryServicesSection(
+              screenSizeLimit: screenSizeLimit,
+              libraryServicesController: _libraryServicesController,
+              enabledHomeLibrariesEntries: _enabledHomeLibrariesEntries,
+              onSelectLibraryService: onSelectLibraryService,
+              librariesServices: _librariesServices,
+              selectedLibraryServices: selectedLibraryServices,
+              servicesCarouselSliderController: _servicesCarouselSliderController,
             ),
           if (isLibraryServicesError && !isLibraryServicesLoading)
             // Library services error message
@@ -383,7 +211,7 @@ class AppNavigationDrawer extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => LibrariesView(libraries: librariesFuture),
             ),
-          ), // navigate to LibrariesView()
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.computer, color: primaryColor),
@@ -457,28 +285,25 @@ class AppNavigationDrawer extends StatelessWidget {
 class DropdownLibrariesServicesWidget extends StatelessWidget {
   const DropdownLibrariesServicesWidget({
     super.key,
-    required TextEditingController libraryServicesController,
-    required List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries,
-    required double maxWidth,
-    required void Function(String) onSelected,
-  }) : _libraryServicesController = libraryServicesController,
-       _enabledHomeLibrariesEntries = enabledHomeLibrariesEntries,
-       _maxWidth = maxWidth,
-       _onSelected = onSelected;
+    required this.libraryServicesController,
+    required this.enabledHomeLibrariesEntries,
+    required this.maxWidth,
+    required this.onSelected,
+  });
 
-  final TextEditingController _libraryServicesController;
-  final List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries;
-  final double _maxWidth;
-  final void Function(String) _onSelected;
+  final TextEditingController libraryServicesController;
+  final List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries;
+  final double maxWidth;
+  final void Function(String) onSelected;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      onSelected: (value) => _onSelected(value!),
-      width: _maxWidth,
-      controller: _libraryServicesController,
-      inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),
-      dropdownMenuEntries: _enabledHomeLibrariesEntries,
+      onSelected: (value) => onSelected(value!),
+      width: maxWidth,
+      controller: libraryServicesController,
+      inputDecorationTheme: const InputDecorationTheme(border: InputBorder.none),
+      dropdownMenuEntries: enabledHomeLibrariesEntries,
       enableSearch: false,
       enableFilter: false,
       requestFocusOnTap: false,
@@ -489,30 +314,27 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
 class DropdownFilters extends StatelessWidget {
   const DropdownFilters({
     super.key,
-    required TextEditingController searchFilterController,
-    required List<DropdownMenuEntry<String>> filterEntries,
-    required QueryParams queryParams,
-    required double maxWidth,
-  }) : _searchFilterController = searchFilterController,
-       _filterEntries = filterEntries,
-       _queryParams = queryParams,
-       _maxWidth = maxWidth;
+    required this.searchFilterController,
+    required this.filterEntries,
+    required this.queryParams,
+    required this.maxWidth,
+  });
 
-  final TextEditingController _searchFilterController;
-  final List<DropdownMenuEntry<String>> _filterEntries;
-  final QueryParams _queryParams;
-  final double _maxWidth;
+  final TextEditingController searchFilterController;
+  final List<DropdownMenuEntry<String>> filterEntries;
+  final QueryParams queryParams;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      controller: _searchFilterController,
+      controller: searchFilterController,
       label: Text(AppLocalizations.of(context)!.searchBy),
       leadingIcon: const Icon(Icons.filter_list, color: primaryColor),
-      dropdownMenuEntries: _filterEntries,
-      initialSelection: _queryParams.searchBy,
-      onSelected: (value) => _queryParams.searchBy = value!,
-      width: _maxWidth,
+      dropdownMenuEntries: filterEntries,
+      initialSelection: queryParams.searchBy,
+      onSelected: (value) => queryParams.searchBy = value!,
+      width: maxWidth,
       enableFilter: false,
       requestFocusOnTap: false,
     );
@@ -522,30 +344,28 @@ class DropdownFilters extends StatelessWidget {
 class TextFieldSearchWidget extends StatelessWidget {
   const TextFieldSearchWidget({
     super.key,
-    required TextEditingController searchController,
-    required Function(String) onSubmitted,
-    required VoidCallback clearSearchController,
-  }) : _searchController = searchController,
-       _onSubmitted = onSubmitted,
-       _clearSearchController = clearSearchController;
+    required this.searchController,
+    required this.onSubmitted,
+    required this.clearSearchController,
+  });
 
-  final TextEditingController _searchController;
-  final Function(String) _onSubmitted;
-  final VoidCallback _clearSearchController;
+  final TextEditingController searchController;
+  final Function(String) onSubmitted;
+  final VoidCallback clearSearchController;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: _searchController,
-      onSubmitted: (value) => _onSubmitted(value),
+      controller: searchController,
+      onSubmitted: (value) => onSubmitted(value),
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search, color: primaryColor),
+        prefixIcon: const Icon(Icons.search, color: primaryColor),
         suffixIcon: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () => _clearSearchController(),
+          icon: const Icon(Icons.clear),
+          onPressed: () => clearSearchController(),
         ),
         labelText: AppLocalizations.of(context)!.search,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }
@@ -554,31 +374,29 @@ class TextFieldSearchWidget extends StatelessWidget {
 class DropdownLibrariesWidget extends StatelessWidget {
   const DropdownLibrariesWidget({
     super.key,
-    required TextEditingController libraryController,
-    required List<DropdownMenuEntry<String>> libraryEntries,
-    required QueryParams queryParams,
-    required double maxWidth,
-  }) : _libraryController = libraryController,
-       _libraryEntries = libraryEntries,
-       _queryParams = queryParams,
-       _maxWidth = maxWidth;
-  final TextEditingController _libraryController;
-  final List<DropdownMenuEntry<String>> _libraryEntries;
-  final QueryParams _queryParams;
-  final double _maxWidth;
+    required this.libraryController,
+    required this.libraryEntries,
+    required this.queryParams,
+    required this.maxWidth,
+  });
+  
+  final TextEditingController libraryController;
+  final List<DropdownMenuEntry<String>> libraryEntries;
+  final QueryParams queryParams;
+  final double maxWidth;
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      controller: _libraryController,
+      controller: libraryController,
       label: Text(AppLocalizations.of(context)!.library),
       enableSearch: true,
       menuHeight: 300,
       leadingIcon: const Icon(Icons.location_city, color: primaryColor),
-      initialSelection: _queryParams.library,
-      width: _maxWidth,
-      dropdownMenuEntries: _libraryEntries,
+      initialSelection: queryParams.library,
+      width: maxWidth,
+      dropdownMenuEntries: libraryEntries,
       onSelected: (value) {
-        _queryParams.library = value!;
+        queryParams.library = value!;
       },
     );
   }
@@ -587,31 +405,29 @@ class DropdownLibrariesWidget extends StatelessWidget {
 class DropdownItemTypesWidget extends StatelessWidget {
   const DropdownItemTypesWidget({
     super.key,
-    required TextEditingController itemTypeController,
-    required List<DropdownMenuEntry<String>> itemTypeEntries,
-    required QueryParams queryParams,
-    required double maxWidth,
-  }) : _itemTypeController = itemTypeController,
-       _itemTypeEntries = itemTypeEntries,
-       _queryParams = queryParams,
-       _maxWidth = maxWidth;
-  final TextEditingController _itemTypeController;
-  final List<DropdownMenuEntry<String>> _itemTypeEntries;
-  final QueryParams _queryParams;
-  final double _maxWidth;
+    required this.itemTypeController,
+    required this.itemTypeEntries,
+    required this.queryParams,
+    required this.maxWidth,
+  });
+  
+  final TextEditingController itemTypeController;
+  final List<DropdownMenuEntry<String>> itemTypeEntries;
+  final QueryParams queryParams;
+  final double maxWidth;
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      controller: _itemTypeController,
+      controller: itemTypeController,
       label: Text(AppLocalizations.of(context)!.itemType),
       enableSearch: true,
       menuHeight: 300,
       leadingIcon: const Icon(Icons.category, color: primaryColor),
-      initialSelection: _queryParams.itemType,
-      dropdownMenuEntries: _itemTypeEntries,
-      width: _maxWidth,
+      initialSelection: queryParams.itemType,
+      dropdownMenuEntries: itemTypeEntries,
+      width: maxWidth,
       onSelected: (value) {
-        _queryParams.itemType = value!;
+        queryParams.itemType = value!;
       },
     );
   }
@@ -620,22 +436,20 @@ class DropdownItemTypesWidget extends StatelessWidget {
 class CarouselBookCard extends StatelessWidget {
   const CarouselBookCard({
     super.key,
-    required String title,
-    required String imageUrl,
-    required BoxFit fit,
-  }) : _title = title,
-       _imageUrl = imageUrl,
-       _fit = fit;
+    required this.title,
+    required this.imageUrl,
+    required this.fit,
+  });
 
-  final String _title;
-  final String _imageUrl;
-  final BoxFit _fit;
+  final String title;
+  final String imageUrl;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color.fromARGB(255, 0, 153, 50),
-      margin: EdgeInsets.only(bottom: 32.0, left: 4.0, right: 4.0, top: 16.0),
+      color: const Color.fromARGB(255, 0, 153, 50),
+      margin: const EdgeInsets.only(bottom: 32.0, left: 4.0, right: 4.0, top: 16.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
@@ -649,11 +463,11 @@ class CarouselBookCard extends StatelessWidget {
                 topRight: Radius.circular(12.0),
               ),
               child: CachedNetworkImage(
-                imageUrl: _imageUrl,
-                fit: _fit,
+                imageUrl: imageUrl,
+                fit: fit,
                 width: double.infinity,
                 placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator()),
+                    const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.error_outline,
@@ -667,7 +481,7 @@ class CarouselBookCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              _title,
+              title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
@@ -685,31 +499,29 @@ class CarouselBookCard extends StatelessWidget {
 class BooksCarouselSliderWidget extends StatelessWidget {
   const BooksCarouselSliderWidget({
     super.key,
-    required CarouselSliderController booksCarouselSliderController,
-    required List<Widget> items,
-    required int screenSizeLimit,
+    required this.booksCarouselSliderController,
+    required this.items,
+    required this.screenSizeLimit,
     required this.onPressedCallback,
-  }) : _booksCarouselSliderController = booksCarouselSliderController,
-       _items = items,
-       _screenSizeLimit = screenSizeLimit;
+  });
 
-  final CarouselSliderController _booksCarouselSliderController;
-  final List<Widget> _items;
-  final int _screenSizeLimit;
+  final CarouselSliderController booksCarouselSliderController;
+  final List<Widget> items;
+  final int screenSizeLimit;
   final Function(int) onPressedCallback;
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      items: _items,
-      carouselController: _booksCarouselSliderController,
+      items: items,
+      carouselController: booksCarouselSliderController,
       options: CarouselOptions(
         onPageChanged: (index, reason) {
           onPressedCallback(index);
         },
         scrollPhysics: kIsWeb
-            ? NeverScrollableScrollPhysics()
-            : AlwaysScrollableScrollPhysics(),
+            ? const NeverScrollableScrollPhysics()
+            : const AlwaysScrollableScrollPhysics(),
         disableCenter: true,
         height: 400.0,
         enlargeCenterPage: true,
@@ -720,7 +532,7 @@ class BooksCarouselSliderWidget extends StatelessWidget {
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeFactor: 0.3,
         aspectRatio: 2 / 4,
-        viewportFraction: MediaQuery.of(context).size.width < _screenSizeLimit
+        viewportFraction: MediaQuery.of(context).size.width < screenSizeLimit
             ? 0.60
             : 0.20,
       ),
@@ -731,22 +543,20 @@ class BooksCarouselSliderWidget extends StatelessWidget {
 class CarouselServiceCard extends StatelessWidget {
   const CarouselServiceCard({
     super.key,
-    required String title,
-    required String imageUrl,
-    required BoxFit fit,
-  }) : _title = title,
-       _imageUrl = imageUrl,
-       _fit = fit;
+    required this.title,
+    required this.imageUrl,
+    required this.fit,
+  });
 
-  final String _title;
-  final String _imageUrl;
-  final BoxFit _fit;
+  final String title;
+  final String imageUrl;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       color: primaryColor,
-      margin: EdgeInsets.only(left: 4.0, right: 4.0, bottom: 32.0, top: 8.0),
+      margin: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 32.0, top: 8.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 16.0,
       child: Column(
@@ -760,11 +570,11 @@ class CarouselServiceCard extends StatelessWidget {
                 topRight: Radius.circular(12.0),
               ),
               child: CachedNetworkImage(
-                imageUrl: _imageUrl,
-                fit: _fit,
+                imageUrl: imageUrl,
+                fit: fit,
                 width: double.infinity,
                 placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator()),
+                    const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.error_outline,
@@ -778,7 +588,7 @@ class CarouselServiceCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              _title,
+              title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
@@ -796,25 +606,24 @@ class CarouselServiceCard extends StatelessWidget {
 class ServicesCarouselSliderWidget extends StatelessWidget {
   const ServicesCarouselSliderWidget({
     super.key,
-    required CarouselSliderController servicesCarouselSliderController,
-    required List<Widget> items,
-  }) : _servicesCarouselSliderController = servicesCarouselSliderController,
-       _items = items;
+    required this.servicesCarouselSliderController,
+    required this.items,
+  });
 
-  final CarouselSliderController _servicesCarouselSliderController;
-  final List<Widget> _items;
+  final CarouselSliderController servicesCarouselSliderController;
+  final List<Widget> items;
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      items: _items,
-      carouselController: _servicesCarouselSliderController,
+      items: items,
+      carouselController: servicesCarouselSliderController,
       options: CarouselOptions(
         height: 500.0,
         enlargeCenterPage: true,
         scrollPhysics: kIsWeb
-            ? NeverScrollableScrollPhysics()
-            : AlwaysScrollableScrollPhysics(),
+            ? const NeverScrollableScrollPhysics()
+            : const AlwaysScrollableScrollPhysics(),
         autoPlay: true,
         enableInfiniteScroll: true,
         autoPlayInterval: const Duration(seconds: 6),
@@ -822,6 +631,289 @@ class ServicesCarouselSliderWidget extends StatelessWidget {
         autoPlayCurve: Curves.fastOutSlowIn,
         aspectRatio: 16 / 9,
         viewportFraction: 0.8,
+      ),
+    );
+  }
+}
+
+class SearchSection extends StatelessWidget {
+  const SearchSection({
+    super.key,
+    required this.screenSizeLimit,
+    required this.itemTypeController,
+    required this.itemTypeEntries,
+    required this.isItemTypesLoading,
+    required this.libraryController,
+    required this.libraryEntries,
+    required this.isLibrariesLoading,
+    required this.searchFilterController,
+    required this.filterEntries,
+    required this.queryParams,
+    required this.searchController,
+    required this.onSubmitted,
+    required this.clearSearchController,
+  });
+
+  final int screenSizeLimit;
+  final TextEditingController itemTypeController;
+  final List<DropdownMenuEntry<String>> itemTypeEntries;
+  final bool isItemTypesLoading;
+  final TextEditingController libraryController;
+  final List<DropdownMenuEntry<String>> libraryEntries;
+  final bool isLibrariesLoading;
+  final TextEditingController searchFilterController;
+  final List<DropdownMenuEntry<String>> filterEntries;
+  final QueryParams queryParams;
+  final TextEditingController searchController;
+  final Function(String) onSubmitted;
+  final VoidCallback clearSearchController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+              ? MediaQuery.of(context).size.width
+              : (MediaQuery.of(context).size.width / 3) * 2,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 8.0,
+                left: 16.0,
+                right: 16.0,
+                bottom: 8.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.searchSectionTitle,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Item types dropdown
+                  Skeletonizer(
+                    enabled: isItemTypesLoading,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return DropdownItemTypesWidget(
+                          itemTypeController: itemTypeController,
+                          itemTypeEntries: itemTypeEntries,
+                          queryParams: queryParams,
+                          maxWidth: constraints.maxWidth,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Libraries dropdown
+                  Skeletonizer(
+                    enabled: isLibrariesLoading,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return DropdownLibrariesWidget(
+                          libraryController: libraryController,
+                          libraryEntries: libraryEntries,
+                          queryParams: queryParams,
+                          maxWidth: constraints.maxWidth,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Search filters dropdown
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return DropdownFilters(
+                        searchFilterController: searchFilterController,
+                        filterEntries: filterEntries,
+                        queryParams: queryParams,
+                        maxWidth: constraints.maxWidth,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  TextFieldSearchWidget(
+                    searchController: searchController,
+                    onSubmitted: onSubmitted,
+                    clearSearchController: clearSearchController,
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4.0),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BookSelectionsSection extends StatelessWidget {
+  const BookSelectionsSection({
+    super.key,
+    required this.screenSizeLimit,
+    required this.bookSelections,
+    required this.currentBiblionumber,
+    required this.booksCarouselSliderController,
+    required this.baseUrl,
+    required this.onBookTap,
+    required this.onPageChanged,
+  });
+
+  final int screenSizeLimit;
+  final List<BookSelection> bookSelections;
+  final String currentBiblionumber;
+  final CarouselSliderController booksCarouselSliderController;
+  final String baseUrl;
+  final Function(BookSelection) onBookTap;
+  final Function(int) onPageChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: primaryColor,
+        child: Column(
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                    ? MediaQuery.of(context).size.width
+                    : (MediaQuery.of(context).size.width / 3) * 2,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 16.0,
+                  left: 16.0,
+                  right: 16.0,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    AppLocalizations.of(context)!.bookSelections,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            BooksCarouselSliderWidget(
+              screenSizeLimit: screenSizeLimit,
+              onPressedCallback: onPageChanged,
+              booksCarouselSliderController: booksCarouselSliderController,
+              items: [
+                for (var book in bookSelections)
+                  GestureDetector(
+                    onTap: () => onBookTap(book),
+                    child: CarouselBookCard(
+                      title: book.name,
+                      imageUrl:
+                          '$baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LibraryServicesSection extends StatelessWidget {
+  const LibraryServicesSection({
+    super.key,
+    required this.screenSizeLimit,
+    required this.libraryServicesController,
+    required this.enabledHomeLibrariesEntries,
+    required this.onSelectLibraryService,
+    required this.librariesServices,
+    required this.selectedLibraryServices,
+    required this.servicesCarouselSliderController,
+  });
+
+  final int screenSizeLimit;
+  final TextEditingController libraryServicesController;
+  final List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries;
+  final Function(String) onSelectLibraryService;
+  final Map<String, List<LibraryService>> librariesServices;
+  final String selectedLibraryServices;
+  final CarouselSliderController servicesCarouselSliderController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                  ? MediaQuery.of(context).size.width
+                  : (MediaQuery.of(context).size.width / 3) * 2,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      AppLocalizations.of(context)!.libraryServices,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  LayoutBuilder(
+                    builder: (context, constraints) =>
+                        DropdownLibrariesServicesWidget(
+                      onSelected: onSelectLibraryService,
+                      libraryServicesController: libraryServicesController,
+                      enabledHomeLibrariesEntries: enabledHomeLibrariesEntries,
+                      maxWidth: constraints.maxWidth,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ServicesCarouselSliderWidget(
+            servicesCarouselSliderController: servicesCarouselSliderController,
+            items: [
+              for (var service in librariesServices[selectedLibraryServices] ?? [])
+                GestureDetector(
+                  onTap: () {
+                    servicesCarouselSliderController.animateToPage(
+                      librariesServices[selectedLibraryServices]!
+                          .indexOf(service),
+                    );
+                  },
+                  child: CarouselServiceCard(
+                    title: service.name,
+                    imageUrl: service.imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 32.0),
+        ],
       ),
     );
   }

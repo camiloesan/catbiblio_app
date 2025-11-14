@@ -27,9 +27,11 @@ abstract class HomeController extends State<HomeView> {
   String currentBookName = '';
   String currentBiblionumber = '';
 
-  /// list of filter dropdown entries with internationalized labels
+  /// cached filter dropdown entries with internationalized labels
+  List<DropdownMenuEntry<String>>? _cachedFilterEntries;
+  
   List<DropdownMenuEntry<String>> get _filterEntries {
-    return [
+    return _cachedFilterEntries ??= [
       DropdownMenuEntry(
         value: 'title',
         label: AppLocalizations.of(context)!.titleEntry,
@@ -74,17 +76,28 @@ abstract class HomeController extends State<HomeView> {
 
   /// fetches necessary data for home view
   ///
-  /// Some data is awaited to ensure proper loading sequence
+  /// Optimized to run independent operations in parallel
   Future<void> fetchData() async {
-    fetchBookSelections();
-
-    await fetchLibraries();
-
-    fetchItemTypes();
-
-    await fetchLibraryServices();
-
-    buildLibraryServicesDropdown();
+    try {
+      // Start book selections immediately (independent)
+      final bookSelectionsFuture = fetchBookSelections();
+      
+      // Fetch libraries first (needed for services dropdown)
+      await fetchLibraries();
+      
+      // Start item types and library services in parallel
+      await Future.wait([
+        fetchItemTypes(),
+        fetchLibraryServices(),
+        bookSelectionsFuture,
+      ]);
+      
+      // Build dropdown after library services are loaded
+      buildLibraryServicesDropdown();
+    } catch (e) {
+      debugPrint('Error in fetchData: $e');
+      // Set error states if needed
+    }
   }
 
   @override
@@ -104,6 +117,8 @@ abstract class HomeController extends State<HomeView> {
 
   void changeLocale(Locale locale) {
     widget.onLocaleChange(locale);
+    // Clear cached filter entries to rebuild with new locale
+    _cachedFilterEntries = null;
     setState(() {
       _itemTypeController.clear();
       _libraryController.clear();
@@ -165,31 +180,31 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchLibraries() async {
     try {
       final libraries = await LibrariesService.getLibraries();
-      isLibrariesLoading = false;
-      _librariesFuture = Future.value(libraries);
-
+      
       if (mounted) {
-        Provider.of<GlobalProvider>(
-          context,
-          listen: false,
-        ).setGlobalLibraryEntries(
-          libraries.map((library) {
-            return DropdownMenuEntry(
-              value: library.libraryId,
-              label: library.name,
-            );
-          }).toList(),
-        );
-
+        final libraryEntries = libraries.map((library) {
+          return DropdownMenuEntry(
+            value: library.libraryId,
+            label: library.name,
+          );
+        }).toList();
+        
+        final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
+        globalProvider.setGlobalLibraryEntries(libraryEntries);
+        
         setState(() {
-          _libraryEntries = Provider.of<GlobalProvider>(
-            context,
-            listen: false,
-          ).globalLibraryEntries;
+          isLibrariesLoading = false;
+          _librariesFuture = Future.value(libraries);
+          _libraryEntries = libraryEntries;
         });
       }
     } catch (e) {
-      debugPrint('Error fetching data: $e');
+      debugPrint('Error fetching libraries: $e');
+      if (mounted) {
+        setState(() {
+          isLibrariesLoading = false;
+        });
+      }
     }
   }
 
@@ -197,30 +212,30 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchItemTypes() async {
     try {
       final itemTypes = await ItemTypesService.getItemTypes();
-      isItemTypesLoading = false;
-
+      
       if (mounted) {
-        Provider.of<GlobalProvider>(
-          context,
-          listen: false,
-        ).setGlobalItemTypeEntries(
-          itemTypes.map((itemType) {
-            return DropdownMenuEntry(
-              value: itemType.itemTypeId,
-              label: itemType.description,
-            );
-          }).toList(),
-        );
+        final itemTypeEntries = itemTypes.map((itemType) {
+          return DropdownMenuEntry(
+            value: itemType.itemTypeId,
+            label: itemType.description,
+          );
+        }).toList();
+        
+        final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
+        globalProvider.setGlobalItemTypeEntries(itemTypeEntries);
+        
+        setState(() {
+          isItemTypesLoading = false;
+          _itemTypeEntries = itemTypeEntries;
+        });
       }
-
-      setState(() {
-        _itemTypeEntries = Provider.of<GlobalProvider>(
-          context,
-          listen: false,
-        ).globalItemTypeEntries;
-      });
     } catch (e) {
       debugPrint('Error fetching item types: $e');
+      if (mounted) {
+        setState(() {
+          isItemTypesLoading = false;
+        });
+      }
     }
   }
 
@@ -228,32 +243,50 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchLibraryServices() async {
     try {
       final libraryServices = await LibraryServices.getLibraryCodeServicesMap();
-      isLibraryServicesLoading = false;
-
-      setState(() {
-        _librariesServices = libraryServices;
-      });
+      
+      if (mounted) {
+        setState(() {
+          isLibraryServicesLoading = false;
+          isLibraryServicesError = false;
+          _librariesServices = libraryServices;
+        });
+      }
     } catch (e) {
-      debugPrint('Error fetching config: $e');
-      setState(() {
-        isLibraryServicesError = true;
-      });
+      debugPrint('Error fetching library services: $e');
+      if (mounted) {
+        setState(() {
+          isLibraryServicesLoading = false;
+          isLibraryServicesError = true;
+        });
+      }
     }
   }
 
   /// fetches book selections for home view carousel
-  void fetchBookSelections() async {
+  Future<void> fetchBookSelections() async {
     try {
-      _bookSelections = await BookSelectionsService.getBookSelections();
-      isBookSelectionsLoading = false;
+      final bookSelections = await BookSelectionsService.getBookSelections();
+      
+      if (mounted) {
+        setState(() {
+          _bookSelections = bookSelections;
+          isBookSelectionsLoading = false;
+          isBookSelectionsError = false;
+          currentBiblionumber = bookSelections.isNotEmpty
+              ? bookSelections[0].biblionumber
+              : '';
+          currentBookName = bookSelections.isNotEmpty ? bookSelections[0].name : '';
+        });
+      }
     } catch (e) {
       debugPrint('Error fetching book selections: $e');
-      isBookSelectionsError = true;
+      if (mounted) {
+        setState(() {
+          isBookSelectionsLoading = false;
+          isBookSelectionsError = true;
+        });
+      }
     }
-    currentBiblionumber = _bookSelections.isNotEmpty
-        ? _bookSelections[0].biblionumber
-        : '';
-    currentBookName = _bookSelections.isNotEmpty ? _bookSelections[0].name : '';
   }
 
   /// builds the library services dropdown based on previously fetched libraries
