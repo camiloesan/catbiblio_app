@@ -190,7 +190,8 @@ abstract class BookController extends State<BookView> {
           '&classification=${Uri.encodeComponent(params.classification)}'
           '&collection=${Uri.encodeComponent(params.collection)}'
           '&collectionCode=${Uri.encodeComponent(params.collectionCode)}'
-          '&holdingLibrary=${Uri.encodeComponent(params.holdingLibrary)}';
+          '&holdingLibrary=${Uri.encodeComponent(params.holdingLibrary)}'
+          '&libraryCode=${Uri.encodeComponent(params.libraryCode)}';
 
       context.go('/finder/$queryParameters');
       return;
