@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'Subject'**
   String get subjectEntry;
 
+  /// General entry in search by dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get generalEntry;
+
   /// ISBN entry in search by dropdown
   ///
   /// In en, this message translates to:

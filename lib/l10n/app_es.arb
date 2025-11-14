@@ -16,6 +16,7 @@
     "titleEntry": "Título",
     "authorEntry": "Autor",
     "subjectEntry": "Materia",
+    "generalEntry": "General",
     "isbnEntry": "ISBN",
     "issnEntry": "ISSN",
     "byAuthor": "Por",

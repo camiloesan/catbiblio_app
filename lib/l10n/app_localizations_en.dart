@@ -57,6 +57,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subjectEntry => 'Subject';
 
   @override
+  String get generalEntry => 'General';
+
+  @override
   String get isbnEntry => 'ISBN';
 
   @override

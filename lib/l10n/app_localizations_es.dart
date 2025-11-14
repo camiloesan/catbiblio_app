@@ -57,6 +57,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get subjectEntry => 'Materia';
 
   @override
+  String get generalEntry => 'General';
+
+  @override
   String get isbnEntry => 'ISBN';
 
   @override

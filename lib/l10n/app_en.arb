@@ -64,6 +64,10 @@
   "@subjectEntry": {
     "description": "Subject entry in search by dropdown"
   },
+  "generalEntry": "General",
+  "@generalEntry": {
+    "description": "General entry in search by dropdown"
+  },
   "isbnEntry": "ISBN",
   "@isbnEntry": {
     "description": "ISBN entry in search by dropdown"
