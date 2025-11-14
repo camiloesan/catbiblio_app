@@ -43,6 +43,10 @@ abstract class HomeController extends State<HomeView> {
         label: AppLocalizations.of(context)!.subjectEntry,
       ),
       DropdownMenuEntry(
+        value: 'general',
+        label: AppLocalizations.of(context)!.generalEntry,
+      ),
+      DropdownMenuEntry(
         value: 'isbn',
         label: AppLocalizations.of(context)!.isbnEntry,
       ),
@@ -69,7 +73,7 @@ abstract class HomeController extends State<HomeView> {
   }
 
   /// fetches necessary data for home view
-  /// 
+  ///
   /// Some data is awaited to ensure proper loading sequence
   Future<void> fetchData() async {
     fetchBookSelections();

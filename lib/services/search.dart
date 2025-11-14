@@ -268,6 +268,7 @@ class SearchService {
     try {
       queryParameters =
           <String, dynamic>{
+            'q': params.searchBy == 'general' ? params.searchQuery : null,
             'title': params.searchBy == 'title' ? params.searchQuery : null,
             'author': params.searchBy == 'author' ? params.searchQuery : null,
             'subject': params.searchBy == 'subject' ? params.searchQuery : null,

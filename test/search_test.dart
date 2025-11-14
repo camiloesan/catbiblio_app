@@ -14,6 +14,36 @@ void main() {
 
   group('SruService requests', () {
     debugPrint('Testing SruService searchBooks method');
+    // general search tests
+    test('test searchBooks: general search and branch', () async {
+      final queryParams = QueryParams(
+        library: 'USBI-X',
+        searchBy: 'general',
+        searchQuery: 'harry potter',
+      );
+
+      final response = await SearchService.searchBooks(queryParams);
+      //debugPrint("Response: ${response.toString()}");
+
+      expect(response, isA<SearchResult>());
+      expect(response.books, isA<List<BookPreview>>());
+      expect(response.totalRecords, isA<int>());
+    });
+    test('test searchBooks: general search and no branch', () async {
+      final queryParams = QueryParams(
+        library: 'all',
+        searchBy: 'general',
+        searchQuery: 'harry potter',
+      );
+
+      final response = await SearchService.searchBooks(queryParams);
+      //debugPrint(" Response: $response");
+
+      expect(response, isA<SearchResult>());
+      expect(response.books, isA<List<BookPreview>>());
+      expect(response.totalRecords, isA<int>());
+    });
+
     // title search tests
     test('test searchBooks: title and branch', () async {
       final queryParams = QueryParams(
@@ -422,11 +452,19 @@ void main() {
 
     // Test with different valid search types
     test('test searchBooks: verify all search types work', () async {
-      final searchTypes = ['title', 'author', 'subject', 'isbn', 'issn'];
+      final searchTypes = [
+        'title',
+        'author',
+        'subject',
+        'general',
+        'isbn',
+        'issn',
+      ];
       final searchQueries = [
         'test',
         'author test',
         'subject test',
+        'general test',
         '1234567890',
         '1234-5678',
       ];
@@ -448,7 +486,33 @@ void main() {
   });
   group('SruService helper methods', () {
     debugPrint('Testing SruService helper methods');
-    test('test buildQueryParameters', () {
+    test('test buildQueryParameters general filter and branch', () {
+      final params = QueryParams(
+        library: 'USBI-X',
+        searchBy: 'general',
+        searchQuery: 'sistemas operativos',
+      );
+
+      final expectedParams = {'q': 'sistemas operativos', 'branch': 'USBI-X'};
+
+      final queryParameters = SearchService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+    test('test buildQueryParameters general filter and no branch', () {
+      final params = QueryParams(
+        library: 'all',
+        searchBy: 'general',
+        searchQuery: 'sistemas operativos',
+      );
+
+      final expectedParams = {'q': 'sistemas operativos'};
+
+      final queryParameters = SearchService.buildQueryParameters(params);
+
+      expect(queryParameters, equals(expectedParams));
+    });
+    test('test buildQueryParameters title and branch', () {
       final params = QueryParams(
         library: 'USBI-X',
         searchBy: 'title',
