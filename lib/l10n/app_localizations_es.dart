@@ -54,7 +54,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get authorEntry => 'Autor';
 
   @override
-  String get subjectEntry => 'Materia';
+  String get subjectEntry => 'Tema';
 
   @override
   String get generalEntry => 'General';
