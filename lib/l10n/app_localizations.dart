@@ -242,10 +242,10 @@ abstract class AppLocalizations {
   /// **'Details'**
   String get detailsTitle;
 
-  /// Snackbar message shown when the language is changed to Spanish
+  /// Snackbar message shown when the language is changed to English
   ///
   /// In en, this message translates to:
-  /// **'Idioma cambiado a Español'**
+  /// **'Language changed to English'**
   String get languageChanged;
 
   /// Label for total number of search results

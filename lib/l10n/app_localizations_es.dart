@@ -81,7 +81,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get detailsTitle => 'Detalles';
 
   @override
-  String get languageChanged => 'Language changed to English';
+  String get languageChanged => 'Idioma cambiado a Español';
 
   @override
   String get totalResults => 'coincidencias';

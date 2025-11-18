@@ -96,9 +96,9 @@
   "@detailsTitle": {
     "description": "Details title in book view"
   },
-  "languageChanged": "Idioma cambiado a Español",
+  "languageChanged": "Language changed to English",
   "@languageChanged": {
-    "description": "Snackbar message shown when the language is changed to Spanish"
+    "description": "Snackbar message shown when the language is changed to English"
   },
   "totalResults": "results",
   "@totalResults": {
