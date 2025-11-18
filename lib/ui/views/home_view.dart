@@ -1,7 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:catbiblio_app/l10n/app_localizations.dart';
 import 'package:catbiblio_app/models/controllers_data.dart';
 import 'package:catbiblio_app/models/global_provider.dart';
+import 'package:catbiblio_app/models/image_model.dart';
 import 'package:catbiblio_app/models/library.dart';
 import 'package:catbiblio_app/models/query_params.dart';
 import 'package:catbiblio_app/services/book_selections.dart';
@@ -71,114 +71,298 @@ class _HomeViewState extends HomeController {
         librariesFuture: _librariesFuture,
       ),
       drawerEnableOpenDragGesture: true,
-      body: CustomScrollView(
-        slivers: [
-          // search section
-          SliverToBoxAdapter(
-            child: SearchSection(
-              screenSizeLimit: screenSizeLimit,
-              itemTypeController: _itemTypeController,
-              itemTypeEntries: itemTypeEntriesPlusAll,
-              isItemTypesLoading: isItemTypesLoading,
-              libraryController: _libraryController,
-              libraryEntries: libraryEntriesPlusAll,
-              isLibrariesLoading: isLibrariesLoading,
-              searchFilterController: _searchFilterController,
-              filterEntries: _filterEntries,
-              queryParams: _queryParams,
-              searchController: _searchController,
-              onSubmitted: (value) => onSubmitAction(),
-              clearSearchController: () => clearSearchController(),
-            ),
-          ),
-          // Book selections section
-          BookSelectionsSection(
+      body: ListView(
+        children: [
+          SearchSection(
             screenSizeLimit: screenSizeLimit,
-            bookSelections: _bookSelections,
-            currentBiblionumber: currentBiblionumber,
-            booksCarouselSliderController: _booksCarouselSliderController,
-            baseUrl: _baseUrl,
-            onBookTap: (book) {
-              if (currentBiblionumber != book.biblionumber) {
-                _booksCarouselSliderController.animateToPage(
-                  _bookSelections.indexOf(book),
-                );
-                return;
-              }
-              if (kIsWeb) {
-                context.go('/book-details/${book.biblionumber}');
-                return;
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      BookView(biblioNumber: book.biblionumber),
-                ),
-              );
-            },
-            onPageChanged: (index) {
-              setState(() {
-                currentBiblionumber = _bookSelections[index].biblionumber;
-              });
-            },
+            itemTypeController: _itemTypeController,
+            itemTypeEntries: itemTypeEntriesPlusAll,
+            isItemTypesLoading: isItemTypesLoading,
+            libraryController: _libraryController,
+            libraryEntries: libraryEntriesPlusAll,
+            isLibrariesLoading: isLibrariesLoading,
+            searchFilterController: _searchFilterController,
+            filterEntries: _filterEntries,
+            queryParams: _queryParams,
+            searchController: _searchController,
+            onSubmitted: (value) => onSubmitAction(),
+            clearSearchController: () => clearSearchController(),
           ),
-          if (isLibraryServicesLoading)
-            const SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: CircularProgressIndicator(color: primaryColor),
-                ),
-              ),
-            ),
-          if (isLibraryServicesError && !isLibraryServicesLoading)
-            // Book selections error message
-            SliverToBoxAdapter(
+          SizedBox(height: 16.0),
+          Container(
+            decoration: BoxDecoration(color: primaryColor),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Column(
                 children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Text(
-                        AppLocalizations.of(context)!.couldntLoadBookSelections,
-                        textAlign: TextAlign.center,
-                      ),
+                  Text(
+                    AppLocalizations.of(context)!.bookSelections,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const Divider(),
+                  SizedBox(height: 16.0),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height / 2,
+                    ),
+                    child: CarouselView.weighted(
+                      flexWeights: const [2, 5, 2],
+                      scrollDirection: Axis.horizontal,
+                      itemSnapping: true,
+                      elevation: 2.0,
+                      controller: null,
+                      enableSplash: true,
+                      onTap: (index) {
+                        final bookSelection = _bookSelections[index];
+                        if (currentBiblionumber != bookSelection.biblionumber) {
+                          // _booksCarouselSliderController.animateToPage(
+                          //   _bookSelections.indexOf(bookSelection),
+                          // );
+                          setState(() {
+                            currentBiblionumber = bookSelection.biblionumber;
+                          });
+                          return;
+                        }
+                        if (kIsWeb) {
+                          context.go('/book-details/${bookSelection.biblionumber}');
+                          return;
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BookView(biblioNumber: bookSelection.biblionumber),
+                          ),
+                        );
+                      },
+                      children: _bookSelections.map((bookSelection) {
+                        return HeroLayoutCard(
+                          fit: BoxFit.fitHeight,
+                          imageModel: ImageModel(
+                            bookSelection.name,
+                            '$_baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${bookSelection.biblionumber}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ],
               ),
             ),
-          if (isLibraryServicesLoading == false &&
-              isLibraryServicesError == false)
-            // Library services section
-            LibraryServicesSection(
-              screenSizeLimit: screenSizeLimit,
+          ),
+          SizedBox(height: 16.0),
+          Center(
+            child: Text(
+              AppLocalizations.of(context)!.libraryServices,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Center(
+            child: DropdownLibrariesServicesWidget(
               libraryServicesController: _libraryServicesController,
               enabledHomeLibrariesEntries: _enabledHomeLibrariesEntries,
-              onSelectLibraryService: onSelectLibraryService,
-              librariesServices: _librariesServices,
-              selectedLibraryServices: selectedLibraryServices,
-              servicesCarouselSliderController: _servicesCarouselSliderController,
+              maxWidth: MediaQuery.of(context).size.width * 0.9,
+              onSelected: onSelectLibraryService,
             ),
-          if (isLibraryServicesError && !isLibraryServicesLoading)
-            // Library services error message
-            SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.couldntLoadHomeLibrariesServices,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+          ),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height / 2,
             ),
+            child: CarouselView.weighted(
+              flexWeights: const [1, 7, 1],
+              scrollDirection: Axis.horizontal,
+              itemSnapping: true,
+              elevation: 2.0,
+              controller: null,
+              enableSplash: false,
+              children: _librariesServices[selectedLibraryServices] != null
+                  ? _librariesServices[selectedLibraryServices]!.map((
+                      libraryService,
+                    ) {
+                      return HeroLayoutCard(
+                        fit: BoxFit.cover,
+                        imageModel: ImageModel(
+                          libraryService.name,
+                          libraryService.imageUrl,
+                        ),
+                      );
+                    }).toList()
+                  : [Container()],
+            ),
+          ),
+          SizedBox(height: 32.0),
         ],
       ),
+
+      // body: CustomScrollView(
+      //   slivers: [
+      //     // search section
+      //     SliverToBoxAdapter(
+      //       child: SearchSection(
+      //         screenSizeLimit: screenSizeLimit,
+      //         itemTypeController: _itemTypeController,
+      //         itemTypeEntries: itemTypeEntriesPlusAll,
+      //         isItemTypesLoading: isItemTypesLoading,
+      //         libraryController: _libraryController,
+      //         libraryEntries: libraryEntriesPlusAll,
+      //         isLibrariesLoading: isLibrariesLoading,
+      //         searchFilterController: _searchFilterController,
+      //         filterEntries: _filterEntries,
+      //         queryParams: _queryParams,
+      //         searchController: _searchController,
+      //         onSubmitted: (value) => onSubmitAction(),
+      //         clearSearchController: () => clearSearchController(),
+      //       ),
+      //     ),
+      // Book selections section
+      // BookSelectionsSection(
+      //   screenSizeLimit: screenSizeLimit,
+      //   bookSelections: _bookSelections,
+      //   currentBiblionumber: currentBiblionumber,
+      //   booksCarouselSliderController: _booksCarouselSliderController,
+      //   baseUrl: _baseUrl,
+      //   onBookTap: (book) {
+      //     if (currentBiblionumber != book.biblionumber) {
+      //       _booksCarouselSliderController.animateToPage(
+      //         _bookSelections.indexOf(book),
+      //       );
+      //       return;
+      //     }
+      //     if (kIsWeb) {
+      //       context.go('/book-details/${book.biblionumber}');
+      //       return;
+      //     }
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) =>
+      //             BookView(biblioNumber: book.biblionumber),
+      //       ),
+      //     );
+      //   },
+      //   onPageChanged: (index) {
+      //     setState(() {
+      //       currentBiblionumber = _bookSelections[index].biblionumber;
+      //     });
+      //   },
+      // ),
+      // if (isLibraryServicesLoading)
+      //   const SliverToBoxAdapter(
+      //     child: Center(
+      //       child: Padding(
+      //         padding: EdgeInsets.all(32.0),
+      //         child: CircularProgressIndicator(color: primaryColor),
+      //       ),
+      //     ),
+      //   ),
+      // if (isLibraryServicesError && !isLibraryServicesLoading)
+      //   // Book selections error message
+      //   SliverToBoxAdapter(
+      //     child: Column(
+      //       children: [
+      //         Center(
+      //           child: Padding(
+      //             padding: const EdgeInsets.all(32.0),
+      //             child: Text(
+      //               AppLocalizations.of(context)!.couldntLoadBookSelections,
+      //               textAlign: TextAlign.center,
+      //             ),
+      //           ),
+      //         ),
+      //         const Divider(),
+      //       ],
+      //     ),
+      //   ),
+      // if (isLibraryServicesLoading == false &&
+      //     isLibraryServicesError == false)
+      //   // Library services section
+      //   LibraryServicesSection(
+      //     screenSizeLimit: screenSizeLimit,
+      //     libraryServicesController: _libraryServicesController,
+      //     enabledHomeLibrariesEntries: _enabledHomeLibrariesEntries,
+      //     onSelectLibraryService: onSelectLibraryService,
+      //     librariesServices: _librariesServices,
+      //     selectedLibraryServices: selectedLibraryServices,
+      //     servicesCarouselSliderController: _servicesCarouselSliderController,
+      //   ),
+      // if (isLibraryServicesError && !isLibraryServicesLoading)
+      //   // Library services error message
+      //   SliverToBoxAdapter(
+      //     child: Center(
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(32.0),
+      //         child: Text(
+      //           AppLocalizations.of(
+      //             context,
+      //           )!.couldntLoadHomeLibrariesServices,
+      //           textAlign: TextAlign.center,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ],
+    );
+  }
+}
+
+class HeroLayoutCard extends StatelessWidget {
+  const HeroLayoutCard({
+    super.key,
+    required this.imageModel,
+    required this.fit,
+  });
+
+  final BoxFit fit;
+  final ImageModel imageModel;
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.sizeOf(context).width;
+    return Stack(
+      alignment: AlignmentDirectional.bottomStart,
+      children: <Widget>[
+        ClipRect(
+          child: OverflowBox(
+            maxWidth: width * 2,
+            minWidth: width,
+            child: CachedNetworkImage(
+              imageUrl: imageModel.url,
+              fit: fit,
+              width: double.infinity,
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(Icons.error_outline, color: primaryColor, size: 40),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          color: const Color.fromARGB(255, 0, 153, 50).withAlpha(200),
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  imageModel.title,
+                  overflow: TextOverflow.clip,
+                  softWrap: false,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -302,7 +486,9 @@ class DropdownLibrariesServicesWidget extends StatelessWidget {
       onSelected: (value) => onSelected(value!),
       width: maxWidth,
       controller: libraryServicesController,
-      inputDecorationTheme: const InputDecorationTheme(border: InputBorder.none),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: InputBorder.none,
+      ),
       dropdownMenuEntries: enabledHomeLibrariesEntries,
       enableSearch: false,
       enableFilter: false,
@@ -379,7 +565,7 @@ class DropdownLibrariesWidget extends StatelessWidget {
     required this.queryParams,
     required this.maxWidth,
   });
-  
+
   final TextEditingController libraryController;
   final List<DropdownMenuEntry<String>> libraryEntries;
   final QueryParams queryParams;
@@ -410,7 +596,7 @@ class DropdownItemTypesWidget extends StatelessWidget {
     required this.queryParams,
     required this.maxWidth,
   });
-  
+
   final TextEditingController itemTypeController;
   final List<DropdownMenuEntry<String>> itemTypeEntries;
   final QueryParams queryParams;
@@ -433,208 +619,208 @@ class DropdownItemTypesWidget extends StatelessWidget {
   }
 }
 
-class CarouselBookCard extends StatelessWidget {
-  const CarouselBookCard({
-    super.key,
-    required this.title,
-    required this.imageUrl,
-    required this.fit,
-  });
+// class CarouselBookCard extends StatelessWidget {
+//   const CarouselBookCard({
+//     super.key,
+//     required this.title,
+//     required this.imageUrl,
+//     required this.fit,
+//   });
 
-  final String title;
-  final String imageUrl;
-  final BoxFit fit;
+//   final String title;
+//   final String imageUrl;
+//   final BoxFit fit;
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color.fromARGB(255, 0, 153, 50),
-      margin: const EdgeInsets.only(bottom: 32.0, left: 4.0, right: 4.0, top: 16.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      elevation: 16.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: fit,
-                width: double.infinity,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => const Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       color: const Color.fromARGB(255, 0, 153, 50),
+//       margin: const EdgeInsets.only(bottom: 32.0, left: 4.0, right: 4.0, top: 16.0),
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+//       elevation: 16.0,
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           Expanded(
+//             child: ClipRRect(
+//               borderRadius: const BorderRadius.only(
+//                 topLeft: Radius.circular(12.0),
+//                 topRight: Radius.circular(12.0),
+//               ),
+//               child: CachedNetworkImage(
+//                 imageUrl: imageUrl,
+//                 fit: fit,
+//                 width: double.infinity,
+//                 placeholder: (context, url) =>
+//                     const Center(child: CircularProgressIndicator()),
+//                 errorWidget: (context, url, error) => const Center(
+//                   child: Icon(
+//                     Icons.error_outline,
+//                     color: Colors.white,
+//                     size: 40,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Text(
+//               title,
+//               textAlign: TextAlign.center,
+//               style: const TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.w500,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class BooksCarouselSliderWidget extends StatelessWidget {
-  const BooksCarouselSliderWidget({
-    super.key,
-    required this.booksCarouselSliderController,
-    required this.items,
-    required this.screenSizeLimit,
-    required this.onPressedCallback,
-  });
+// class BooksCarouselSliderWidget extends StatelessWidget {
+//   const BooksCarouselSliderWidget({
+//     super.key,
+//     required this.booksCarouselSliderController,
+//     required this.items,
+//     required this.screenSizeLimit,
+//     required this.onPressedCallback,
+//   });
 
-  final CarouselSliderController booksCarouselSliderController;
-  final List<Widget> items;
-  final int screenSizeLimit;
-  final Function(int) onPressedCallback;
+//   final CarouselSliderController booksCarouselSliderController;
+//   final List<Widget> items;
+//   final int screenSizeLimit;
+//   final Function(int) onPressedCallback;
 
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      items: items,
-      carouselController: booksCarouselSliderController,
-      options: CarouselOptions(
-        onPageChanged: (index, reason) {
-          onPressedCallback(index);
-        },
-        scrollPhysics: kIsWeb
-            ? const NeverScrollableScrollPhysics()
-            : const AlwaysScrollableScrollPhysics(),
-        disableCenter: true,
-        height: 400.0,
-        enlargeCenterPage: true,
-        autoPlay: true,
-        enableInfiniteScroll: true,
-        autoPlayInterval: const Duration(seconds: 6),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeFactor: 0.3,
-        aspectRatio: 2 / 4,
-        viewportFraction: MediaQuery.of(context).size.width < screenSizeLimit
-            ? 0.60
-            : 0.20,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CarouselSlider(
+//       items: items,
+//       carouselController: booksCarouselSliderController,
+//       options: CarouselOptions(
+//         onPageChanged: (index, reason) {
+//           onPressedCallback(index);
+//         },
+//         scrollPhysics: kIsWeb
+//             ? const NeverScrollableScrollPhysics()
+//             : const AlwaysScrollableScrollPhysics(),
+//         disableCenter: true,
+//         height: 400.0,
+//         enlargeCenterPage: true,
+//         autoPlay: true,
+//         enableInfiniteScroll: true,
+//         autoPlayInterval: const Duration(seconds: 6),
+//         autoPlayAnimationDuration: const Duration(milliseconds: 800),
+//         autoPlayCurve: Curves.fastOutSlowIn,
+//         enlargeFactor: 0.3,
+//         aspectRatio: 2 / 4,
+//         viewportFraction: MediaQuery.of(context).size.width < screenSizeLimit
+//             ? 0.60
+//             : 0.20,
+//       ),
+//     );
+//   }
+// }
 
-class CarouselServiceCard extends StatelessWidget {
-  const CarouselServiceCard({
-    super.key,
-    required this.title,
-    required this.imageUrl,
-    required this.fit,
-  });
+// class CarouselServiceCard extends StatelessWidget {
+//   const CarouselServiceCard({
+//     super.key,
+//     required this.title,
+//     required this.imageUrl,
+//     required this.fit,
+//   });
 
-  final String title;
-  final String imageUrl;
-  final BoxFit fit;
+//   final String title;
+//   final String imageUrl;
+//   final BoxFit fit;
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: primaryColor,
-      margin: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 32.0, top: 8.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      elevation: 16.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: fit,
-                width: double.infinity,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => const Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       color: primaryColor,
+//       margin: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 32.0, top: 8.0),
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+//       elevation: 16.0,
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           Expanded(
+//             child: ClipRRect(
+//               borderRadius: const BorderRadius.only(
+//                 topLeft: Radius.circular(12.0),
+//                 topRight: Radius.circular(12.0),
+//               ),
+//               child: CachedNetworkImage(
+//                 imageUrl: imageUrl,
+//                 fit: fit,
+//                 width: double.infinity,
+//                 placeholder: (context, url) =>
+//                     const Center(child: CircularProgressIndicator()),
+//                 errorWidget: (context, url, error) => const Center(
+//                   child: Icon(
+//                     Icons.error_outline,
+//                     color: Colors.white,
+//                     size: 40,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Text(
+//               title,
+//               textAlign: TextAlign.center,
+//               style: const TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.w500,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class ServicesCarouselSliderWidget extends StatelessWidget {
-  const ServicesCarouselSliderWidget({
-    super.key,
-    required this.servicesCarouselSliderController,
-    required this.items,
-  });
+// class ServicesCarouselSliderWidget extends StatelessWidget {
+//   const ServicesCarouselSliderWidget({
+//     super.key,
+//     required this.servicesCarouselSliderController,
+//     required this.items,
+//   });
 
-  final CarouselSliderController servicesCarouselSliderController;
-  final List<Widget> items;
+//   final CarouselSliderController servicesCarouselSliderController;
+//   final List<Widget> items;
 
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      items: items,
-      carouselController: servicesCarouselSliderController,
-      options: CarouselOptions(
-        height: 500.0,
-        enlargeCenterPage: true,
-        scrollPhysics: kIsWeb
-            ? const NeverScrollableScrollPhysics()
-            : const AlwaysScrollableScrollPhysics(),
-        autoPlay: true,
-        enableInfiniteScroll: true,
-        autoPlayInterval: const Duration(seconds: 6),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CarouselSlider(
+//       items: items,
+//       carouselController: servicesCarouselSliderController,
+//       options: CarouselOptions(
+//         height: 500.0,
+//         enlargeCenterPage: true,
+//         scrollPhysics: kIsWeb
+//             ? const NeverScrollableScrollPhysics()
+//             : const AlwaysScrollableScrollPhysics(),
+//         autoPlay: true,
+//         enableInfiniteScroll: true,
+//         autoPlayInterval: const Duration(seconds: 6),
+//         autoPlayAnimationDuration: const Duration(milliseconds: 800),
+//         autoPlayCurve: Curves.fastOutSlowIn,
+//         aspectRatio: 16 / 9,
+//         viewportFraction: 0.8,
+//       ),
+//     );
+//   }
+// }
 
 class SearchSection extends StatelessWidget {
   const SearchSection({
@@ -745,11 +931,9 @@ class SearchSection extends StatelessWidget {
                     onSubmitted: onSubmitted,
                     clearSearchController: clearSearchController,
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
-            const SizedBox(height: 4.0),
           ],
         ),
       ),
@@ -757,164 +941,164 @@ class SearchSection extends StatelessWidget {
   }
 }
 
-class BookSelectionsSection extends StatelessWidget {
-  const BookSelectionsSection({
-    super.key,
-    required this.screenSizeLimit,
-    required this.bookSelections,
-    required this.currentBiblionumber,
-    required this.booksCarouselSliderController,
-    required this.baseUrl,
-    required this.onBookTap,
-    required this.onPageChanged,
-  });
+// class BookSelectionsSection extends StatelessWidget {
+//   const BookSelectionsSection({
+//     super.key,
+//     required this.screenSizeLimit,
+//     required this.bookSelections,
+//     required this.currentBiblionumber,
+//     required this.booksCarouselSliderController,
+//     required this.baseUrl,
+//     required this.onBookTap,
+//     required this.onPageChanged,
+//   });
 
-  final int screenSizeLimit;
-  final List<BookSelection> bookSelections;
-  final String currentBiblionumber;
-  final CarouselSliderController booksCarouselSliderController;
-  final String baseUrl;
-  final Function(BookSelection) onBookTap;
-  final Function(int) onPageChanged;
+//   final int screenSizeLimit;
+//   final List<BookSelection> bookSelections;
+//   final String currentBiblionumber;
+//   final CarouselSliderController booksCarouselSliderController;
+//   final String baseUrl;
+//   final Function(BookSelection) onBookTap;
+//   final Function(int) onPageChanged;
 
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        color: primaryColor,
-        child: Column(
-          children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
-                    ? MediaQuery.of(context).size.width
-                    : (MediaQuery.of(context).size.width / 3) * 2,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 16.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    AppLocalizations.of(context)!.bookSelections,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            BooksCarouselSliderWidget(
-              screenSizeLimit: screenSizeLimit,
-              onPressedCallback: onPageChanged,
-              booksCarouselSliderController: booksCarouselSliderController,
-              items: [
-                for (var book in bookSelections)
-                  GestureDetector(
-                    onTap: () => onBookTap(book),
-                    child: CarouselBookCard(
-                      title: book.name,
-                      imageUrl:
-                          '$baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SliverToBoxAdapter(
+//       child: Container(
+//         color: primaryColor,
+//         child: Column(
+//           children: [
+//             ConstrainedBox(
+//               constraints: BoxConstraints(
+//                 maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+//                     ? MediaQuery.of(context).size.width
+//                     : (MediaQuery.of(context).size.width / 3) * 2,
+//               ),
+//               child: Padding(
+//                 padding: const EdgeInsets.only(
+//                   top: 16.0,
+//                   left: 16.0,
+//                   right: 16.0,
+//                 ),
+//                 child: Align(
+//                   alignment: Alignment.centerLeft,
+//                   child: Text(
+//                     AppLocalizations.of(context)!.bookSelections,
+//                     style: const TextStyle(
+//                       fontSize: 20,
+//                       color: Colors.white,
+//                       fontWeight: FontWeight.w600,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             BooksCarouselSliderWidget(
+//               screenSizeLimit: screenSizeLimit,
+//               onPressedCallback: onPageChanged,
+//               booksCarouselSliderController: booksCarouselSliderController,
+//               items: [
+//                 for (var book in bookSelections)
+//                   GestureDetector(
+//                     onTap: () => onBookTap(book),
+//                     child: CarouselBookCard(
+//                       title: book.name,
+//                       imageUrl:
+//                           '$baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${book.biblionumber}',
+//                       fit: BoxFit.cover,
+//                     ),
+//                   ),
+//               ],
+//             ),
+//             const SizedBox(height: 16.0),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-class LibraryServicesSection extends StatelessWidget {
-  const LibraryServicesSection({
-    super.key,
-    required this.screenSizeLimit,
-    required this.libraryServicesController,
-    required this.enabledHomeLibrariesEntries,
-    required this.onSelectLibraryService,
-    required this.librariesServices,
-    required this.selectedLibraryServices,
-    required this.servicesCarouselSliderController,
-  });
+// class LibraryServicesSection extends StatelessWidget {
+//   const LibraryServicesSection({
+//     super.key,
+//     required this.screenSizeLimit,
+//     required this.libraryServicesController,
+//     required this.enabledHomeLibrariesEntries,
+//     required this.onSelectLibraryService,
+//     required this.librariesServices,
+//     required this.selectedLibraryServices,
+//     required this.servicesCarouselSliderController,
+//   });
 
-  final int screenSizeLimit;
-  final TextEditingController libraryServicesController;
-  final List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries;
-  final Function(String) onSelectLibraryService;
-  final Map<String, List<LibraryService>> librariesServices;
-  final String selectedLibraryServices;
-  final CarouselSliderController servicesCarouselSliderController;
+//   final int screenSizeLimit;
+//   final TextEditingController libraryServicesController;
+//   final List<DropdownMenuEntry<String>> enabledHomeLibrariesEntries;
+//   final Function(String) onSelectLibraryService;
+//   final Map<String, List<LibraryService>> librariesServices;
+//   final String selectedLibraryServices;
+//   final CarouselSliderController servicesCarouselSliderController;
 
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
-                  ? MediaQuery.of(context).size.width
-                  : (MediaQuery.of(context).size.width / 3) * 2,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      AppLocalizations.of(context)!.libraryServices,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  LayoutBuilder(
-                    builder: (context, constraints) =>
-                        DropdownLibrariesServicesWidget(
-                      onSelected: onSelectLibraryService,
-                      libraryServicesController: libraryServicesController,
-                      enabledHomeLibrariesEntries: enabledHomeLibrariesEntries,
-                      maxWidth: constraints.maxWidth,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          ServicesCarouselSliderWidget(
-            servicesCarouselSliderController: servicesCarouselSliderController,
-            items: [
-              for (var service in librariesServices[selectedLibraryServices] ?? [])
-                GestureDetector(
-                  onTap: () {
-                    servicesCarouselSliderController.animateToPage(
-                      librariesServices[selectedLibraryServices]!
-                          .indexOf(service),
-                    );
-                  },
-                  child: CarouselServiceCard(
-                    title: service.name,
-                    imageUrl: service.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 32.0),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SliverToBoxAdapter(
+//       child: Column(
+//         children: [
+//           ConstrainedBox(
+//             constraints: BoxConstraints(
+//               maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+//                   ? MediaQuery.of(context).size.width
+//                   : (MediaQuery.of(context).size.width / 3) * 2,
+//             ),
+//             child: Padding(
+//               padding: const EdgeInsets.all(16.0),
+//               child: Column(
+//                 children: [
+//                   Align(
+//                     alignment: Alignment.centerLeft,
+//                     child: Text(
+//                       AppLocalizations.of(context)!.libraryServices,
+//                       style: const TextStyle(
+//                         fontSize: 20,
+//                         fontWeight: FontWeight.w600,
+//                       ),
+//                       textAlign: TextAlign.start,
+//                     ),
+//                   ),
+//                   LayoutBuilder(
+//                     builder: (context, constraints) =>
+//                         DropdownLibrariesServicesWidget(
+//                       onSelected: onSelectLibraryService,
+//                       libraryServicesController: libraryServicesController,
+//                       enabledHomeLibrariesEntries: enabledHomeLibrariesEntries,
+//                       maxWidth: constraints.maxWidth,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           ServicesCarouselSliderWidget(
+//             servicesCarouselSliderController: servicesCarouselSliderController,
+//             items: [
+//               for (var service in librariesServices[selectedLibraryServices] ?? [])
+//                 GestureDetector(
+//                   onTap: () {
+//                     servicesCarouselSliderController.animateToPage(
+//                       librariesServices[selectedLibraryServices]!
+//                           .indexOf(service),
+//                     );
+//                   },
+//                   child: CarouselServiceCard(
+//                     title: service.name,
+//                     imageUrl: service.imageUrl,
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//             ],
+//           ),
+//           const SizedBox(height: 32.0),
+//         ],
+//       ),
+//     );
+//   }
+// }
