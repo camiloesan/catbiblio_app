@@ -17,6 +17,7 @@ import 'url_strategy_nonweb.dart'
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  /// Set URL strategy based on platform, if not set will crash on mobile
   configureAppUrlStrategy();
   await dotenv.load();
   runApp(
@@ -48,6 +49,7 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    /// Define app routes for web
     _router = GoRouter(
       initialLocation: '/',
       routes: <RouteBase>[
