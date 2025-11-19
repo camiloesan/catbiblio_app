@@ -56,7 +56,7 @@ class _MainAppState extends State<MainApp> {
         GoRoute(
           path: '/',
           builder: (BuildContext context, GoRouterState state) {
-            return HomeView(onLocaleChange: setLocale);
+            return HomeView(onLocaleChange: (locale) => setLocale(locale));
           },
         ),
         GoRoute(

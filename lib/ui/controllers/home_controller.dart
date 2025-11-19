@@ -8,8 +8,8 @@ abstract class HomeController extends State<HomeView> {
   late TextEditingController _libraryServicesController;
   late TextEditingController _itemTypeController;
   late Future<List<Library>> _librariesFuture;
-  // late CarouselSliderController _booksCarouselSliderController;
-  // late CarouselSliderController _servicesCarouselSliderController;
+  final CarouselController _booksCarouselController = CarouselController();
+  final CarouselController _servicesCarouselController = CarouselController();
   late List<DropdownMenuEntry<String>> _libraryEntries = [];
   late List<DropdownMenuEntry<String>> _itemTypeEntries = [];
   late List<DropdownMenuEntry<String>> _enabledHomeLibrariesEntries = [];
@@ -27,9 +27,14 @@ abstract class HomeController extends State<HomeView> {
   String currentBookName = '';
   String currentBiblionumber = '';
 
+  late Timer _booksCarouselTimer;
+  late Timer _servicesCarouselTimer;
+  int _currentBookIndex = 0;
+  int _currentServiceIndex = 0;
+
   /// cached filter dropdown entries with internationalized labels
   List<DropdownMenuEntry<String>>? _cachedFilterEntries;
-  
+
   List<DropdownMenuEntry<String>> get _filterEntries {
     return _cachedFilterEntries ??= [
       DropdownMenuEntry(
@@ -66,12 +71,57 @@ abstract class HomeController extends State<HomeView> {
     _libraryController = TextEditingController();
     _searchController = TextEditingController();
     _itemTypeController = TextEditingController();
-    // _booksCarouselSliderController = CarouselSliderController();
     _libraryServicesController = TextEditingController();
-    // _servicesCarouselSliderController = CarouselSliderController();
     _librariesFuture = Future.value([]);
 
     fetchData();
+
+    if (mounted && context.mounted) {
+      _booksCarouselTimer = Timer.periodic(const Duration(seconds: 4), (
+        Timer timer,
+      ) {
+        if (context.mounted && _bookSelections.isNotEmpty) {
+          if (MediaQuery.of(context).size.width < 600) {
+            _currentBookIndex = _currentBookIndex + 1;
+            if (_currentBookIndex >= _bookSelections.length - 4) {
+              _currentBookIndex = 0;
+            }
+            return;
+          } else {
+            _currentBookIndex = _currentBookIndex + 1;
+            if (_currentBookIndex >= _bookSelections.length - 4) {
+              _currentBookIndex = 0;
+            }
+          }
+
+          _booksCarouselController.animateToItem(
+            _currentBookIndex,
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+
+      _servicesCarouselTimer = Timer.periodic(const Duration(seconds: 6), (
+        Timer timer,
+      ) {
+        if (context.mounted && _enabledHomeLibrariesEntries.isNotEmpty) {
+          if (_currentServiceIndex >
+              _librariesServices[selectedLibraryServices]!.length) {
+            _currentServiceIndex = 0;
+          }
+
+          _currentServiceIndex =
+              (_currentServiceIndex + 1) %
+              _librariesServices[selectedLibraryServices]!.length;
+          _servicesCarouselController.animateToItem(
+            _currentServiceIndex,
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   /// fetches necessary data for home view
@@ -81,17 +131,17 @@ abstract class HomeController extends State<HomeView> {
     try {
       // Start book selections immediately (independent)
       final bookSelectionsFuture = fetchBookSelections();
-      
+
       // Fetch libraries first (needed for services dropdown)
       await fetchLibraries();
-      
+
       // Start item types and library services in parallel
       await Future.wait([
         fetchItemTypes(),
         fetchLibraryServices(),
         bookSelectionsFuture,
       ]);
-      
+
       // Build dropdown after library services are loaded
       buildLibraryServicesDropdown();
     } catch (e) {
@@ -108,6 +158,10 @@ abstract class HomeController extends State<HomeView> {
     _libraryServicesController.dispose();
     _itemTypeController.dispose();
     _libraryServicesController.dispose();
+    _booksCarouselController.dispose();
+    _servicesCarouselController.dispose();
+    _booksCarouselTimer.cancel();
+    _servicesCarouselTimer.cancel();
     super.dispose();
   }
 
@@ -180,7 +234,7 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchLibraries() async {
     try {
       final libraries = await LibrariesService.getLibraries();
-      
+
       if (mounted) {
         final libraryEntries = libraries.map((library) {
           return DropdownMenuEntry(
@@ -188,10 +242,13 @@ abstract class HomeController extends State<HomeView> {
             label: library.name,
           );
         }).toList();
-        
-        final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
+
+        final globalProvider = Provider.of<GlobalProvider>(
+          context,
+          listen: false,
+        );
         globalProvider.setGlobalLibraryEntries(libraryEntries);
-        
+
         setState(() {
           isLibrariesLoading = false;
           _librariesFuture = Future.value(libraries);
@@ -212,7 +269,7 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchItemTypes() async {
     try {
       final itemTypes = await ItemTypesService.getItemTypes();
-      
+
       if (mounted) {
         final itemTypeEntries = itemTypes.map((itemType) {
           return DropdownMenuEntry(
@@ -220,10 +277,13 @@ abstract class HomeController extends State<HomeView> {
             label: itemType.description,
           );
         }).toList();
-        
-        final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
+
+        final globalProvider = Provider.of<GlobalProvider>(
+          context,
+          listen: false,
+        );
         globalProvider.setGlobalItemTypeEntries(itemTypeEntries);
-        
+
         setState(() {
           isItemTypesLoading = false;
           _itemTypeEntries = itemTypeEntries;
@@ -243,7 +303,7 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchLibraryServices() async {
     try {
       final libraryServices = await LibraryServices.getLibraryCodeServicesMap();
-      
+
       if (mounted) {
         setState(() {
           isLibraryServicesLoading = false;
@@ -266,7 +326,7 @@ abstract class HomeController extends State<HomeView> {
   Future<void> fetchBookSelections() async {
     try {
       final bookSelections = await BookSelectionsService.getBookSelections();
-      
+
       if (mounted) {
         setState(() {
           _bookSelections = bookSelections;
@@ -275,7 +335,10 @@ abstract class HomeController extends State<HomeView> {
           currentBiblionumber = bookSelections.isNotEmpty
               ? bookSelections[0].biblionumber
               : '';
-          currentBookName = bookSelections.isNotEmpty ? bookSelections[0].name : '';
+          currentBookName = bookSelections.isNotEmpty
+              ? bookSelections[0].name
+              : '';
+          _currentBookIndex = 0;
         });
       }
     } catch (e) {
