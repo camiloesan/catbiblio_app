@@ -83,26 +83,23 @@ abstract class HomeController extends State<HomeView> {
       _booksCarouselTimer = Timer.periodic(const Duration(seconds: 4), (
         Timer timer,
       ) {
-        if (context.mounted && _bookSelections.isNotEmpty) {
-          if (MediaQuery.of(context).size.width < 600) {
-            _currentBookIndex = _currentBookIndex + 1;
-            if (_currentBookIndex >= _bookSelections.length - 4) {
-              _currentBookIndex = 0;
-            }
-            return;
-          } else {
-            _currentBookIndex = _currentBookIndex + 1;
-            if (_currentBookIndex >= _bookSelections.length - 4) {
-              _currentBookIndex = 0;
-            }
+        _currentBookIndex = _currentBookIndex + 1;
+        if (MediaQuery.of(context).size.width < 600) {
+          if (_currentBookIndex >= _bookSelections.length) {
+            _currentBookIndex = 0;
           }
-
-          _booksCarouselController.animateToItem(
-            _currentBookIndex,
-            duration: const Duration(milliseconds: 800),
-            curve: Curves.easeInOut,
-          );
+        } else {
+          if (_currentBookIndex >= _bookSelections.length - 4) {
+            _currentBookIndex = 0;
+          }
         }
+        print('Current Book Index: $_currentBookIndex');
+
+        _booksCarouselController.animateToItem(
+          _currentBookIndex,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
       });
 
       _servicesCarouselTimer = Timer.periodic(const Duration(seconds: 6), (
