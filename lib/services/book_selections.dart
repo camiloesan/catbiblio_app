@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
-final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class BookSelection {
   final String biblionumber;
@@ -37,7 +36,6 @@ class BookSelectionsService {
       receiveTimeout: const Duration(seconds: 30),
       headers: {
         'Accept': 'application/json;encoding=UTF-8',
-        'x-api-key': _apiKey,
       },
     );
 

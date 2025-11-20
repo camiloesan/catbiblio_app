@@ -183,10 +183,7 @@ abstract class HomeController extends State<HomeView> {
     }
 
     ControllersData controllersData = ControllersData(
-      filterController: _searchFilterController,
-      libraryController: _libraryController,
       libraryEntries: _libraryEntries,
-      itemTypeController: _itemTypeController,
       itemTypeEntries: _itemTypeEntries,
       filterEntries: _filterEntries,
     );

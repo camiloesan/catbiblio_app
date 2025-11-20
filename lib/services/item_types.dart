@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:catbiblio_app/models/item_type.dart';
 
 final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
-final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 class ItemTypesService {
   static Dio _createDio() {
@@ -19,7 +18,6 @@ class ItemTypesService {
       receiveTimeout: const Duration(seconds: 30),
       headers: {
         'Accept': 'application/json;encoding=UTF-8',
-        'x-api-key': _apiKey,
       },
     );
 

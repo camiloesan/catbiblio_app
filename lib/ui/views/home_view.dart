@@ -538,6 +538,7 @@ class DropdownItemTypesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
+      
       controller: itemTypeController,
       label: Text(AppLocalizations.of(context)!.itemType),
       enableSearch: true,

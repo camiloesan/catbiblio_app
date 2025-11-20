@@ -1,11 +1,11 @@
 part of '../views/search_view.dart';
 
 abstract class SearchController extends State<SearchView> {
-  late TextEditingController _filterController;
-  late TextEditingController _searchController;
-  late final TextEditingController _itemTypeController =
-      widget.controllersData.itemTypeController;
-  late ScrollController _scrollController;
+  final TextEditingController _filterController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _itemTypeController =
+      TextEditingController();
+  ScrollController _scrollController = ScrollController();
   late List<BookPreview> books = [];
   late final List<DropdownMenuEntry<String>> _filterEntries;
   static const int initialUpperLimit = 8;
@@ -23,11 +23,9 @@ abstract class SearchController extends State<SearchView> {
   @override
   void initState() {
     super.initState();
-    _filterController = widget.controllersData.filterController;
-    _searchController = TextEditingController();
+    _scrollController = ScrollController();
     _filterEntries = widget.controllersData.filterEntries;
     _searchController.text = widget.queryParams.searchQuery;
-    _scrollController = ScrollController();
     setMiddleSpace = setUpperLimit - 2;
 
     loadSearch();
@@ -61,6 +59,9 @@ abstract class SearchController extends State<SearchView> {
 
   @override
   void dispose() {
+    _filterController.dispose();
+    _scrollController.dispose();
+    _itemTypeController.dispose();
     _searchController.dispose();
     super.dispose();
   }

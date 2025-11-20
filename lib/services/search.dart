@@ -10,7 +10,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
 final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
-final String _apiKey = dotenv.env['HTTP_X_API_KEY'] ?? '';
 
 sealed class SruException implements Exception {
   final String message;
@@ -40,7 +39,7 @@ class SearchService {
       responseType: ResponseType.plain,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/xml', 'x-api-key': _apiKey},
+      headers: {'Accept': 'application/xml'},
     ),
   );
 
@@ -54,7 +53,6 @@ class SearchService {
       receiveTimeout: const Duration(seconds: 30),
       headers: {
         'Accept': 'application/json;encoding=UTF-8',
-        'x-api-key': _apiKey,
       },
     );
 

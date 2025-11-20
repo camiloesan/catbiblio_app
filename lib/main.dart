@@ -68,10 +68,7 @@ class _MainAppState extends State<MainApp> {
             String query = state.uri.queryParameters['query'] ?? '';
 
             ControllersData controllersData = ControllersData(
-              filterController: TextEditingController(),
-              libraryController: TextEditingController(),
               libraryEntries: [],
-              itemTypeController: TextEditingController(),
               itemTypeEntries: [],
               filterEntries: [],
             );
