@@ -190,33 +190,52 @@ class _HomeViewState extends HomeController {
               onSelected: onSelectLibraryService,
             ),
           ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 2,
-            ),
-            child: IgnorePointer(
-              ignoring: kIsWeb,
-              child: CarouselView.weighted(
-                flexWeights: const [1, 7, 1],
-                scrollDirection: Axis.horizontal,
-                itemSnapping: true,
-                controller: _servicesCarouselController,
-                enableSplash: false,
-                children:
-                    _librariesServices[selectedLibraryServices]?.map((
-                      libraryService,
-                    ) {
-                      return HeroLayoutCard(
-                        fit: BoxFit.fitWidth,
-                        imageModel: ImageModel(
-                          libraryService.name,
-                          libraryService.imageUrl,
-                        ),
-                      );
-                    }).toList() ??
-                    [],
-              ),
-            ),
+          FutureBuilder(
+            future: _librariesServicesFuture,
+            builder: (context, asyncSnapshot) {
+              if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (asyncSnapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'error',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+              
+              _librariesServices = asyncSnapshot.data ?? {};
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height / 2,
+                ),
+                child: IgnorePointer(
+                  ignoring: kIsWeb,
+                  child: CarouselView.weighted(
+                    flexWeights: const [1, 7, 1],
+                    scrollDirection: Axis.horizontal,
+                    itemSnapping: true,
+                    controller: _servicesCarouselController,
+                    enableSplash: false,
+                    children:
+                        _librariesServices[selectedLibraryServices]?.map((
+                          libraryService,
+                        ) {
+                          return HeroLayoutCard(
+                            fit: BoxFit.fitWidth,
+                            imageModel: ImageModel(
+                              libraryService.name,
+                              libraryService.imageUrl,
+                            ),
+                          );
+                        }).toList() ??
+                        [],
+                  ),
+                ),
+              );
+            }
           ),
         ],
       ),

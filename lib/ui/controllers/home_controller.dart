@@ -28,6 +28,7 @@ abstract class HomeController extends State<HomeView> {
   String currentBiblionumber = '';
 
   late Future<List<BookSelection>> _bookSelectionsFuture;
+  late Future<Map<String, List<LibraryService>>> _librariesServicesFuture;
 
   late Timer _booksCarouselTimer;
   late Timer _servicesCarouselTimer;
@@ -79,6 +80,7 @@ abstract class HomeController extends State<HomeView> {
     fetchData();
 
     _bookSelectionsFuture = BookSelectionsService.getBookSelections();
+    _librariesServicesFuture = LibraryServices.getLibraryCodeServicesMap();
 
     if (mounted && context.mounted) {
       _booksCarouselTimer = Timer.periodic(const Duration(seconds: 4), (
@@ -139,7 +141,6 @@ abstract class HomeController extends State<HomeView> {
       // Start item types and library services in parallel
       await Future.wait([
         fetchItemTypes(),
-        fetchLibraryServices(),
       ]);
 
       // Build dropdown after library services are loaded
@@ -293,29 +294,6 @@ abstract class HomeController extends State<HomeView> {
       if (mounted) {
         setState(() {
           isItemTypesLoading = false;
-        });
-      }
-    }
-  }
-
-  /// fetches library services
-  Future<void> fetchLibraryServices() async {
-    try {
-      final libraryServices = await LibraryServices.getLibraryCodeServicesMap();
-
-      if (mounted) {
-        setState(() {
-          isLibraryServicesLoading = false;
-          isLibraryServicesError = false;
-          _librariesServices = libraryServices;
-        });
-      }
-    } catch (e) {
-      debugPrint('Error fetching library services: $e');
-      if (mounted) {
-        setState(() {
-          isLibraryServicesLoading = false;
-          isLibraryServicesError = true;
         });
       }
     }
