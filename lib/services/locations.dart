@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:catbiblio_app/models/book_location.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -8,20 +9,39 @@ final String _baseUrl = dotenv.env['KOHA_SVC_URL'] ?? '';
 
 class LocationsService {
   static Dio _createDio() {
-    return Dio(
-      BaseOptions(
-        baseUrl: _baseUrl,
-        responseType: ResponseType.plain,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {
-          'Accept': 'application/json;encoding=UTF-8',
+    Dio dio = Dio();
+
+    dio.options = BaseOptions(
+      baseUrl: _baseUrl,
+      responseType: ResponseType.plain,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {'Accept': 'application/json;encoding=UTF-8'},
+    );
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
         },
       ),
     );
+
+    return dio;
   }
 
-  static Future<BookLocation> getBookLocation(String lcc, String collection, String libraryCode) async {
+  static Future<BookLocation> getBookLocation(
+    String lcc,
+    String collection,
+    String libraryCode,
+  ) async {
     final dio = _createDio();
 
     try {
@@ -34,7 +54,9 @@ class LocationsService {
         },
       );
 
-      BookLocation bookLocation = BookLocation.fromJson(json.decode(response.data));
+      BookLocation bookLocation = BookLocation.fromJson(
+        json.decode(response.data),
+      );
       return bookLocation;
     } on DioException catch (e) {
       // Log the error for debugging

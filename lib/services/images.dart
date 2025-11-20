@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -19,14 +20,31 @@ class ThumbnailResult {
 
 class ImageService {
   static Dio _createDio() {
-    return Dio(
-      BaseOptions(
-        baseUrl: '',
-        responseType: ResponseType.bytes,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 30),
+    Dio dio = Dio();
+
+    dio.options = BaseOptions(
+      baseUrl: '',
+      responseType: ResponseType.bytes,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+    );
+
+    dio.interceptors.add(
+      RetryInterceptor(
+        dio: dio,
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+        retryEvaluator: (error, _) {
+          return error.type == DioExceptionType.receiveTimeout;
+        },
       ),
     );
+
+    return dio;
   }
 
   // Source marker to indicate where the thumbnail was fetched from.

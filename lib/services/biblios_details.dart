@@ -20,15 +20,12 @@ class BibliosDetailsService {
       responseType: responseType,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {
-        'Accept': 'application/json;encoding=UTF-8',
-      },
+      headers: {'Accept': 'application/json;encoding=UTF-8'},
     );
 
     dio.interceptors.add(
       RetryInterceptor(
         dio: dio,
-        logPrint: (obj) => debugPrint('$obj (from RetryInterceptor)'),
         retries: 3,
         retryDelays: const [
           Duration(seconds: 1),
