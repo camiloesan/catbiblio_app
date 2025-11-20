@@ -214,7 +214,7 @@ class _HomeViewState extends HomeController {
                 child: IgnorePointer(
                   ignoring: kIsWeb,
                   child: CarouselView.weighted(
-                    flexWeights: const [1, 7, 1],
+                    flexWeights: const [2, 7, 2],
                     scrollDirection: Axis.horizontal,
                     itemSnapping: true,
                     controller: _servicesCarouselController,

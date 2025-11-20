@@ -35,11 +35,8 @@ abstract class HomeController extends State<HomeView> {
   int _currentBookIndex = 0;
   int _currentServiceIndex = 0;
 
-  /// cached filter dropdown entries with internationalized labels
-  List<DropdownMenuEntry<String>>? _cachedFilterEntries;
-
   List<DropdownMenuEntry<String>> get _filterEntries {
-    return _cachedFilterEntries ??= [
+    return [
       DropdownMenuEntry(
         value: 'title',
         label: AppLocalizations.of(context)!.titleEntry,
@@ -139,9 +136,7 @@ abstract class HomeController extends State<HomeView> {
       await fetchLibraries();
 
       // Start item types and library services in parallel
-      await Future.wait([
-        fetchItemTypes(),
-      ]);
+      await Future.wait([fetchItemTypes()]);
 
       // Build dropdown after library services are loaded
       buildLibraryServicesDropdown();
@@ -172,8 +167,8 @@ abstract class HomeController extends State<HomeView> {
   void changeLocale(Locale locale) {
     widget.onLocaleChange(locale);
     // Clear cached filter entries to rebuild with new locale
-    _cachedFilterEntries = null;
     setState(() {
+      _searchFilterController.clear();
       _itemTypeController.clear();
       _libraryController.clear();
     });
