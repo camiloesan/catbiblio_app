@@ -146,7 +146,6 @@ abstract class HomeController extends State<HomeView> {
       buildLibraryServicesDropdown();
     } catch (e) {
       debugPrint('Error in fetchData: $e');
-      // Set error states if needed
     }
   }
 
