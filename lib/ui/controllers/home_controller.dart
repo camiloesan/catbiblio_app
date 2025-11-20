@@ -27,6 +27,8 @@ abstract class HomeController extends State<HomeView> {
   String currentBookName = '';
   String currentBiblionumber = '';
 
+  late Future<List<BookSelection>> _bookSelectionsFuture;
+
   late Timer _booksCarouselTimer;
   late Timer _servicesCarouselTimer;
   int _currentBookIndex = 0;
@@ -75,6 +77,8 @@ abstract class HomeController extends State<HomeView> {
     _librariesFuture = Future.value([]);
 
     fetchData();
+
+    _bookSelectionsFuture = BookSelectionsService.getBookSelections();
 
     if (mounted && context.mounted) {
       _booksCarouselTimer = Timer.periodic(const Duration(seconds: 4), (
@@ -129,9 +133,6 @@ abstract class HomeController extends State<HomeView> {
   /// Optimized to run independent operations in parallel
   Future<void> fetchData() async {
     try {
-      // Start book selections immediately (independent)
-      final bookSelectionsFuture = fetchBookSelections();
-
       // Fetch libraries first (needed for services dropdown)
       await fetchLibraries();
 
@@ -139,7 +140,6 @@ abstract class HomeController extends State<HomeView> {
       await Future.wait([
         fetchItemTypes(),
         fetchLibraryServices(),
-        bookSelectionsFuture,
       ]);
 
       // Build dropdown after library services are loaded
@@ -317,36 +317,6 @@ abstract class HomeController extends State<HomeView> {
         setState(() {
           isLibraryServicesLoading = false;
           isLibraryServicesError = true;
-        });
-      }
-    }
-  }
-
-  /// fetches book selections for home view carousel
-  Future<void> fetchBookSelections() async {
-    try {
-      final bookSelections = await BookSelectionsService.getBookSelections();
-
-      if (mounted) {
-        setState(() {
-          _bookSelections = bookSelections;
-          isBookSelectionsLoading = false;
-          isBookSelectionsError = false;
-          currentBiblionumber = bookSelections.isNotEmpty
-              ? bookSelections[0].biblionumber
-              : '';
-          currentBookName = bookSelections.isNotEmpty
-              ? bookSelections[0].name
-              : '';
-          _currentBookIndex = 0;
-        });
-      }
-    } catch (e) {
-      debugPrint('Error fetching book selections: $e');
-      if (mounted) {
-        setState(() {
-          isBookSelectionsLoading = false;
-          isBookSelectionsError = true;
         });
       }
     }

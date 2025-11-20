@@ -106,47 +106,70 @@ class _HomeViewState extends HomeController {
                     ),
                   ),
                   SizedBox(height: 16.0),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height / 2,
-                    ),
-                    child: CarouselView.weighted(
-                      flexWeights: MediaQuery.of(context).size.width < 600
-                          ? const [1, 3, 1]
-                          : const [1, 1, 1, 1, 1],
-                      scrollDirection: Axis.horizontal,
-                      itemSnapping: true,
-                      elevation: 2.0,
-                      controller: _booksCarouselController,
-                      enableSplash: true,
-                      backgroundColor: primaryColor,
-                      onTap: (index) {
-                        final bookSelection = _bookSelections[index];
-                        if (kIsWeb) {
-                          context.go(
-                            '/book-details/${bookSelection.biblionumber}',
-                          );
-                          return;
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BookView(
-                              biblioNumber: bookSelection.biblionumber,
-                            ),
+                  FutureBuilder(
+                    future: _bookSelectionsFuture,
+                    builder: (context, asyncSnapshot) {
+                      if (asyncSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         );
-                      },
-                      children: _bookSelections.map((bookSelection) {
-                        return HeroLayoutCard(
-                          fit: BoxFit.fitHeight,
-                          imageModel: ImageModel(
-                            bookSelection.name,
-                            '$_baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${bookSelection.biblionumber}',
+                      } else if (asyncSnapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'error',
+                            style: const TextStyle(color: Colors.white),
                           ),
                         );
-                      }).toList(),
-                    ),
+                      }
+                      _bookSelections = asyncSnapshot.data ?? [];
+
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height / 2,
+                        ),
+                        child: CarouselView.weighted(
+                          flexWeights: MediaQuery.of(context).size.width < 600
+                              ? const [1, 3, 1]
+                              : const [1, 1, 1, 1, 1],
+                          scrollDirection: Axis.horizontal,
+                          itemSnapping: true,
+                          elevation: 2.0,
+                          controller: _booksCarouselController,
+                          enableSplash: true,
+                          backgroundColor: primaryColor,
+                          onTap: (index) {
+                            final bookSelection = _bookSelections[index];
+                            if (kIsWeb) {
+                              context.go(
+                                '/book-details/${bookSelection.biblionumber}',
+                              );
+                              return;
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookView(
+                                  biblioNumber: bookSelection.biblionumber,
+                                ),
+                              ),
+                            );
+                          },
+                          children: _bookSelections.map((bookSelection) {
+                            return HeroLayoutCard(
+                              fit: BoxFit.fitHeight,
+                              imageModel: ImageModel(
+                                bookSelection.name,
+                                '$_baseUrl/cgi-bin/koha/opac-image.pl?biblionumber=${bookSelection.biblionumber}',
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    }
                   ),
                 ],
               ),
