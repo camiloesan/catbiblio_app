@@ -114,9 +114,7 @@ abstract class HomeController extends State<HomeView> {
             _currentServiceIndex = 0;
           }
 
-          _currentServiceIndex =
-              (_currentServiceIndex + 1) %
-              _librariesServices[selectedLibraryServices]!.length;
+          _currentServiceIndex = _currentServiceIndex + 1;
           _servicesCarouselController.animateToItem(
             _currentServiceIndex,
             duration: const Duration(milliseconds: 800),
