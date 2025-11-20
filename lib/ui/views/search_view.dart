@@ -540,6 +540,7 @@ class DropdownFilter extends StatelessWidget {
       dropdownMenuEntries: _filterEntries,
       onSelected: (value) => widget.queryParams.searchBy = value!,
       enableFilter: false,
+      initialSelection: widget.queryParams.searchBy,
       requestFocusOnTap: false,
       width: _maxWidth,
     );
