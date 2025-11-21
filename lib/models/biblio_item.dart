@@ -5,18 +5,18 @@ class BiblioItem {
   static const int statusBorrowed = 1;
   static const int statusNotForLoan = 2;
 
-  String itemTypeId;
-  String itemType;
+  String? itemTypeId;
+  String? itemType;
   String holdingLibraryId;
   String holdingLibrary;
   String homeLibraryId;
   String homeLibrary;
-  String collectionCode;
-  String collection;
-  String callNumber;
-  String callNumberSort;
-  String copyNumber;
-  int notForLoanStatus;
+  String? collectionCode;
+  String? collection;
+  String? callNumber;
+  String? callNumberSort;
+  String? copyNumber;
+  int? notForLoanStatus;
   String? checkedOutDate;
   bool borrowedStatus; // Not in json, calculated based on checkedOutDate
   int
@@ -27,18 +27,18 @@ class BiblioItem {
   */
 
   BiblioItem({
-    required this.itemTypeId,
-    required this.itemType,
+    this.itemTypeId,
+    this.itemType,
     required this.holdingLibraryId,
     required this.holdingLibrary,
     required this.homeLibraryId,
     required this.homeLibrary,
-    required this.collectionCode,
-    required this.collection,
-    required this.callNumber,
-    required this.callNumberSort,
-    required this.copyNumber,
-    required this.notForLoanStatus,
+    this.collectionCode,
+    this.collection,
+    this.callNumber,
+    this.callNumberSort,
+    this.copyNumber,
+    this.notForLoanStatus,
     this.checkedOutDate,
     this.borrowedStatus = false,
     //ItemLocation? location,
@@ -53,17 +53,17 @@ class BiblioItem {
     final checkedOutDate = json['checked_out_date'] as String?;
     final notForLoanStatus = json['not_for_loan_status'];
     return BiblioItem(
-      itemTypeId: json['item_type_id'],
-      itemType: json['item_type'],
+      itemTypeId: json['item_type_id'] ?? 'N/D',
+      itemType: json['item_type'] ?? 'N/D',
       holdingLibraryId: json['holding_library_id'],
       holdingLibrary: json['holding_library'],
       homeLibraryId: json['home_library_id'],
       homeLibrary: json['home_library'],
-      collectionCode: json['collection_code'],
-      collection: json['collection'],
-      callNumber: json['callnumber'],
-      callNumberSort: json['call_number_sort'],
-      copyNumber: json['copy_number'],
+      collectionCode: json['collection_code'] ?? 'N/D',
+      collection: json['collection'] ?? 'N/D',
+      callNumber: json['callnumber'] ?? 'N/D',
+      callNumberSort: json['call_number_sort'] ?? 'N/D',
+      copyNumber: json['copy_number'] ?? 'N/D',
       notForLoanStatus: notForLoanStatus,
       checkedOutDate: checkedOutDate,
       borrowedStatus: checkedOutDate != null,
