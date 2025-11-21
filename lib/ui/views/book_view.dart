@@ -387,46 +387,62 @@ class KeysLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-      child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                const Icon(
-                  Icons.pin_drop,
-                  color: Color.fromARGB(255, 240, 30, 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.pin_drop,
+                color: Color.fromARGB(255, 240, 30, 15),
+                size: 20.0,
+              ),
+              const SizedBox(width: 4.0),
+              Text(
+                AppLocalizations.of(context)!.legendFinder,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                 ),
-                const SizedBox(height: 4.0),
-                Text(AppLocalizations.of(context)!.legendFinder),
-              ],
-            ),
-            const VerticalDivider(),
-            Column(
-              children: [
-                const Icon(Icons.check_circle, color: Colors.green),
-                const SizedBox(height: 4.0),
-                Text(AppLocalizations.of(context)!.legendAvailable),
-              ],
-            ),
-            const VerticalDivider(),
-            Column(
-              children: [
-                const Icon(Icons.watch_later, color: Colors.orange),
-                const SizedBox(height: 4.0),
-                Text(AppLocalizations.of(context)!.legendBorrowed),
-              ],
-            ),
-            const VerticalDivider(),
-            Column(
-              children: [
-                const Icon(Icons.lock, color: Colors.red),
-                const SizedBox(height: 4.0),
-                Text(AppLocalizations.of(context)!.legendNotForBorrow),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.green, size: 20.0),
+              const SizedBox(width: 4.0),
+              Text(
+                AppLocalizations.of(context)!.legendAvailable,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Icon(Icons.watch_later, color: Colors.orange, size: 20.0),
+              const SizedBox(width: 4.0),
+              Text(
+                AppLocalizations.of(context)!.legendBorrowed,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Icon(Icons.lock, color: Colors.red, size: 20.0),
+              const SizedBox(width: 4.0),
+              Text(
+                AppLocalizations.of(context)!.legendNotForBorrow,
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
