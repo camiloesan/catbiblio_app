@@ -6,7 +6,6 @@ import 'package:catbiblio_app/services/biblios_items.dart';
 import 'package:catbiblio_app/services/book_finder_libraries.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/ui/views/finder_view.dart';
-import 'package:catbiblio_app/ui/views/home_view.dart' show primaryColor;
 import 'package:catbiblio_app/ui/views/marc_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/foundation.dart';
@@ -358,6 +357,8 @@ class _BookViewState extends BookController {
                               ),
                             ),
 
+                          KeysLegend(),
+
                           ListViewLibrariesWidget(
                             finderlibraries: _finderLibraries,
                             holdingLibraries: holdingLibraries,
@@ -372,6 +373,64 @@ class _BookViewState extends BookController {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class KeysLegend extends StatelessWidget {
+  const KeysLegend({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              const Icon(
+                Icons.pin_drop,
+                color: Color.fromARGB(255, 240, 30, 15),
+              ),
+              const SizedBox(height: 4.0),
+              Text('Localizador'),
+            ],
+          ),
+          const SizedBox(width: 16.0),
+          Column(
+            children: [
+              const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
+              const SizedBox(height: 4.0),
+              Text('Disponible'),
+            ],
+          ),
+          const SizedBox(width: 16.0),
+          Column(
+            children: [
+              const Icon(
+                Icons.watch_later,
+                color: Colors.orange,
+              ),
+              const SizedBox(height: 4.0),
+              Text('Prestado'),
+            ],
+          ),
+          const SizedBox(width: 16.0),
+          Column(
+            children: [
+              const Icon(Icons.lock, color: Colors.red),
+              const SizedBox(height: 4.0),
+              Text('No para préstamo'),
+            ],
           ),
         ],
       ),
@@ -429,24 +488,28 @@ class ListViewLibrariesWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = holdingLibraries[index];
         final libraryCode = groupedItems[item]!.first.holdingLibraryId;
+        final isFinderEnabled = finderlibraries.contains(libraryCode);
 
         return Card(
-          color: Colors.grey[100],
-          shape: finderlibraries.contains(libraryCode)
-              ? RoundedRectangleBorder(
-                  side: BorderSide(color: primaryColor, width: 2.0),
-                  borderRadius: BorderRadius.circular(10.0),
-                )
+          shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          color: isFinderEnabled
+              ? const Color.fromARGB(255, 0, 153, 50).withAlpha(255)
               : null,
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
+              collapsedIconColor: isFinderEnabled ? Colors.white : null,
+              iconColor: isFinderEnabled ? Colors.white : null,
               tilePadding: const EdgeInsets.symmetric(horizontal: 8.0),
               dense: true,
               childrenPadding: const EdgeInsets.only(bottom: 8.0),
               title: Text(
                 '$item (${groupedItems[item]!.length})',
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: isFinderEnabled ? Colors.white : null,
+                ),
               ),
               children: groupedItems[item]!.map((biblioItem) {
                 return Card(
