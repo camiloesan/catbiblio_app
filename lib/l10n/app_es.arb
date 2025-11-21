@@ -95,7 +95,7 @@
     "couldntLoadHomeLibrariesServices": "No se pudieron cargar los servicios de las bibliotecas, verifique su conexión a Internet o inténtelo de nuevo más tarde.",
     "openLibraryCoverIMGAlt": "Imagen de Open Library",
     "localCoverIMGAlt": "Imagen de cubierta local",
-    "legendAvailable": "No disponible",
+    "legendAvailable": "Disponible",
     "legendBorrowed": "Prestado",
     "legendFinder": "Localizador",
     "legendNotForBorrow": "No para préstamo"

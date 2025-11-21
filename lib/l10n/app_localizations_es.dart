@@ -300,7 +300,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get localCoverIMGAlt => 'Imagen de cubierta local';
 
   @override
-  String get legendAvailable => 'No disponible';
+  String get legendAvailable => 'Disponible';
 
   @override
   String get legendBorrowed => 'Prestado';
