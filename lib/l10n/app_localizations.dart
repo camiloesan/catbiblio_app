@@ -667,6 +667,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Local book cover image'**
   String get localCoverIMGAlt;
+
+  /// Status label indicating that a book copy is available
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get legendAvailable;
+
+  /// Status label indicating that a book copy is borrowed
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed'**
+  String get legendBorrowed;
+
+  /// Status label indicating that a book copy is located using the finder
+  ///
+  /// In en, this message translates to:
+  /// **'Finder'**
+  String get legendFinder;
+
+  /// Status label indicating that a book copy is not for borrowing
+  ///
+  /// In en, this message translates to:
+  /// **'Not for borrow'**
+  String get legendNotForBorrow;
 }
 
 class _AppLocalizationsDelegate

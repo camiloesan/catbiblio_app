@@ -379,5 +379,21 @@
   "localCoverIMGAlt": "Local book cover image",
   "@localCoverIMGAlt": {
     "description": "Alt text for book cover images fetched from Local Library"
+  },
+  "legendAvailable": "Available",
+  "@legendAvailable": {
+    "description": "Status label indicating that a book copy is available"
+  },
+  "legendBorrowed": "Borrowed",
+  "@legendBorrowed": {
+    "description": "Status label indicating that a book copy is borrowed"
+  },
+  "legendFinder": "Finder",
+  "@legendFinder": {
+    "description": "Status label indicating that a book copy is located using the finder"
+  },
+  "legendNotForBorrow": "Not for borrow",
+  "@legendNotForBorrow": {
+    "description": "Status label indicating that a book copy is not for borrowing"
   }
 }

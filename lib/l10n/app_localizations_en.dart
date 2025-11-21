@@ -296,4 +296,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get localCoverIMGAlt => 'Local book cover image';
+
+  @override
+  String get legendAvailable => 'Available';
+
+  @override
+  String get legendBorrowed => 'Borrowed';
+
+  @override
+  String get legendFinder => 'Finder';
+
+  @override
+  String get legendNotForBorrow => 'Not for borrow';
 }

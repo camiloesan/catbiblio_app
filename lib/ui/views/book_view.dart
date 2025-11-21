@@ -388,51 +388,53 @@ class KeysLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              const Icon(
-                Icons.pin_drop,
-                color: Color.fromARGB(255, 240, 30, 15),
-              ),
-              const SizedBox(height: 4.0),
-              Text('Localizador'),
-            ],
-          ),
-          const SizedBox(width: 16.0),
-          Column(
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-              ),
-              const SizedBox(height: 4.0),
-              Text('Disponible'),
-            ],
-          ),
-          const SizedBox(width: 16.0),
-          Column(
-            children: [
-              const Icon(
-                Icons.watch_later,
-                color: Colors.orange,
-              ),
-              const SizedBox(height: 4.0),
-              Text('Prestado'),
-            ],
-          ),
-          const SizedBox(width: 16.0),
-          Column(
-            children: [
-              const Icon(Icons.lock, color: Colors.red),
-              const SizedBox(height: 4.0),
-              Text('No para préstamo'),
-            ],
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                const Icon(
+                  Icons.pin_drop,
+                  color: Color.fromARGB(255, 240, 30, 15),
+                ),
+                const SizedBox(height: 4.0),
+                Text(AppLocalizations.of(context)!.legendFinder),
+              ],
+            ),
+            const VerticalDivider(),
+            Column(
+              children: [
+                const Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                ),
+                const SizedBox(height: 4.0),
+                Text(AppLocalizations.of(context)!.legendAvailable),
+              ],
+            ),
+            const VerticalDivider(),
+            Column(
+              children: [
+                const Icon(
+                  Icons.watch_later,
+                  color: Colors.orange,
+                ),
+                const SizedBox(height: 4.0),
+                Text(AppLocalizations.of(context)!.legendBorrowed),
+              ],
+            ),
+            const VerticalDivider(),
+            Column(
+              children: [
+                const Icon(Icons.lock, color: Colors.red),
+                const SizedBox(height: 4.0),
+                Text(AppLocalizations.of(context)!.legendNotForBorrow),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

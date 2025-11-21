@@ -94,5 +94,9 @@
     "couldntLoadBookSelections": "No se pudieron cargar las selecciones de libros, verifique su conexión a Internet o inténtelo de nuevo más tarde.",
     "couldntLoadHomeLibrariesServices": "No se pudieron cargar los servicios de las bibliotecas, verifique su conexión a Internet o inténtelo de nuevo más tarde.",
     "openLibraryCoverIMGAlt": "Imagen de Open Library",
-    "localCoverIMGAlt": "Imagen de cubierta local"
+    "localCoverIMGAlt": "Imagen de cubierta local",
+    "legendAvailable": "No disponible",
+    "legendBorrowed": "Prestado",
+    "legendFinder": "Localizador",
+    "legendNotForBorrow": "No para préstamo"
 }
