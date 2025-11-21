@@ -357,7 +357,10 @@ class _BookViewState extends BookController {
                               ),
                             ),
 
-                          KeysLegend(),
+                          Skeletonizer(
+                            enabled: isLoadingBiblioItems,
+                            child: KeysLegend(),
+                          ),
 
                           ListViewLibrariesWidget(
                             finderlibraries: _finderLibraries,
