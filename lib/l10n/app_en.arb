@@ -316,6 +316,10 @@
   "@libraries": {
     "description": "Libraries label in book preview"
   },
+  "couldNotFetchLibraries": "Could not fetch libraries, check your internet connection, or try again later.",
+  "@couldNotFetchLibraries": {
+    "description": "Message shown when libraries could not be fetched for the directory"
+  },
   "noLibrariesFound": "No libraries found",
   "@noLibrariesFound": {
     "description": "Message shown when no libraries are found for the directory"

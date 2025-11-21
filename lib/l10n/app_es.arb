@@ -79,6 +79,7 @@
     "errorLoadingMarc": "Error al cargar la vista MARC",
     "noMarcDataAvailable": "No hay datos MARC disponibles",
     "libraries": "Bibliotecas",
+    "couldNotFetchLibraries": "No se pudieron obtener las bibliotecas, verifique su conexión a Internet o inténtelo de nuevo más tarde.",
     "noLibrariesFound": "No se encontraron bibliotecas",
     "finderTitle": "Localizador",
     "location": "Ubicación",

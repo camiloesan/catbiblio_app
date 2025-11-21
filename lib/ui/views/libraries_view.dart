@@ -41,7 +41,11 @@ class _LibrariesViewState extends LibrariesController {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
+                      return Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.couldNotFetchLibraries,
+                        ),
+                      );
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Center(
                         child: Text(
@@ -96,7 +100,10 @@ class _LibrariesViewState extends LibrariesController {
                                             builder: (context) {
                                               return AlertDialog(
                                                 title: Text(library.name),
-                                                content: LibraryDialogBody(library: library, context: context),
+                                                content: LibraryDialogBody(
+                                                  library: library,
+                                                  context: context,
+                                                ),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () =>
@@ -143,7 +150,11 @@ class LibraryDialogBody extends StatelessWidget {
   final Library library;
   final BuildContext context;
 
-  const LibraryDialogBody({super.key, required this.library, required this.context});
+  const LibraryDialogBody({
+    super.key,
+    required this.library,
+    required this.context,
+  });
 
   @override
   Widget build(BuildContext context) {

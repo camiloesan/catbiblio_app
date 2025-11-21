@@ -248,6 +248,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get libraries => 'Bibliotecas';
 
   @override
+  String get couldNotFetchLibraries =>
+      'No se pudieron obtener las bibliotecas, verifique su conexión a Internet o inténtelo de nuevo más tarde.';
+
+  @override
   String get noLibrariesFound => 'No se encontraron bibliotecas';
 
   @override

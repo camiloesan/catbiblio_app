@@ -572,6 +572,12 @@ abstract class AppLocalizations {
   /// **'Libraries'**
   String get libraries;
 
+  /// Message shown when libraries could not be fetched for the directory
+  ///
+  /// In en, this message translates to:
+  /// **'Could not fetch libraries, check your internet connection, or try again later.'**
+  String get couldNotFetchLibraries;
+
   /// Message shown when no libraries are found for the directory
   ///
   /// In en, this message translates to:

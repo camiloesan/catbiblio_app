@@ -247,6 +247,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get libraries => 'Libraries';
 
   @override
+  String get couldNotFetchLibraries =>
+      'Could not fetch libraries, check your internet connection, or try again later.';
+
+  @override
   String get noLibrariesFound => 'No libraries found';
 
   @override
