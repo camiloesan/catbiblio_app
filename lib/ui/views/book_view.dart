@@ -6,6 +6,7 @@ import 'package:catbiblio_app/services/biblios_items.dart';
 import 'package:catbiblio_app/services/book_finder_libraries.dart';
 import 'package:catbiblio_app/services/images.dart';
 import 'package:catbiblio_app/ui/views/finder_view.dart';
+import 'package:catbiblio_app/ui/views/home_view.dart' show primaryColor;
 import 'package:catbiblio_app/ui/views/marc_view.dart';
 import 'package:catbiblio_app/ui/views/search_view.dart';
 import 'package:flutter/foundation.dart';
@@ -427,9 +428,16 @@ class ListViewLibrariesWidget extends StatelessWidget {
       itemCount: holdingLibraries.length,
       itemBuilder: (context, index) {
         final item = holdingLibraries[index];
+        final libraryCode = groupedItems[item]!.first.holdingLibraryId;
 
         return Card(
           color: Colors.grey[100],
+          shape: finderlibraries.contains(libraryCode)
+              ? RoundedRectangleBorder(
+                  side: BorderSide(color: primaryColor, width: 2.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                )
+              : null,
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
@@ -463,7 +471,10 @@ class ListViewLibrariesWidget extends StatelessWidget {
                                   biblioItem.holdingLibrary,
                                   biblioItem.holdingLibraryId,
                                 ),
-                                icon: const Icon(Icons.map),
+                                icon: const Icon(
+                                  Icons.pin_drop,
+                                  color: Color.fromARGB(255, 240, 30, 15),
+                                ),
                               )
                             : const SizedBox.shrink(),
                       ],
