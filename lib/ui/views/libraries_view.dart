@@ -24,22 +24,25 @@ class _LibrariesViewState extends LibrariesController {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.libraryDirectory),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-            maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
-                ? MediaQuery.of(context).size.width
-                : (MediaQuery.of(context).size.width / 3) * 2,
-          ),
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                  maxWidth: MediaQuery.of(context).size.width < screenSizeLimit
+                      ? MediaQuery.of(context).size.width
+                      : (MediaQuery.of(context).size.width / 3) * 2,
+                ),
                 child: FutureBuilder<List<Library>>(
                   future: widget.libraries,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const SizedBox(
+                        height: 200,
+                        child: Center(child: CircularProgressIndicator()),
+                      );
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Text(
@@ -54,13 +57,8 @@ class _LibrariesViewState extends LibrariesController {
                       );
                     } else {
                       final libraries = snapshot.data!;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: regionsList.length,
-                        itemBuilder: (context, index) {
-                          final item = regionsList[index];
-
+                      return Column(
+                        children: regionsList.map((item) {
                           return Card(
                             color: Colors.grey[100],
                             margin: const EdgeInsets.symmetric(
@@ -133,15 +131,15 @@ class _LibrariesViewState extends LibrariesController {
                               ),
                             ),
                           );
-                        },
+                        }).toList(),
                       );
                     }
                   },
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
