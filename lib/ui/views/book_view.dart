@@ -381,9 +381,7 @@ class _BookViewState extends BookController {
 }
 
 class KeysLegend extends StatelessWidget {
-  const KeysLegend({
-    super.key,
-  });
+  const KeysLegend({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -406,10 +404,7 @@ class KeysLegend extends StatelessWidget {
             const VerticalDivider(),
             Column(
               children: [
-                const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                ),
+                const Icon(Icons.check_circle, color: Colors.green),
                 const SizedBox(height: 4.0),
                 Text(AppLocalizations.of(context)!.legendAvailable),
               ],
@@ -417,10 +412,7 @@ class KeysLegend extends StatelessWidget {
             const VerticalDivider(),
             Column(
               children: [
-                const Icon(
-                  Icons.watch_later,
-                  color: Colors.orange,
-                ),
+                const Icon(Icons.watch_later, color: Colors.orange),
                 const SizedBox(height: 4.0),
                 Text(AppLocalizations.of(context)!.legendBorrowed),
               ],
@@ -526,7 +518,7 @@ class ListViewLibrariesWidget extends StatelessWidget {
                         finderlibraries.contains(biblioItem.holdingLibraryId) &&
                                 biblioItem.homeLibraryId ==
                                     biblioItem.holdingLibraryId &&
-                                biblioItem.notForLoanStatus ==
+                                biblioItem.overAllStatus ==
                                     BiblioItem.statusAvailable
                             ? IconButton(
                                 onPressed: () => navigateToFinderView(
