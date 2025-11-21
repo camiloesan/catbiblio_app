@@ -72,6 +72,12 @@ class _LibrariesViewState extends LibrariesController {
                                 context,
                               ).copyWith(dividerColor: Colors.transparent),
                               child: ExpansionTile(
+                                collapsedShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
                                 title: Text(
                                   item,
                                   style: const TextStyle(
