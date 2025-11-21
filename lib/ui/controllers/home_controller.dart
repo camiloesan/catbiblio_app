@@ -207,10 +207,14 @@ abstract class HomeController extends State<HomeView> {
   /// opens external link in browser
   Future<void> openExternalLink(String url) async {
     final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(uri, mode: LaunchMode.inAppBrowserView)) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No se pudo abrir el enlace: $url')),
+          SnackBar(
+            content: Text(
+              '${AppLocalizations.of(context)!.couldNotLaunchExternalLink} $url',
+            ),
+          ),
         );
       }
     }

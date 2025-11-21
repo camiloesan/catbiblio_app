@@ -184,6 +184,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
+  String get couldNotLaunchExternalLink => 'No se pudo abrir el enlace externo';
+
+  @override
   String get couldNotLaunchWhatsApp => 'No se pudo abrir WhatsApp';
 
   @override

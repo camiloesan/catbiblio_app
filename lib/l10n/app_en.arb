@@ -232,6 +232,10 @@
   "@cancel": {
     "description": "Cancel button label in share via dialog"
   },
+  "couldNotLaunchExternalLink": "Could not launch external link.",
+  "@couldNotLaunchExternalLink": {
+    "description": "Snackbar message shown when an external link could not be launched"
+  },
   "couldNotLaunchWhatsApp": "WhatsApp is not installed.",
   "@couldNotLaunchWhatsApp": {
     "description": "Snackbar message shown when WhatsApp is not installed"

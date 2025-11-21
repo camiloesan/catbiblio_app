@@ -113,8 +113,9 @@ class _HomeViewState extends HomeController {
                           ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         );
                       } else if (asyncSnapshot.hasError) {
@@ -169,7 +170,7 @@ class _HomeViewState extends HomeController {
                           }).toList(),
                         ),
                       );
-                    }
+                    },
                   ),
                 ],
               ),
@@ -194,9 +195,7 @@ class _HomeViewState extends HomeController {
             future: _librariesServicesFuture,
             builder: (context, asyncSnapshot) {
               if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               } else if (asyncSnapshot.hasError) {
                 return Center(
                   child: Text(
@@ -205,7 +204,7 @@ class _HomeViewState extends HomeController {
                   ),
                 );
               }
-              
+
               _librariesServices = asyncSnapshot.data ?? {};
               return ConstrainedBox(
                 constraints: BoxConstraints(
@@ -236,7 +235,7 @@ class _HomeViewState extends HomeController {
                   ),
                 ),
               );
-            }
+            },
           ),
         ],
       ),
@@ -539,7 +538,6 @@ class DropdownItemTypesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      
       controller: itemTypeController,
       label: Text(AppLocalizations.of(context)!.itemType),
       enableSearch: true,

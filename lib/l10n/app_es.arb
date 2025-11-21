@@ -58,6 +58,7 @@
     "email": "Correo electrónico",
     "shareVia": "Compartir por...",
     "cancel": "Cancelar",
+    "couldNotLaunchExternalLink": "No se pudo abrir el enlace externo",
     "couldNotLaunchWhatsApp": "No se pudo abrir WhatsApp",
     "couldNotFindEmailClient": "No se pudo encontrar un cliente de correo electrónico",
     "itemType": "Tipo de ejemplar",

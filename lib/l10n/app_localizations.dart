@@ -446,6 +446,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// Snackbar message shown when an external link could not be launched
+  ///
+  /// In en, this message translates to:
+  /// **'Could not launch external link.'**
+  String get couldNotLaunchExternalLink;
+
   /// Snackbar message shown when WhatsApp is not installed
   ///
   /// In en, this message translates to:
