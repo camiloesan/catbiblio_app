@@ -512,6 +512,12 @@ class ListViewLibrariesWidget extends StatelessWidget {
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
+              collapsedShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               collapsedIconColor: isFinderEnabled ? Colors.white : null,
               iconColor: isFinderEnabled ? Colors.white : null,
               tilePadding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -527,6 +533,12 @@ class ListViewLibrariesWidget extends StatelessWidget {
               children: groupedItems[item]!.map((biblioItem) {
                 return Card(
                   child: ExpansionTile(
+                    collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
                     title: Row(
                       children: [
                         Expanded(
