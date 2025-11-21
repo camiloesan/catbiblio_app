@@ -93,7 +93,6 @@ abstract class HomeController extends State<HomeView> {
             _currentBookIndex = 0;
           }
         }
-        print('Current Book Index: $_currentBookIndex');
 
         _booksCarouselController.animateToItem(
           _currentBookIndex,
